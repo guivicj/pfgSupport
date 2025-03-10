@@ -4,9 +4,7 @@ import com.guivicj.apiSupport.dtos.UserDTO
 import com.guivicj.apiSupport.services.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @Controller
@@ -19,20 +17,30 @@ class UserController(val userService: UserService) {
     }
 
     @GetMapping("id/{id}")
-    fun getUserById(@PathVariable userId: Long): ResponseEntity<UserDTO> {
-        var user: Optional<UserDTO> = userService.getUserById(userId)
-        return ResponseEntity.ok(user.get())
+    fun getUserById(@PathVariable id: Long): ResponseEntity<UserDTO> {
+        val user: Optional<UserDTO> = userService.getUserById(id)
+        return if (user.isPresent) {
+            ResponseEntity.ok(user.get())
+        } else {
+            ResponseEntity.notFound().build()
+        }
     }
 
     @GetMapping("/name/{name}")
     fun getUserByName(@PathVariable name: String): ResponseEntity<UserDTO> {
-        var user: Optional<UserDTO> = userService.getUserByName(name)
+        val user: Optional<UserDTO> = userService.getUserByName(name)
         return ResponseEntity.ok(user.get())
     }
 
     @GetMapping("/email/{email}")
     fun getUserByEmail(@PathVariable email: String): ResponseEntity<UserDTO> {
-        var user: Optional<UserDTO> = userService.getUserByEmail(email)
+        val user: Optional<UserDTO> = userService.getUserByEmail(email)
         return ResponseEntity.ok(user.get())
+    }
+
+    @PostMapping("/signup")
+    fun signUp(@RequestBody dto: UserDTO): ResponseEntity<UserDTO> {
+        val user: UserDTO = userService.signUp(dto)
+        return ResponseEntity.ok(user)
     }
 }
