@@ -21,7 +21,7 @@ class AuthService(
 
     fun register(request: RegisterDTO): UserModel {
         if (userRepository.existsByEmail(request.email)) throw Exception("Email already exists")
-        val userdto = UserDTO(
+        val user = UserDTO(
             request.username,
             request.email,
             request.password,
@@ -29,9 +29,7 @@ class AuthService(
             manageType(request.userTypeCode)
         )
 
-        val user = userMapper.toEntity(userdto)
-
-        return userRepository.save(user)
+        return userRepository.save(userMapper.toEntity(user))
     }
 
     private fun manageType(userTypeCode: String): UserType {

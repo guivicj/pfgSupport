@@ -1,6 +1,7 @@
 package com.guivicj.apiSupport.controllers
 
 import com.guivicj.apiSupport.dtos.UserDTO
+import com.guivicj.apiSupport.dtos.UserUpdateRequest
 import com.guivicj.apiSupport.services.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -36,5 +37,14 @@ class UserController(val userService: UserService) {
     fun getUserByEmail(@PathVariable email: String): ResponseEntity<UserDTO> {
         val user: Optional<UserDTO> = userService.getUserByEmail(email)
         return ResponseEntity.ok(user.get())
+    }
+
+    @PutMapping("/update/{email}")
+    fun updateUser(
+        @PathVariable email: String,
+        @RequestBody updateRequest: UserUpdateRequest
+    ): ResponseEntity<UserDTO> {
+        val user = userService.updateUser(email, updateRequest)
+        return ResponseEntity.ok(user)
     }
 }
