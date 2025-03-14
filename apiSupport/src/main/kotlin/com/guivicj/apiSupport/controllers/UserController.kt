@@ -37,10 +37,4 @@ class UserController(val userService: UserService) {
         val user: Optional<UserDTO> = userService.getUserByEmail(email)
         return ResponseEntity.ok(user.get())
     }
-
-    @PostMapping("/signup")
-    fun signUp(@RequestBody dto: UserDTO): ResponseEntity<UserDTO> {
-        val user: UserDTO = userService.signUp(dto)
-        return ResponseEntity.ok(user)
-    }
 }

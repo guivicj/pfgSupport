@@ -4,6 +4,7 @@ import com.guivicj.apiSupport.dtos.UserDTO
 import com.guivicj.apiSupport.mappers.UserMapper
 import com.guivicj.apiSupport.models.UserModel
 import com.guivicj.apiSupport.repositories.UserRepository
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -24,12 +25,6 @@ class UserService(
 
     fun getUserByEmail(email: String): Optional<UserDTO> {
         return userRepository.findByEmail(email)
-    }
-
-    fun signUp(userDTO: UserDTO): UserDTO {
-        val userEntity = userMapper.toEntity(userDTO)
-        val userSaved: UserModel = userRepository.save(userEntity)
-        return userMapper.toDTO(userSaved)
     }
 
 }
