@@ -32,18 +32,6 @@ class AuthService(
         return userRepository.save(userMapper.toEntity(user))
     }
 
-    private fun manageType(userTypeCode: String): UserType {
-        val code = userTypeCode.split("#")
-
-        val validators = listOf(
-            AdminValidator(),
-            TechnicianValidator(),
-            UserValidator()
-        )
-
-        return validators.firstOrNull { it.isValid(code) }?.getUserType() ?: throw Exception("User type not valid")
-    }
-
     fun login(request: LoginDTO): LoginResponse {
         val user = userRepository.findByEmail(request.email)
 
@@ -52,5 +40,16 @@ class AuthService(
         } else {
             LoginResponse(401, "Error: Email or password invalid")
         }
+    }
+
+    private fun manageType(userTypeCode: String): UserType {
+        val code = userTypeCode.split("#")
+
+        val validators = listOf(
+            AdminValidator(),
+            TechnicianValidator(),
+            UserValidator()
+        )
+        return validators.firstOrNull { it.isValid(code) }?.getUserType() ?: throw Exception("User type not valid")
     }
 }

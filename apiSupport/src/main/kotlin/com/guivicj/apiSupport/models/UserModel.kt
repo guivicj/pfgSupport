@@ -5,6 +5,7 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "users", schema = "public")
+@Inheritance(strategy = InheritanceType.JOINED)
 data class UserModel(
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -17,6 +18,8 @@ data class UserModel(
     var password: String = "",
     @Column(nullable = false)
     var telephone: Int = 0,
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    var type: UserType = UserType.USER
+    var type: UserType = UserType.USER,
+
 )

@@ -1,9 +1,11 @@
 package com.guivicj.apiSupport.services
 
+import com.guivicj.apiSupport.dtos.DeleteRequest
+import com.guivicj.apiSupport.dtos.DeleteResponse
 import com.guivicj.apiSupport.dtos.UserDTO
 import com.guivicj.apiSupport.dtos.UserUpdateRequest
+import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.mappers.UserMapper
-import com.guivicj.apiSupport.models.UserModel
 import com.guivicj.apiSupport.repositories.UserRepository
 import org.springframework.stereotype.Service
 import java.util.*
@@ -38,4 +40,17 @@ class UserService(
         return user;
     }
 
+    fun deleteUser(email: String, deleteRequest: DeleteRequest): DeleteResponse {
+        val user = getUserByEmail(email).orElseThrow { IllegalArgumentException("User not found") }
+        var isDeleted = false
+        if ((deleteRequest.userType).equals(UserType.ADMIN)) {
+            userRepository.delete(userMapper.toEntity(user))
+            isDeleted = true
+        }
+        return if (isDeleted) {
+            DeleteResponse(200, "Successfully deleted the user")
+        } else {
+            DeleteResponse(403, "Only Admin is allowed to delete users")
+        }
+    }
 }

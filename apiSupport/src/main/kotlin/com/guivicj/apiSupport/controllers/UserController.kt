@@ -1,5 +1,7 @@
 package com.guivicj.apiSupport.controllers
 
+import com.guivicj.apiSupport.dtos.DeleteRequest
+import com.guivicj.apiSupport.dtos.DeleteResponse
 import com.guivicj.apiSupport.dtos.UserDTO
 import com.guivicj.apiSupport.dtos.UserUpdateRequest
 import com.guivicj.apiSupport.services.UserService
@@ -46,5 +48,11 @@ class UserController(val userService: UserService) {
     ): ResponseEntity<UserDTO> {
         val user = userService.updateUser(email, updateRequest)
         return ResponseEntity.ok(user)
+    }
+
+    @DeleteMapping("/delete/{email}")
+    fun deleteUser(@PathVariable email: String, @RequestBody deleteRequest: DeleteRequest): ResponseEntity<DeleteResponse> {
+        val response = userService.deleteUser(email, deleteRequest)
+        return ResponseEntity.status(response.status).body(response)
     }
 }
