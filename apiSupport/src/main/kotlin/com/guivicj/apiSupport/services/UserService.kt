@@ -1,10 +1,10 @@
 package com.guivicj.apiSupport.services
 
 import com.guivicj.apiSupport.dtos.UserDTO
+import com.guivicj.apiSupport.dtos.UserUpdateRequest
 import com.guivicj.apiSupport.mappers.UserMapper
 import com.guivicj.apiSupport.models.UserModel
 import com.guivicj.apiSupport.repositories.UserRepository
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -25,6 +25,17 @@ class UserService(
 
     fun getUserByEmail(email: String): Optional<UserDTO> {
         return userRepository.findByEmail(email)
+    }
+
+    fun updateUser(email: String, updateRequest: UserUpdateRequest): UserDTO {
+        val user = getUserByEmail(email).orElseThrow { IllegalArgumentException("User not found") }
+
+        updateRequest.username?.let { user.name = it }
+        updateRequest.email?.let { user.email = it }
+        updateRequest.telephone?.let { user.telephone = it }
+        userRepository.save(userMapper.toEntity(user))
+
+        return user;
     }
 
 }

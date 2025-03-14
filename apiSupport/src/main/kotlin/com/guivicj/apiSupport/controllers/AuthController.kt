@@ -3,6 +3,7 @@ package com.guivicj.apiSupport.controllers
 import com.guivicj.apiSupport.dtos.LoginDTO
 import com.guivicj.apiSupport.dtos.LoginResponse
 import com.guivicj.apiSupport.dtos.RegisterDTO
+import com.guivicj.apiSupport.dtos.UserDTO
 import com.guivicj.apiSupport.models.UserModel
 import com.guivicj.apiSupport.services.AuthService
 import org.springframework.http.ResponseEntity
