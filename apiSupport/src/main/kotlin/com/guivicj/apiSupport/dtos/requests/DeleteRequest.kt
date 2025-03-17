@@ -1,4 +1,4 @@
-package com.guivicj.apiSupport.dtos
+package com.guivicj.apiSupport.dtos.requests
 
 import com.guivicj.apiSupport.enums.UserType
 

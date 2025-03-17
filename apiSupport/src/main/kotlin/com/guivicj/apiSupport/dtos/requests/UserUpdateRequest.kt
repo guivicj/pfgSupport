@@ -1,4 +1,4 @@
-package com.guivicj.apiSupport.dtos
+package com.guivicj.apiSupport.dtos.requests
 
 data class UserUpdateRequest(
     val username: String?,

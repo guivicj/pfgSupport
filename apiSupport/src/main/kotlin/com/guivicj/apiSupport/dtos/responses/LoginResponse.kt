@@ -1,4 +1,4 @@
-package com.guivicj.apiSupport.dtos
+package com.guivicj.apiSupport.dtos.responses
 
 
 data class LoginResponse(

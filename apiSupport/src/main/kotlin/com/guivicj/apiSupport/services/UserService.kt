@@ -1,9 +1,9 @@
 package com.guivicj.apiSupport.services
 
-import com.guivicj.apiSupport.dtos.DeleteRequest
-import com.guivicj.apiSupport.dtos.DeleteResponse
+import com.guivicj.apiSupport.dtos.requests.DeleteRequest
+import com.guivicj.apiSupport.dtos.responses.DeleteResponse
 import com.guivicj.apiSupport.dtos.UserDTO
-import com.guivicj.apiSupport.dtos.UserUpdateRequest
+import com.guivicj.apiSupport.dtos.requests.UserUpdateRequest
 import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.mappers.UserMapper
 import com.guivicj.apiSupport.repositories.UserRepository
@@ -13,7 +13,7 @@ import java.util.*
 @Service
 class UserService(
     private val userMapper: UserMapper,
-    private val userRepository: UserRepository,
+    private val userRepository: UserRepository
 ) {
     fun getUsers(): List<UserDTO> = userRepository.findAll().stream().map(userMapper::toDTO).toList()
 

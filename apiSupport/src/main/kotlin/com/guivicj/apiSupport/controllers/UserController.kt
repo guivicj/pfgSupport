@@ -1,9 +1,9 @@
 package com.guivicj.apiSupport.controllers
 
-import com.guivicj.apiSupport.dtos.DeleteRequest
-import com.guivicj.apiSupport.dtos.DeleteResponse
+import com.guivicj.apiSupport.dtos.requests.DeleteRequest
+import com.guivicj.apiSupport.dtos.responses.DeleteResponse
 import com.guivicj.apiSupport.dtos.UserDTO
-import com.guivicj.apiSupport.dtos.UserUpdateRequest
+import com.guivicj.apiSupport.dtos.requests.UserUpdateRequest
 import com.guivicj.apiSupport.services.UserService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 class UserController(val userService: UserService) {
 
     @GetMapping

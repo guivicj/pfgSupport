@@ -1,6 +1,6 @@
-package com.guivicj.apiSupport.dtos
+package com.guivicj.apiSupport.dtos.requests
 
-data class RegisterDTO(
+data class RegisterRequest(
     val username: String,
     val email: String,
     val password: String,

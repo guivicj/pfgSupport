@@ -18,7 +18,6 @@ data class UserModel(
     var password: String = "",
     @Column(nullable = false)
     var telephone: Int = 0,
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     var type: UserType = UserType.USER,
 
