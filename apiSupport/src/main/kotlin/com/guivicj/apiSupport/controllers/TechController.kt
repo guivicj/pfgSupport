@@ -1,8 +1,10 @@
 package com.guivicj.apiSupport.controllers
 
 import com.guivicj.apiSupport.dtos.TechDTO
+import com.guivicj.apiSupport.dtos.requests.DeleteTechRequest
 import com.guivicj.apiSupport.dtos.requests.TechRequest
 import com.guivicj.apiSupport.dtos.requests.UpdateTechRequest
+import com.guivicj.apiSupport.dtos.responses.DeleteTechResponse
 import com.guivicj.apiSupport.enums.TechnicianType
 import com.guivicj.apiSupport.services.TechService
 import org.springframework.http.ResponseEntity
@@ -40,4 +42,11 @@ class TechController(val techService: TechService) {
         val tech = techService.updateTech(techRequest)
         return ResponseEntity.ok(tech)
     }
+
+    @DeleteMapping("/delete/")
+    fun deleteTech(@RequestBody techRequest: DeleteTechRequest): ResponseEntity<DeleteTechResponse> {
+        val response = techService.deleteTech(techRequest)
+        return ResponseEntity.status(response.status).body(response)
+    }
+
 }

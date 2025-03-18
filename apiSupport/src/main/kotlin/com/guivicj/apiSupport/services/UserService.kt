@@ -43,7 +43,7 @@ class UserService(
     fun deleteUser(email: String, deleteRequest: DeleteRequest): DeleteResponse {
         val user = getUserByEmail(email).orElseThrow { IllegalArgumentException("User not found") }
         var isDeleted = false
-        if ((deleteRequest.userType).equals(UserType.ADMIN)) {
+        if (deleteRequest.userType == UserType.ADMIN) {
             userRepository.delete(userMapper.toEntity(user))
             isDeleted = true
         }
