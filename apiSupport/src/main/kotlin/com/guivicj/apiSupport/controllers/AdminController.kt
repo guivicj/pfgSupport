@@ -35,7 +35,7 @@ class AdminController(val adminService: AdminService) {
         return ResponseEntity.ok(admin)
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete")
     fun deleteAdmin(@RequestBody adminRequest: DeleteEmployeeRequest): ResponseEntity<Response> {
         val response = adminService.deleteAdmin(adminRequest)
         return ResponseEntity.status(response.status).body(response)

@@ -10,6 +10,8 @@ data class UserModel(
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     var id: Long = 0,
+    @Column(nullable = true, unique = true)
+    val firebaseUid: String? = null,
     @Column(nullable = false)
     var name: String = "",
     @Column(nullable = false)

@@ -7,6 +7,7 @@ import com.guivicj.apiSupport.dtos.requests.UserUpdateRequest
 import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.mappers.UserMapper
 import com.guivicj.apiSupport.repositories.UserRepository
+import org.apache.http.HttpStatus
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -48,9 +49,9 @@ class UserService(
             isDeleted = true
         }
         return if (isDeleted) {
-            Response(200, "Successfully deleted the user")
+            Response(HttpStatus.SC_OK, "Successfully deleted the user")
         } else {
-            Response(403, "Only Admin is allowed to delete users")
+            Response(HttpStatus.SC_UNAUTHORIZED, "Only Admin is allowed to delete users")
         }
     }
 }

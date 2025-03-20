@@ -43,7 +43,7 @@ class TechController(val techService: TechService) {
         return ResponseEntity.ok(tech)
     }
 
-    @DeleteMapping("/delete/")
+    @DeleteMapping("/delete")
     fun deleteTech(@RequestBody techRequest: DeleteEmployeeRequest): ResponseEntity<Response> {
         val response = techService.deleteTech(techRequest)
         return ResponseEntity.status(response.status).body(response)

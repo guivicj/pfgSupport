@@ -8,6 +8,7 @@ import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.mappers.AdminMapper
 import com.guivicj.apiSupport.repositories.AdminRepository
 import com.guivicj.apiSupport.repositories.UserRepository
+import org.apache.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -60,7 +61,7 @@ class AdminService(
         }
 
         if (adminRequest.userType != UserType.ADMIN) {
-            return Response(403, "Only Admin is allowed to delete administrators")
+            return Response(HttpStatus.SC_UNAUTHORIZED, "Only Admin is allowed to delete administrators")
         }
 
         adminRepository.deleteById(user.id)
@@ -68,6 +69,6 @@ class AdminService(
         user.type = UserType.USER
         userRepository.save(user)
 
-        return Response(200, "Successfully removed admin role. User remains as a normal user.")
+        return Response(HttpStatus.SC_OK, "Successfully removed admin role. User remains as a normal user.")
     }
 }

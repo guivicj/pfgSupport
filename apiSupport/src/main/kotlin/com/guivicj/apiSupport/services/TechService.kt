@@ -12,6 +12,7 @@ import com.guivicj.apiSupport.mappers.TechMapper
 import com.guivicj.apiSupport.repositories.TechRepository
 import com.guivicj.apiSupport.repositories.UserRepository
 import jakarta.transaction.Transactional
+import org.apache.http.HttpStatus
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -53,7 +54,7 @@ class TechService(
             throw RuntimeException("User is not TECHNICIAN")
         }
 
-        val tech = techRepository.findById(user.id!!)
+        val tech = techRepository.findById(user.id)
             .orElseThrow { RuntimeException("Tech not found") }
 
         tech.technicianType = techRequest.technicianType
@@ -76,7 +77,7 @@ class TechService(
         }
 
         if (techRequest.userType != UserType.ADMIN) {
-            return Response(403, "Only Admin is allowed to delete technicians")
+            return Response(HttpStatus.SC_UNAUTHORIZED, "Only Admin is allowed to delete technicians")
         }
 
         techRepository.deleteById(user.id)
@@ -84,7 +85,7 @@ class TechService(
         user.type = UserType.USER
         userRepository.save(user)
 
-        return Response(200, "Successfully removed technician role. User remains as a normal user.")
+        return Response(HttpStatus.SC_OK, "Successfully removed technician role. User remains as a normal user.")
     }
 
 }

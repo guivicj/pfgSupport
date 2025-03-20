@@ -1,9 +1,7 @@
 package com.guivicj.apiSupport.controllers
 
-import com.guivicj.apiSupport.dtos.requests.LoginRequest
+import com.guivicj.apiSupport.dtos.requests.FirebaseLoginRequest
 import com.guivicj.apiSupport.dtos.responses.Response
-import com.guivicj.apiSupport.dtos.requests.RegisterRequest
-import com.guivicj.apiSupport.models.UserModel
 import com.guivicj.apiSupport.services.AuthService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -15,19 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RequestMapping("/api/auth")
 class AuthController(val authService: AuthService) {
 
-    @PostMapping("/login")
-    fun login(@RequestBody request: LoginRequest): ResponseEntity<Response> {
-        val response = authService.login(request)
+    @PostMapping("/firebase-login")
+    fun loginWithFirebase(@RequestBody request: FirebaseLoginRequest): ResponseEntity<Response> {
+        val response = authService.authenticateWithFirebase(request.token)
         return ResponseEntity.status(response.status).body(response)
-    }
-
-    @PostMapping("/register")
-    fun register(@RequestBody request: RegisterRequest): ResponseEntity<UserModel> {
-        val user = authService.register(request)
-        return try {
-            ResponseEntity.ok(user)
-        } catch (e: IllegalArgumentException) {
-            ResponseEntity.badRequest().build()
-        }
     }
 }
