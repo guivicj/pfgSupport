@@ -40,4 +40,5 @@ class AdminController(val adminService: AdminService) {
         val response = adminService.deleteAdmin(adminRequest)
         return ResponseEntity.status(response.status).body(response)
     }
+
 }
