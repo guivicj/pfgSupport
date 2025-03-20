@@ -1,10 +1,10 @@
 package com.guivicj.apiSupport.controllers
 
 import com.guivicj.apiSupport.dtos.TechDTO
-import com.guivicj.apiSupport.dtos.requests.DeleteTechRequest
-import com.guivicj.apiSupport.dtos.requests.TechRequest
+import com.guivicj.apiSupport.dtos.requests.DeleteEmployeeRequest
+import com.guivicj.apiSupport.dtos.requests.EmployeeRequest
 import com.guivicj.apiSupport.dtos.requests.UpdateTechRequest
-import com.guivicj.apiSupport.dtos.responses.DeleteTechResponse
+import com.guivicj.apiSupport.dtos.responses.Response
 import com.guivicj.apiSupport.enums.TechnicianType
 import com.guivicj.apiSupport.services.TechService
 import org.springframework.http.ResponseEntity
@@ -22,7 +22,7 @@ class TechController(val techService: TechService) {
     }
 
     @GetMapping("/id/{id}")
-    fun getTechById(@PathVariable id: Long): Optional<TechDTO> {
+    fun getTechById(@PathVariable id: Long): TechDTO? {
         return techService.getTechById(id)
     }
 
@@ -32,8 +32,8 @@ class TechController(val techService: TechService) {
     }
 
     @PostMapping
-    fun addTech(@RequestBody techRequest: TechRequest): ResponseEntity<TechDTO> {
-        val tech = techService.addTech(techRequest)
+    fun addTech(@RequestBody employeeRequest: EmployeeRequest): ResponseEntity<TechDTO> {
+        val tech = techService.addTech(employeeRequest)
         return ResponseEntity.ok(tech)
     }
 
@@ -44,7 +44,7 @@ class TechController(val techService: TechService) {
     }
 
     @DeleteMapping("/delete/")
-    fun deleteTech(@RequestBody techRequest: DeleteTechRequest): ResponseEntity<DeleteTechResponse> {
+    fun deleteTech(@RequestBody techRequest: DeleteEmployeeRequest): ResponseEntity<Response> {
         val response = techService.deleteTech(techRequest)
         return ResponseEntity.status(response.status).body(response)
     }

@@ -1,5 +1,5 @@
 package com.guivicj.apiSupport.dtos.requests
 
-data class TechRequest(
+data class EmployeeRequest(
     val userid: Long
 )

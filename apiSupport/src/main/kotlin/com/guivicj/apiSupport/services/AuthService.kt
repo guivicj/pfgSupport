@@ -1,7 +1,7 @@
 package com.guivicj.apiSupport.services
 
 import com.guivicj.apiSupport.dtos.requests.LoginRequest
-import com.guivicj.apiSupport.dtos.responses.LoginResponse
+import com.guivicj.apiSupport.dtos.responses.Response
 import com.guivicj.apiSupport.dtos.requests.RegisterRequest
 import com.guivicj.apiSupport.dtos.UserDTO
 import com.guivicj.apiSupport.enums.UserType
@@ -32,13 +32,13 @@ class AuthService(
         return userRepository.save(userMapper.toEntity(user))
     }
 
-    fun login(request: LoginRequest): LoginResponse {
+    fun login(request: LoginRequest): Response {
         val user = userRepository.findByEmail(request.email)
 
         return if (user.isPresent && user.get().password == request.password) {
-            LoginResponse(200, "Login successful")
+            Response(200, "Login successful")
         } else {
-            LoginResponse(401, "Error: Email or password invalid")
+            Response(401, "Error: Email or password invalid")
         }
     }
 

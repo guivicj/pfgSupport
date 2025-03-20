@@ -6,7 +6,7 @@ import jakarta.persistence.*
 @Table(name = "admin")
 data class Admin(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     var id: Long = 0,
     @OneToOne
     @JoinColumn(name = "userid", nullable = false, unique = true)

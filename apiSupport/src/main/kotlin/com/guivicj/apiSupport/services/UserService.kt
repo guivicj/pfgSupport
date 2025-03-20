@@ -1,7 +1,7 @@
 package com.guivicj.apiSupport.services
 
 import com.guivicj.apiSupport.dtos.requests.DeleteRequest
-import com.guivicj.apiSupport.dtos.responses.DeleteResponse
+import com.guivicj.apiSupport.dtos.responses.Response
 import com.guivicj.apiSupport.dtos.UserDTO
 import com.guivicj.apiSupport.dtos.requests.UserUpdateRequest
 import com.guivicj.apiSupport.enums.UserType
@@ -32,7 +32,7 @@ class UserService(
     fun updateUser(email: String, updateRequest: UserUpdateRequest): UserDTO {
         val user = getUserByEmail(email).orElseThrow { IllegalArgumentException("User not found") }
 
-        updateRequest.username?.let { user.name = it }
+        updateRequest.name?.let { user.name = it }
         updateRequest.email?.let { user.email = it }
         updateRequest.telephone?.let { user.telephone = it }
         userRepository.save(userMapper.toEntity(user))
@@ -40,7 +40,7 @@ class UserService(
         return user;
     }
 
-    fun deleteUser(email: String, deleteRequest: DeleteRequest): DeleteResponse {
+    fun deleteUser(email: String, deleteRequest: DeleteRequest): Response {
         val user = getUserByEmail(email).orElseThrow { IllegalArgumentException("User not found") }
         var isDeleted = false
         if (deleteRequest.userType == UserType.ADMIN) {
@@ -48,9 +48,9 @@ class UserService(
             isDeleted = true
         }
         return if (isDeleted) {
-            DeleteResponse(200, "Successfully deleted the user")
+            Response(200, "Successfully deleted the user")
         } else {
-            DeleteResponse(403, "Only Admin is allowed to delete users")
+            Response(403, "Only Admin is allowed to delete users")
         }
     }
 }

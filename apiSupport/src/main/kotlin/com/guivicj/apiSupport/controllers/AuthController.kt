@@ -1,7 +1,7 @@
 package com.guivicj.apiSupport.controllers
 
 import com.guivicj.apiSupport.dtos.requests.LoginRequest
-import com.guivicj.apiSupport.dtos.responses.LoginResponse
+import com.guivicj.apiSupport.dtos.responses.Response
 import com.guivicj.apiSupport.dtos.requests.RegisterRequest
 import com.guivicj.apiSupport.models.UserModel
 import com.guivicj.apiSupport.services.AuthService
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 class AuthController(val authService: AuthService) {
 
     @PostMapping("/login")
-    fun login(@RequestBody request: LoginRequest): ResponseEntity<LoginResponse> {
+    fun login(@RequestBody request: LoginRequest): ResponseEntity<Response> {
         val response = authService.login(request)
         return ResponseEntity.status(response.status).body(response)
     }
