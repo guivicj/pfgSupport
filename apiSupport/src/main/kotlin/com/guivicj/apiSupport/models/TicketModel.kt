@@ -11,14 +11,14 @@ data class TicketModel(
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     var id: Long,
     @OneToOne
-    @JoinColumn(name = "userid", nullable = false, unique = true)
-    var userModel: UserModel,
+    @JoinColumn(name = "userid", nullable = false)
+    var userId: UserModel,
     @OneToOne
-    @JoinColumn(name = "techid", nullable = false, unique = true)
-    var technician: Technician,
+    @JoinColumn(name = "techid", nullable = false)
+    var technicianId: Technician,
     @OneToOne
-    @JoinColumn(name = "productid", nullable = false, unique = true)
-    var product: Product,
+    @JoinColumn(name = "productid", nullable = false)
+    var productId: Product,
     var description: String,
     var state: StateType,
     var openedAt: LocalDateTime,
