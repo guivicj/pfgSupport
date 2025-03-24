@@ -1,15 +1,15 @@
 package com.guivicj.apiSupport.services
 
 import com.guivicj.apiSupport.dtos.TicketDTO
+import com.guivicj.apiSupport.dtos.TicketHistoryDTO
 import com.guivicj.apiSupport.dtos.requests.ChangeStateRequest
 import com.guivicj.apiSupport.enums.StateType
 import com.guivicj.apiSupport.enums.TechnicianType
+import com.guivicj.apiSupport.mappers.TicketHistoryMapper
 import com.guivicj.apiSupport.mappers.TicketMapper
+import com.guivicj.apiSupport.models.TicketHistory
 import com.guivicj.apiSupport.models.TicketModel
-import com.guivicj.apiSupport.repositories.ProductRepository
-import com.guivicj.apiSupport.repositories.TechRepository
-import com.guivicj.apiSupport.repositories.TicketRepository
-import com.guivicj.apiSupport.repositories.UserRepository
+import com.guivicj.apiSupport.repositories.*
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
@@ -19,8 +19,11 @@ class TicketService(
     private val ticketRepository: TicketRepository,
     private val techRepository: TechRepository,
     private val productRepository: ProductRepository,
-    private val ticketMapper: TicketMapper
-) {
+    private val ticketMapper: TicketMapper,
+    private val ticketHistoryRepository: TicketHistoryRepository,
+    private val ticketHistoryMapper: TicketHistoryMapper,
+
+    ) {
     fun toEntity(dto: TicketDTO): TicketModel {
         val user = userRepository.findById(dto.userId)
             .orElseThrow { RuntimeException("User not found") }
@@ -70,11 +73,12 @@ class TicketService(
     fun assignToAvailableHuman(ticketId: Long): TicketDTO {
         val ticket = ticketRepository.findById(ticketId).orElseThrow { RuntimeException("Ticket not found") }
 
-        val techs = techRepository.getTechsByTechnicianType(TechnicianType.CHAT)
+        val techs = techRepository.findAll().filter { it.technicianType != TechnicianType.CHAT }
 
         val techWithLeastTickets = techs.minByOrNull {
             ticketRepository.countByTechnicianId(it)
         } ?: throw RuntimeException("No technics available")
+
 
         ticket.technicianId = techWithLeastTickets
         return ticketMapper.toDTO(ticketRepository.save(ticket))
@@ -87,7 +91,14 @@ class TicketService(
         val newTechnician = techRepository.findById(newTechnicianId)
             .orElseThrow { RuntimeException("Technician not found") }
 
+        val history = TicketHistory(
+            ticket = ticket,
+            fromTechnician = ticket.technicianId,
+            toTechnician = newTechnician
+        )
         ticket.technicianId = newTechnician
+
+        ticketHistoryRepository.save(history)
 
         return ticketMapper.toDTO(ticketRepository.save(ticket))
     }
@@ -102,11 +113,13 @@ class TicketService(
                     ticket.inProgressAt = LocalDateTime.now()
                 }
             }
+
             StateType.CLOSED -> {
                 if (ticket.closedAt == null) {
                     ticket.closedAt = LocalDateTime.now()
                 }
             }
+
             else -> {}
         }
 
@@ -116,5 +129,11 @@ class TicketService(
 
         return ticketMapper.toDTO(ticketRepository.save(ticket))
     }
+
+    fun getTicketHistory(ticketId: Long): List<TicketHistoryDTO> {
+        val history = ticketHistoryRepository.findByTicketId(ticketId)
+        return ticketHistoryMapper.toDtoList(history)
+    }
+
 
 }
