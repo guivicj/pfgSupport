@@ -4,7 +4,7 @@ import com.guivicj.apiSupport.dtos.TicketDTO
 import com.guivicj.apiSupport.dtos.TicketHistoryDTO
 import com.guivicj.apiSupport.dtos.requests.ChangeStateRequest
 import com.guivicj.apiSupport.dtos.requests.EscalateTicketRequest
-import com.guivicj.apiSupport.models.TicketHistory
+import com.guivicj.apiSupport.enums.StateType
 import com.guivicj.apiSupport.services.TicketService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -20,6 +20,29 @@ class TicketController(val ticketService: TicketService) {
     @GetMapping("id/{id}")
     fun getTicketById(@PathVariable("id") id: Long): TicketDTO {
         return ticketService.getTicketById(id)
+    }
+
+    @GetMapping("/{ticketId}/history")
+    fun getTicketHistory(@PathVariable ticketId: Long): ResponseEntity<List<TicketHistoryDTO>> {
+        return ResponseEntity.ok(ticketService.getTicketHistory(ticketId))
+    }
+
+    @GetMapping("/by-technician/{techId}")
+    fun getTicketByTechnician(@PathVariable techId: Long): ResponseEntity<List<TicketDTO>> {
+        val tickets = ticketService.getTicketByTechnician(techId)
+        return ResponseEntity.ok(tickets)
+    }
+
+    @GetMapping("/by-user/{userId}")
+    fun getTicketByUserId(@PathVariable userId: Long): ResponseEntity<List<TicketDTO>> {
+        val tickets = ticketService.getTicketByUser(userId)
+        return ResponseEntity.ok(tickets)
+    }
+
+    @GetMapping("/by-state/{state}")
+    fun getTicketByState(@PathVariable state: StateType): ResponseEntity<List<TicketDTO>> {
+        val tickets = ticketService.getTicketByState(state)
+        return ResponseEntity.ok(tickets)
     }
 
     @PostMapping
@@ -48,11 +71,6 @@ class TicketController(val ticketService: TicketService) {
     ): ResponseEntity<TicketDTO> {
         val stateChanged = ticketService.changeState(ticketId, request)
         return ResponseEntity.ok(stateChanged)
-    }
-
-    @GetMapping("/{ticketId}/history")
-    fun getTicketHistory(@PathVariable ticketId: Long): ResponseEntity<List<TicketHistoryDTO>> {
-        return ResponseEntity.ok(ticketService.getTicketHistory(ticketId))
     }
 
 

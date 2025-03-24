@@ -5,6 +5,7 @@ import com.guivicj.apiSupport.dtos.TicketHistoryDTO
 import com.guivicj.apiSupport.dtos.requests.ChangeStateRequest
 import com.guivicj.apiSupport.enums.StateType
 import com.guivicj.apiSupport.enums.TechnicianType
+import com.guivicj.apiSupport.mappers.TechMapper
 import com.guivicj.apiSupport.mappers.TicketHistoryMapper
 import com.guivicj.apiSupport.mappers.TicketMapper
 import com.guivicj.apiSupport.models.TicketHistory
@@ -19,6 +20,7 @@ class TicketService(
     private val ticketRepository: TicketRepository,
     private val techRepository: TechRepository,
     private val productRepository: ProductRepository,
+    private val techMapper: TechMapper,
     private val ticketMapper: TicketMapper,
     private val ticketHistoryRepository: TicketHistoryRepository,
     private val ticketHistoryMapper: TicketHistoryMapper,
@@ -58,6 +60,22 @@ class TicketService(
         val ticket = (ticketRepository.findById(ticketId))
             .orElseThrow { RuntimeException("Ticket not found") }
         return ticketMapper.toDTO(ticket)
+    }
+
+    fun getTicketByTechnician(techId: Long): List<TicketDTO> {
+        val tech = techRepository.findById(techId)
+            .orElseThrow { RuntimeException("Technician not found") }
+        return ticketRepository.getTicketsByTechnicianId(tech).map { ticketMapper.toDTO(it) }
+    }
+
+    fun getTicketByUser(userId: Long): List<TicketDTO> {
+        val user = userRepository.findById(userId)
+            .orElseThrow { RuntimeException("User not found") }
+        return ticketRepository.getTicketsByUserId(user).map { ticketMapper.toDTO(it) }
+    }
+
+    fun getTicketByState(state: StateType): List<TicketDTO> {
+        return ticketRepository.getTicketsByState(state).map { ticketMapper.toDTO(it) }
     }
 
     fun createTicket(ticket: TicketDTO): TicketDTO {
@@ -134,6 +152,5 @@ class TicketService(
         val history = ticketHistoryRepository.findByTicketId(ticketId)
         return ticketHistoryMapper.toDtoList(history)
     }
-
 
 }

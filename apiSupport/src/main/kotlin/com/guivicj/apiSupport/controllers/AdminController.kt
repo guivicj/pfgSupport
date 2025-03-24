@@ -29,11 +29,11 @@ class AdminController(val adminService: AdminService) {
         return ResponseEntity.ok(admin)
     }
 
-//    @PostMapping
-//    fun addAdmin(@RequestBody adminRequest: EmployeeRequest): ResponseEntity<AdminDTO> {
-//        val admin = adminService.addAdmin(adminRequest)
-//        return ResponseEntity.ok(admin)
-//    }
+    @PostMapping
+    fun addAdmin(@RequestBody adminRequest: EmployeeRequest): ResponseEntity<AdminDTO> {
+        val admin = adminService.addAdmin(adminRequest)
+        return ResponseEntity.ok(admin)
+    }
 
     @DeleteMapping("/delete")
     fun deleteAdmin(@RequestBody adminRequest: DeleteEmployeeRequest): ResponseEntity<Response> {

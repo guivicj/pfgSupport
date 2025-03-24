@@ -8,8 +8,8 @@ import org.mapstruct.Mapping
 
 @Mapper(componentModel = "spring")
 interface TicketMapper {
-    @Mapping(source = "userModel.id", target = "userId")
-    @Mapping(source = "technician.id", target = "technicianId")
-    @Mapping(source = "product.id", target = "productId")
+    @Mapping(source = "userId.id", target = "userId")
+    @Mapping(source = "technicianId.id", target = "technicianId")
+    @Mapping(source = "productId.id", target = "productId")
     fun toDTO(ticket: TicketModel): TicketDTO
 }
