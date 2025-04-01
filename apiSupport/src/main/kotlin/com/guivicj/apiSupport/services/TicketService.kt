@@ -3,8 +3,10 @@ package com.guivicj.apiSupport.services
 import com.guivicj.apiSupport.dtos.TicketDTO
 import com.guivicj.apiSupport.dtos.TicketHistoryDTO
 import com.guivicj.apiSupport.dtos.requests.ChangeStateRequest
+import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.StateType
 import com.guivicj.apiSupport.enums.TechnicianType
+import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.mappers.TechMapper
 import com.guivicj.apiSupport.mappers.TicketHistoryMapper
 import com.guivicj.apiSupport.mappers.TicketMapper
@@ -78,33 +80,64 @@ class TicketService(
         return ticketRepository.getTicketsByState(state).map { ticketMapper.toDTO(it) }
     }
 
-    fun createTicket(ticket: TicketDTO): TicketDTO {
-        if (!userRepository.existsById(ticket.userId)) {
-            throw RuntimeException("User not found")
-        }
+    fun createTicket(currentUser: UserSessionInfoDTO, dto: TicketDTO): TicketDTO {
+        val userEmail = currentUser.user.email
 
-        val entity = toEntity(ticket)
-        val saved = ticketRepository.save(entity)
+        val user = userRepository.findByEmail(userEmail)
+            .orElseThrow { RuntimeException("User not found") }
+
+        val chatTech = techRepository.findAll().find {
+            it.technicianType == TechnicianType.CHAT
+        } ?: throw RuntimeException("No AI technician available")
+
+        val ticket = TicketModel(
+            id = 0,
+            userId = user,
+            technicianId = chatTech,
+            productId = productRepository.findById(dto.productId)
+                .orElseThrow { RuntimeException("Product not found") },
+            description = dto.description,
+            state = StateType.OPEN,
+            openedAt = LocalDateTime.now()
+        )
+
+        val saved = ticketRepository.save(ticket)
         return ticketMapper.toDTO(saved)
     }
 
-    fun assignToAvailableHuman(ticketId: Long): TicketDTO {
-        val ticket = ticketRepository.findById(ticketId).orElseThrow { RuntimeException("Ticket not found") }
+    fun assignToAvailableHuman(ticketId: Long, currentUser: UserSessionInfoDTO): TicketDTO {
+        val ticket = ticketRepository.findById(ticketId)
+            .orElseThrow { RuntimeException("Ticket not found") }
 
-        val techs = techRepository.findAll().filter { it.technicianType != TechnicianType.CHAT }
+        if (ticket.userId.email != currentUser.user.email) {
+            throw RuntimeException("You can only escalate your own tickets")
+        }
 
-        val techWithLeastTickets = techs.minByOrNull {
-            ticketRepository.countByTechnicianId(it)
-        } ?: throw RuntimeException("No technics available")
+        if (ticket.technicianId.technicianType != TechnicianType.CHAT) {
+            throw RuntimeException("Ticket already assigned to a human technician")
+        }
 
+        val techWithLeastTickets = techRepository.findAll()
+            .filter { it.technicianType != TechnicianType.CHAT }
+            .minByOrNull { ticketRepository.countByTechnicianId(it) }
+            ?: throw RuntimeException("No human technicians available")
 
         ticket.technicianId = techWithLeastTickets
+        ticket.inProgressAt = LocalDateTime.now()
+        ticket.state = StateType.IN_PROGRESS
+
         return ticketMapper.toDTO(ticketRepository.save(ticket))
     }
 
-    fun escalateTicket(ticketId: Long, newTechnicianId: Long): TicketDTO {
+    fun escalateTicket(ticketId: Long, newTechnicianId: Long, currentUser: UserSessionInfoDTO): TicketDTO {
         val ticket = ticketRepository.findById(ticketId)
             .orElseThrow { RuntimeException("Ticket not found") }
+
+        if (ticket.userId.email != currentUser.user.email &&
+            currentUser.user.type != UserType.ADMIN && currentUser.user.type != UserType.TECHNICIAN
+        ) {
+            throw RuntimeException("You can't escalate this ticket")
+        }
 
         val newTechnician = techRepository.findById(newTechnicianId)
             .orElseThrow { RuntimeException("Technician not found") }
@@ -114,37 +147,30 @@ class TicketService(
             fromTechnician = ticket.technicianId,
             toTechnician = newTechnician
         )
-        ticket.technicianId = newTechnician
 
+        ticket.technicianId = newTechnician
         ticketHistoryRepository.save(history)
 
         return ticketMapper.toDTO(ticketRepository.save(ticket))
     }
 
-    fun changeState(ticketId: Long, request: ChangeStateRequest): TicketDTO {
+    fun changeState(ticketId: Long, request: ChangeStateRequest, currentUser: UserSessionInfoDTO): TicketDTO {
         val ticket = ticketRepository.findById(ticketId)
             .orElseThrow { RuntimeException("Ticket not found") }
 
-        when (request.state) {
-            StateType.IN_PROGRESS -> {
-                if (ticket.inProgressAt == null) {
-                    ticket.inProgressAt = LocalDateTime.now()
-                }
-            }
+        if (request.state == StateType.IN_PROGRESS && ticket.inProgressAt == null)
+            ticket.inProgressAt = LocalDateTime.now()
 
-            StateType.CLOSED -> {
-                if (ticket.closedAt == null) {
-                    ticket.closedAt = LocalDateTime.now()
-                }
-            }
+        if (request.state == StateType.CLOSED && ticket.closedAt == null)
+            ticket.closedAt = LocalDateTime.now()
 
-            else -> {}
+        request.technicianId.let {
+            val newTech = techRepository.findById(it)
+                .orElseThrow { RuntimeException("Technician not found") }
+            ticket.technicianId = newTech
         }
 
         ticket.state = request.state
-        ticket.technicianId = techRepository.findById(request.technicianId)
-            .orElseThrow()
-
         return ticketMapper.toDTO(ticketRepository.save(ticket))
     }
 

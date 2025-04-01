@@ -1,9 +1,11 @@
 package com.guivicj.apiSupport.controllers
 
+import com.guivicj.apiSupport.annotations.CurrentUser
 import com.guivicj.apiSupport.dtos.TicketDTO
 import com.guivicj.apiSupport.dtos.TicketHistoryDTO
 import com.guivicj.apiSupport.dtos.requests.ChangeStateRequest
 import com.guivicj.apiSupport.dtos.requests.EscalateTicketRequest
+import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.StateType
 import com.guivicj.apiSupport.services.TicketService
 import org.springframework.http.ResponseEntity
@@ -46,32 +48,37 @@ class TicketController(val ticketService: TicketService) {
     }
 
     @PostMapping
-    fun createTicket(@RequestBody request: TicketDTO): ResponseEntity<TicketDTO> {
-        val createdTicket = ticketService.createTicket(request)
+    fun createTicket(@CurrentUser user: UserSessionInfoDTO, @RequestBody dto: TicketDTO): ResponseEntity<TicketDTO> {
+        val createdTicket = ticketService.createTicket(user, dto)
         return ResponseEntity.ok(createdTicket)
     }
 
     @PutMapping("/tickets/{ticketId}/assign-human")
-    fun assignHumanTech(@PathVariable ticketId: Long): ResponseEntity<TicketDTO> {
-        val reassignedTicket = ticketService.assignToAvailableHuman(ticketId)
+    fun assignHumanTech(
+        @CurrentUser user: UserSessionInfoDTO,
+        @PathVariable ticketId: Long
+    ): ResponseEntity<TicketDTO> {
+        val reassignedTicket = ticketService.assignToAvailableHuman(ticketId, user)
         return ResponseEntity.ok(reassignedTicket)
     }
 
     @PutMapping("/tickets/{ticketId}/escalate")
     fun escalateTicket(
-        @PathVariable ticketId: Long, @RequestBody request: EscalateTicketRequest
+        @CurrentUser user: UserSessionInfoDTO,
+        @PathVariable ticketId: Long,
+        @RequestBody request: EscalateTicketRequest
     ): ResponseEntity<TicketDTO> {
-        val updatedTicket = ticketService.escalateTicket(ticketId, request.newTechnicianId)
+        val updatedTicket = ticketService.escalateTicket(ticketId, request.newTechnicianId, user)
         return ResponseEntity.ok(updatedTicket)
     }
 
     @PutMapping("/tickets/{ticketId}/change-state")
     fun changeState(
-        @PathVariable ticketId: Long, @RequestBody request: ChangeStateRequest
+        @CurrentUser user: UserSessionInfoDTO,
+        @PathVariable ticketId: Long,
+        @RequestBody request: ChangeStateRequest
     ): ResponseEntity<TicketDTO> {
-        val stateChanged = ticketService.changeState(ticketId, request)
-        return ResponseEntity.ok(stateChanged)
+        val updatedTicket = ticketService.changeState(ticketId, request, user)
+        return ResponseEntity.ok(updatedTicket)
     }
-
-
 }
