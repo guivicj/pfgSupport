@@ -51,5 +51,4 @@ class AdminController(val adminService: AdminService) {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not an ADMIN")
         }
     }
-
 }

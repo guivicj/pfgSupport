@@ -1,11 +1,8 @@
 package com.guivicj.apiSupport.services
 
 import com.guivicj.apiSupport.dtos.TechDTO
-import com.guivicj.apiSupport.dtos.requests.DeleteEmployeeRequest
-import com.guivicj.apiSupport.dtos.requests.EmployeeRequest
-import com.guivicj.apiSupport.dtos.requests.UpdateTechRequest
-import com.guivicj.apiSupport.dtos.requests.UserUpdateRequest
 import com.guivicj.apiSupport.dtos.responses.Response
+import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.TechnicianType
 import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.mappers.TechMapper
@@ -14,7 +11,6 @@ import com.guivicj.apiSupport.repositories.UserRepository
 import jakarta.transaction.Transactional
 import org.apache.http.HttpStatus
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class TechService(
@@ -34,38 +30,53 @@ class TechService(
         techRepository.getTechsByTechnicianType(type).map(techMapper::toDTO)
 
     @Transactional
-    fun addTech(employeeRequest: EmployeeRequest): TechDTO {
-        val user =
-            userRepository.findById(employeeRequest.userid)
-                .orElseThrow { throw RuntimeException("User not found") }
-        if (user.type != UserType.TECHNICIAN) throw RuntimeException("User is not TECHNICIAN")
-        val tech = techMapper.toEntity(TechDTO(userId = user.id, technicianType = TechnicianType.JUNIOR))
-        techRepository.save(tech)
-
-        return techMapper.toDTO(tech)
-    }
-
-    @org.springframework.transaction.annotation.Transactional
-    fun updateTech(techRequest: UpdateTechRequest): TechDTO {
-        val user = userRepository.findById(techRequest.userid)
-            .orElseThrow { RuntimeException("User not found with ID: ${techRequest.userid}") }
-
-        if (user.type != UserType.TECHNICIAN) {
-            throw RuntimeException("User is not TECHNICIAN")
+    fun addTech(currentUser: UserSessionInfoDTO, dto: TechDTO): TechDTO {
+        if (currentUser.user.type != UserType.ADMIN) {
+            throw RuntimeException("Only ADMINs can create technicians")
         }
 
-        val tech = techRepository.findById(user.id)
-            .orElseThrow { RuntimeException("Tech not found") }
+        val user = userRepository.findById(dto.userId)
+            .orElseThrow { RuntimeException("User to promote not found") }
 
-        tech.technicianType = techRequest.technicianType
+        user.type = UserType.TECHNICIAN
+        userRepository.save(user)
+
+        val tech = techMapper.toEntity(dto)
         techRepository.save(tech)
 
         return techMapper.toDTO(tech)
     }
 
     @Transactional
-    fun deleteTech(techRequest: DeleteEmployeeRequest): Response {
-        val user = userRepository.findById(techRequest.id)
+    fun updateTech(currentUser: UserSessionInfoDTO, dto: TechDTO): TechDTO {
+        if (currentUser.user.type != UserType.ADMIN) {
+            throw RuntimeException("Only ADMINs can update technicians")
+        }
+
+        val user = userRepository.findById(dto.userId)
+            .orElseThrow { RuntimeException("User not found with ID: ${dto.userId}") }
+
+        if (user.type != UserType.TECHNICIAN || !techRepository.existsById(user.id)) {
+            throw RuntimeException("User is not a valid registered TECHNICIAN")
+        }
+
+        val tech = techRepository.findById(user.id)
+            .orElseThrow { RuntimeException("Tech not found") }
+
+        tech.technicianType = dto.technicianType
+        techRepository.save(tech)
+
+        return techMapper.toDTO(tech)
+    }
+
+
+    @Transactional
+    fun deleteTech(currentUser: UserSessionInfoDTO, dto: TechDTO): Response {
+        if (currentUser.user.type != UserType.ADMIN) {
+            return Response(HttpStatus.SC_UNAUTHORIZED, "Only Admins are allowed to delete technicians")
+        }
+
+        val user = userRepository.findById(dto.userId)
             .orElseThrow { RuntimeException("User not found") }
 
         if (user.type != UserType.TECHNICIAN) {
@@ -74,10 +85,6 @@ class TechService(
 
         if (!techRepository.existsById(user.id)) {
             throw RuntimeException("Tech not found")
-        }
-
-        if (techRequest.userType != UserType.ADMIN) {
-            return Response(HttpStatus.SC_UNAUTHORIZED, "Only Admin is allowed to delete technicians")
         }
 
         techRepository.deleteById(user.id)
