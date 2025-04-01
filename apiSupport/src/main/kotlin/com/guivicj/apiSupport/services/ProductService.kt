@@ -5,6 +5,7 @@ import com.guivicj.apiSupport.dtos.requests.CreateProductRequest
 import com.guivicj.apiSupport.dtos.requests.ProductDeleteRequest
 import com.guivicj.apiSupport.dtos.requests.ProductUpdateRequest
 import com.guivicj.apiSupport.dtos.responses.Response
+import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.mappers.ProductMapper
 import com.guivicj.apiSupport.models.Product
@@ -25,36 +26,44 @@ class ProductService(
         return productMapper.toDTO(productRepository.findById(productId).orElseThrow())
     }
 
-    fun createProduct(createProductRequest: CreateProductRequest): Response {
-        return if (createProductRequest.userType == UserType.ADMIN
-            && !productRepository.existsById(createProductRequest.product.id)
-        ) {
-            saveProductInternal(createProductRequest.product, "created")
-        } else {
-            Response(HttpStatus.SC_UNAUTHORIZED, "Only admins can add products")
+    fun createProduct(currentUser: UserSessionInfoDTO, product: ProductDTO): Response {
+        if (currentUser.user.type != UserType.ADMIN) {
+            return Response(HttpStatus.SC_UNAUTHORIZED, "Only ADMINs can add products")
         }
+
+        if (productRepository.existsByName(product.name)) {
+            return Response(HttpStatus.SC_CONFLICT, "Product already exists")
+        }
+
+        return saveProductInternal(productMapper.toEntity(product), "created")
     }
 
-    fun updateProduct(productUpdateRequest: ProductUpdateRequest): Response {
-        return if (productUpdateRequest.userType == UserType.ADMIN
-            && !productRepository.existsById(productUpdateRequest.product.id)
-        ) {
-            saveProductInternal(productUpdateRequest.product, "updated")
-        } else {
-            Response(HttpStatus.SC_UNAUTHORIZED, "Only admins can update products")
+    fun updateProduct(currentUser: UserSessionInfoDTO, product: ProductDTO): Response {
+        if (currentUser.user.type != UserType.ADMIN) {
+            return Response(HttpStatus.SC_UNAUTHORIZED, "Only ADMINSs can update products")
         }
+
+        if (!productRepository.existsByName(product.name)) {
+            return Response(HttpStatus.SC_NOT_FOUND, "Product not found")
+        }
+
+        return saveProductInternal(productMapper.toEntity(product), "updated")
     }
 
-    fun deleteProduct(productDeleteRequest: ProductDeleteRequest): Response {
-        return if (productDeleteRequest.userType == UserType.ADMIN
-            && !productRepository.existsById(productDeleteRequest.productId)
-        ) {
-            productRepository.deleteById(productDeleteRequest.productId)
-            Response(HttpStatus.SC_OK, "Product deleted")
-        } else {
-            Response(HttpStatus.SC_UNAUTHORIZED, "Only admins can remove products")
+
+    fun deleteProduct(currentUser: UserSessionInfoDTO, productId: Long): Response {
+        if (currentUser.user.type != UserType.ADMIN) {
+            return Response(HttpStatus.SC_UNAUTHORIZED, "Only ADMINs can remove products")
         }
+
+        if (!productRepository.existsById(productId)) {
+            return Response(HttpStatus.SC_NOT_FOUND, "Product not found")
+        }
+
+        productRepository.deleteById(productId)
+        return Response(HttpStatus.SC_OK, "Product deleted")
     }
+
 
     private fun saveProductInternal(product: Product, action: String): Response {
         productRepository.save(product)
