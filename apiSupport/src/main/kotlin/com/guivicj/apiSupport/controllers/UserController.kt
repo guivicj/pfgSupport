@@ -1,10 +1,12 @@
 package com.guivicj.apiSupport.controllers
 
-import com.guivicj.apiSupport.dtos.requests.DeleteRequest
-import com.guivicj.apiSupport.dtos.responses.Response
+import com.guivicj.apiSupport.annotations.CurrentUser
 import com.guivicj.apiSupport.dtos.UserDTO
 import com.guivicj.apiSupport.dtos.requests.UserUpdateRequest
+import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
+import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.services.UserService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -51,8 +53,15 @@ class UserController(val userService: UserService) {
     }
 
     @DeleteMapping("/delete/{email}")
-    fun deleteUser(@PathVariable email: String, @RequestBody deleteRequest: DeleteRequest): ResponseEntity<Response> {
-        val response = userService.deleteUser(email, deleteRequest)
-        return ResponseEntity.status(response.status).body(response)
+    fun deleteUser(
+        @CurrentUser user: UserSessionInfoDTO,
+        @PathVariable email: String
+    ): ResponseEntity<Any> {
+        return if (user.user.type == UserType.ADMIN) {
+            val response = userService.deleteUser(email)
+            ResponseEntity.status(response.status).body(response)
+        } else {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not an ADMIN")
+        }
     }
 }

@@ -73,7 +73,7 @@ class TechService(
     @Transactional
     fun deleteTech(currentUser: UserSessionInfoDTO, dto: TechDTO): Response {
         if (currentUser.user.type != UserType.ADMIN) {
-            return Response(HttpStatus.SC_UNAUTHORIZED, "Only Admins are allowed to delete technicians")
+            throw RuntimeException("Only ADMINs can delete other admins")
         }
 
         val user = userRepository.findById(dto.userId)

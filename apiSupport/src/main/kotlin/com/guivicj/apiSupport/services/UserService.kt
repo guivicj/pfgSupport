@@ -1,12 +1,13 @@
 package com.guivicj.apiSupport.services
 
-import com.guivicj.apiSupport.dtos.requests.DeleteRequest
 import com.guivicj.apiSupport.dtos.responses.Response
 import com.guivicj.apiSupport.dtos.UserDTO
 import com.guivicj.apiSupport.dtos.requests.UserUpdateRequest
+import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.mappers.UserMapper
 import com.guivicj.apiSupport.repositories.UserRepository
+import jakarta.transaction.Transactional
 import org.apache.http.HttpStatus
 import org.springframework.stereotype.Service
 import java.util.*
@@ -41,17 +42,12 @@ class UserService(
         return user;
     }
 
-    fun deleteUser(email: String, deleteRequest: DeleteRequest): Response {
-        val user = getUserByEmail(email).orElseThrow { IllegalArgumentException("User not found") }
-        var isDeleted = false
-        if (deleteRequest.userType == UserType.ADMIN) {
-            userRepository.delete(userMapper.toEntity(user))
-            isDeleted = true
-        }
-        return if (isDeleted) {
-            Response(HttpStatus.SC_OK, "Successfully deleted the user")
-        } else {
-            Response(HttpStatus.SC_UNAUTHORIZED, "Only Admin is allowed to delete users")
-        }
+    @Transactional
+    fun deleteUser(email: String): Response {
+        val user = userRepository.findByEmail(email)
+            .orElseThrow { RuntimeException("User not found with email: $email") }
+
+        userRepository.delete(user)
+        return Response(HttpStatus.SC_OK, "User with email $email deleted successfully")
     }
 }
