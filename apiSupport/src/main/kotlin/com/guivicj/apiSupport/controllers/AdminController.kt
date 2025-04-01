@@ -1,9 +1,9 @@
 package com.guivicj.apiSupport.controllers
 
+import com.guivicj.apiSupport.annotations.CurrentUser
 import com.guivicj.apiSupport.dtos.AdminDTO
-import com.guivicj.apiSupport.dtos.requests.DeleteEmployeeRequest
-import com.guivicj.apiSupport.dtos.requests.EmployeeRequest
-import com.guivicj.apiSupport.dtos.responses.Response
+import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
+import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.services.AdminService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -30,15 +30,26 @@ class AdminController(val adminService: AdminService) {
     }
 
     @PostMapping
-    fun addAdmin(@RequestBody adminRequest: EmployeeRequest): ResponseEntity<AdminDTO> {
-        val admin = adminService.addAdmin(adminRequest)
-        return ResponseEntity.ok(admin)
+    fun addAdmin(@CurrentUser user: UserSessionInfoDTO, @RequestBody dto: AdminDTO): ResponseEntity<Any> {
+        return if (user.user.type == UserType.ADMIN) {
+            val admin = adminService.addAdmin(user, dto)
+            ResponseEntity.ok(admin)
+        } else {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not an ADMIN")
+        }
     }
 
-    @DeleteMapping("/delete")
-    fun deleteAdmin(@RequestBody adminRequest: DeleteEmployeeRequest): ResponseEntity<Response> {
-        val response = adminService.deleteAdmin(adminRequest)
-        return ResponseEntity.status(response.status).body(response)
+    @DeleteMapping
+    fun deleteAdmin(
+        @CurrentUser user: UserSessionInfoDTO,
+        @RequestBody dto: AdminDTO
+    ): ResponseEntity<Any> {
+        return if (user.user.type == UserType.ADMIN) {
+            val response = adminService.deleteAdmin(user, dto)
+            ResponseEntity.status(response.status).body(response)
+        } else {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not an ADMIN")
+        }
     }
 
 }

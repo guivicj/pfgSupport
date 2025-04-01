@@ -1,9 +1,8 @@
 package com.guivicj.apiSupport.services
 
 import com.guivicj.apiSupport.dtos.AdminDTO
-import com.guivicj.apiSupport.dtos.requests.DeleteEmployeeRequest
-import com.guivicj.apiSupport.dtos.requests.EmployeeRequest
 import com.guivicj.apiSupport.dtos.responses.Response
+import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.mappers.AdminMapper
 import com.guivicj.apiSupport.repositories.AdminRepository
@@ -33,13 +32,13 @@ class AdminService(
         )
 
     @Transactional
-    fun addAdmin(adminRequest: EmployeeRequest): AdminDTO {
-        val user = userRepository.findById(adminRequest.userid)
-            .orElseThrow { RuntimeException("User not found with ID: ${adminRequest.userid}") }
-
-        if (user.type != UserType.ADMIN) {
-            throw RuntimeException("User is not an ADMIN")
+    fun addAdmin(currentUser: UserSessionInfoDTO, dto: AdminDTO): AdminDTO {
+        if (currentUser.user.type != UserType.ADMIN) {
+            throw RuntimeException("Only ADMINs can create other admins")
         }
+
+        val user = userRepository.findByEmail(currentUser.user.email)
+            .orElseThrow { RuntimeException("User not found with Email: ${currentUser.user.email}") }
 
         val admin = adminMapper.toEntity(AdminDTO(userId = user.id))
         adminRepository.save(admin)
@@ -48,27 +47,27 @@ class AdminService(
     }
 
     @Transactional
-    fun deleteAdmin(adminRequest: DeleteEmployeeRequest): Response {
-        val user = userRepository.findById(adminRequest.id)
-            .orElseThrow { RuntimeException("User not found with ID: ${adminRequest.id}") }
-
-        if (user.type != UserType.ADMIN) {
-            throw RuntimeException("User is not an ADMIN")
+    fun deleteAdmin(currentUser: UserSessionInfoDTO, dto: AdminDTO): Response {
+        if (currentUser.user.type != UserType.ADMIN) {
+            throw RuntimeException("Only ADMINs can delete other admins")
         }
 
-        if (!adminRepository.existsById(user.id)) {
-            throw RuntimeException("Admin not found for user ID: ${user.id}")
+        val userToDelete = userRepository.findById(dto.userId)
+            .orElseThrow { RuntimeException("Target user not found with ID: ${dto.userId}") }
+
+        if (userToDelete.type != UserType.ADMIN) {
+            throw RuntimeException("Target user is not an admin")
         }
 
-        if (adminRequest.userType != UserType.ADMIN) {
-            return Response(HttpStatus.SC_UNAUTHORIZED, "Only Admin is allowed to delete administrators")
+        if (!adminRepository.existsById(userToDelete.id)) {
+            throw RuntimeException("Admin entity not found for user ID: ${userToDelete.id}")
         }
 
-        adminRepository.deleteById(user.id)
+        adminRepository.deleteById(userToDelete.id)
 
-        user.type = UserType.USER
-        userRepository.save(user)
+        userToDelete.type = UserType.USER
+        userRepository.save(userToDelete)
 
-        return Response(HttpStatus.SC_OK, "Successfully removed admin role. User remains as a normal user.")
+        return Response(HttpStatus.SC_OK, "Removed admin role from user ${userToDelete.email}")
     }
 }

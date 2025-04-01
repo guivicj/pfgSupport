@@ -87,5 +87,4 @@ class TechService(
 
         return Response(HttpStatus.SC_OK, "Successfully removed technician role. User remains as a normal user.")
     }
-
 }

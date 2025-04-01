@@ -23,11 +23,11 @@ class UserService(
     }
 
     fun getUserByName(name: String): Optional<UserDTO> {
-        return userRepository.findByName(name)
+        return userRepository.findByName(name).map(userMapper::toDTO)
     }
 
     fun getUserByEmail(email: String): Optional<UserDTO> {
-        return userRepository.findByEmail(email)
+        return userRepository.findByEmail(email).map(userMapper::toDTO)
     }
 
     fun updateUser(email: String, updateRequest: UserUpdateRequest): UserDTO {
