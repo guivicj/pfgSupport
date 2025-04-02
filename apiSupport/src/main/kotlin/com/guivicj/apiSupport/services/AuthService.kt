@@ -45,7 +45,7 @@ class AuthService(
             val email = verifiedToken.email ?: throw Exception("Cannot verify email")
 
             val user = userRepository.findByFirebaseUid(firebaseUid).orElseGet {
-                userMapper.toEntity(userRepository.findByEmail(email).orElseThrow())
+                userRepository.findByEmail(email).orElseThrow()
             }
 
             return if (user != null) {
