@@ -1,9 +1,6 @@
 package com.guivicj.apiSupport.services
 
 import com.guivicj.apiSupport.dtos.ProductDTO
-import com.guivicj.apiSupport.dtos.requests.CreateProductRequest
-import com.guivicj.apiSupport.dtos.requests.ProductDeleteRequest
-import com.guivicj.apiSupport.dtos.requests.ProductUpdateRequest
 import com.guivicj.apiSupport.dtos.responses.Response
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.UserType

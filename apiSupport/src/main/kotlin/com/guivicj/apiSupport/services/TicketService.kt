@@ -4,13 +4,14 @@ import com.guivicj.apiSupport.dtos.TicketDTO
 import com.guivicj.apiSupport.dtos.TicketHistoryDTO
 import com.guivicj.apiSupport.dtos.requests.ChangeStateRequest
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
+import com.guivicj.apiSupport.enums.ChatRole
 import com.guivicj.apiSupport.enums.StateType
 import com.guivicj.apiSupport.enums.TechnicianType
 import com.guivicj.apiSupport.enums.UserType
-import com.guivicj.apiSupport.mappers.TechMapper
 import com.guivicj.apiSupport.mappers.TicketHistoryMapper
 import com.guivicj.apiSupport.mappers.TicketMapper
 import com.guivicj.apiSupport.models.TicketHistory
+import com.guivicj.apiSupport.models.TicketMessage
 import com.guivicj.apiSupport.models.TicketModel
 import com.guivicj.apiSupport.repositories.*
 import org.springframework.stereotype.Service
@@ -22,12 +23,12 @@ class TicketService(
     private val ticketRepository: TicketRepository,
     private val techRepository: TechRepository,
     private val productRepository: ProductRepository,
-    private val techMapper: TechMapper,
     private val ticketMapper: TicketMapper,
     private val ticketHistoryRepository: TicketHistoryRepository,
     private val ticketHistoryMapper: TicketHistoryMapper,
-
-    ) {
+    private val ticketMessageRepository: TicketMessageRepository,
+    private val openAiService: OpenAiService,
+) {
     fun toEntity(dto: TicketDTO): TicketModel {
         val user = userRepository.findById(dto.userId)
             .orElseThrow { RuntimeException("User not found") }
@@ -177,6 +178,50 @@ class TicketService(
     fun getTicketHistory(ticketId: Long): List<TicketHistoryDTO> {
         val history = ticketHistoryRepository.findByTicketId(ticketId)
         return ticketHistoryMapper.toDtoList(history)
+    }
+
+    fun chatWithIA(ticketId: Long, userSession: UserSessionInfoDTO, message: String): String {
+        val user = userRepository.findByEmail(userSession.user.email)
+            .orElseThrow { RuntimeException("User not found") }
+
+        val ticket = ticketRepository.findById(ticketId)
+            .orElseThrow { RuntimeException("Ticket not found") }
+
+        if (ticket.userId.id != user.id) {
+            throw RuntimeException("This ticket is not yours")
+        }
+
+        ticketMessageRepository.save(
+            TicketMessage(
+                ticket = ticket,
+                role = ChatRole.USER,
+                content = message
+            )
+        )
+
+        val messages = ticketMessageRepository
+            .findAllByTicketIdOrderByTimestampAsc(ticketId)
+            .map {
+                mapOf("role" to it.role.name.lowercase(), "content" to it.content)
+            }
+
+        val response = openAiService.sendMessage(messages)
+
+        ticketMessageRepository.save(
+            TicketMessage(
+                ticket = ticket,
+                role = ChatRole.ASSISTANT,
+                content = response
+            )
+        )
+        if (
+            message.contains("real person", ignoreCase = true)) {
+            if (ticket.technicianId.technicianType.name == "CHAT") {
+                assignToAvailableHuman(ticketId, userSession)
+            }
+        }
+
+        return response
     }
 
 }

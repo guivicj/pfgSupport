@@ -4,7 +4,9 @@ import com.guivicj.apiSupport.annotations.CurrentUser
 import com.guivicj.apiSupport.dtos.TicketDTO
 import com.guivicj.apiSupport.dtos.TicketHistoryDTO
 import com.guivicj.apiSupport.dtos.requests.ChangeStateRequest
+import com.guivicj.apiSupport.dtos.requests.ChatRequest
 import com.guivicj.apiSupport.dtos.requests.EscalateTicketRequest
+import com.guivicj.apiSupport.dtos.responses.ChatResponse
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.StateType
 import com.guivicj.apiSupport.services.TicketService
@@ -80,5 +82,15 @@ class TicketController(val ticketService: TicketService) {
     ): ResponseEntity<TicketDTO> {
         val updatedTicket = ticketService.changeState(ticketId, request, user)
         return ResponseEntity.ok(updatedTicket)
+    }
+
+    @PostMapping("/{ticketId}/chat")
+    fun chatWithIA(
+        @PathVariable ticketId: Long,
+        @RequestBody request: ChatRequest,
+        @CurrentUser userSession: UserSessionInfoDTO
+    ): ResponseEntity<ChatResponse> {
+        val response = ticketService.chatWithIA(ticketId, userSession, request.message)
+        return ResponseEntity.ok(ChatResponse(response))
     }
 }

@@ -2,9 +2,6 @@ package com.guivicj.apiSupport.controllers
 
 import com.guivicj.apiSupport.annotations.CurrentUser
 import com.guivicj.apiSupport.dtos.ProductDTO
-import com.guivicj.apiSupport.dtos.requests.CreateProductRequest
-import com.guivicj.apiSupport.dtos.requests.ProductDeleteRequest
-import com.guivicj.apiSupport.dtos.requests.ProductUpdateRequest
 import com.guivicj.apiSupport.dtos.responses.Response
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.services.ProductService
