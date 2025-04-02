@@ -1,6 +1,7 @@
 package com.guivicj.apiSupport.controllers
 
 import com.guivicj.apiSupport.annotations.CurrentUser
+import com.guivicj.apiSupport.annotations.RoleRequired
 import com.guivicj.apiSupport.dtos.UserDTO
 import com.guivicj.apiSupport.dtos.requests.UserUpdateRequest
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
@@ -52,16 +53,13 @@ class UserController(val userService: UserService) {
         return ResponseEntity.ok(user)
     }
 
+    @RoleRequired(UserType.ADMIN)
     @DeleteMapping("/delete/{email}")
     fun deleteUser(
         @CurrentUser user: UserSessionInfoDTO,
         @PathVariable email: String
     ): ResponseEntity<Any> {
-        return if (user.user.type == UserType.ADMIN) {
             val response = userService.deleteUser(email)
-            ResponseEntity.status(response.status).body(response)
-        } else {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not an ADMIN")
-        }
+            return ResponseEntity.status(response.status).body(response)
     }
 }

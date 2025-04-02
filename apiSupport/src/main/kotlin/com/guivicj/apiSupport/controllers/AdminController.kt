@@ -1,6 +1,7 @@
 package com.guivicj.apiSupport.controllers
 
 import com.guivicj.apiSupport.annotations.CurrentUser
+import com.guivicj.apiSupport.annotations.RoleRequired
 import com.guivicj.apiSupport.dtos.AdminDTO
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.UserType
@@ -29,26 +30,23 @@ class AdminController(val adminService: AdminService) {
         return ResponseEntity.ok(admin)
     }
 
+    @RoleRequired(UserType.ADMIN)
     @PostMapping
-    fun addAdmin(@CurrentUser user: UserSessionInfoDTO, @RequestBody dto: AdminDTO): ResponseEntity<Any> {
-        return if (user.user.type == UserType.ADMIN) {
-            val admin = adminService.addAdmin(user, dto)
-            ResponseEntity.ok(admin)
-        } else {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not an ADMIN")
-        }
+    fun addAdmin(
+        @CurrentUser user: UserSessionInfoDTO,
+        @RequestBody dto: AdminDTO
+    ): ResponseEntity<Any> {
+        val admin = adminService.addAdmin(user, dto)
+        return ResponseEntity.ok(admin)
     }
 
+    @RoleRequired(UserType.ADMIN)
     @DeleteMapping
     fun deleteAdmin(
         @CurrentUser user: UserSessionInfoDTO,
         @RequestBody dto: AdminDTO
     ): ResponseEntity<Any> {
-        return if (user.user.type == UserType.ADMIN) {
-            val response = adminService.deleteAdmin(user, dto)
-            ResponseEntity.status(response.status).body(response)
-        } else {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not an ADMIN")
-        }
+        val response = adminService.deleteAdmin(user, dto)
+        return ResponseEntity.status(response.status).body(response)
     }
 }
