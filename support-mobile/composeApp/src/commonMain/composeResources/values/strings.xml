@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">support-mobile</string>
+    <string name="welcome_title">Welcome to Support-Mobile</string>
+    <string name="first_onboarding_subtitle">A professional platform for efficient and reliable technical assistance.</string>
+    <string name="first_onboarding_button">Continue</string>
+    <string name="second_onboarding_title">Effortless issue reporting</string>
+    <string name="second_onboarding_subtitle">Create support tickets quickly and monitor their status in real time</string>
+    <string name="second_onboarding_button">Proceed</string>
+    <string name="third_onboarding_title">Intelligent support available 24/7</string>
+    <string name="third_onboarding_subtitle">Receive immediate assistance through our AI-powered system</string>
+    <string name="third_onboarding_button">Next</string>
+    <string name="fourth_onboarding_title">Handled by certified professionals</string>
+    <string name="fourth_onboarding_subtitle">Your request is assigned to the most suitable technician for optimal resolution</string>
+    <string name="fourth_onboarding_button">Start using Support-Mobile</string>
+</resources>

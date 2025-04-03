@@ -17,8 +17,6 @@ data class UserModel(
     @Column(nullable = false)
     var email: String = "",
     @Column(nullable = false)
-    var password: String = "",
-    @Column(nullable = false)
     var telephone: Int = 0,
     @Column(nullable = false)
     var type: UserType = UserType.USER,
