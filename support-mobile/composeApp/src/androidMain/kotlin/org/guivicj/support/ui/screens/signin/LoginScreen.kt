@@ -1,6 +1,7 @@
 package org.guivicj.support.ui.screens.signin
 
 import android.app.Activity
+import android.content.Context
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,7 +17,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -29,12 +31,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import kotlinx.coroutines.launch
+import org.guivicj.support.R
 import org.guivicj.support.firebase.firebaseAuthWithGoogle
 import org.guivicj.support.navigation.Screen
 import org.guivicj.support.ui.screens.signin.components.FormTextField
@@ -46,6 +51,7 @@ import support_mobile.composeapp.generated.resources.Res
 import support_mobile.composeapp.generated.resources.email_field
 import support_mobile.composeapp.generated.resources.forgot_password
 import support_mobile.composeapp.generated.resources.login_btn
+import support_mobile.composeapp.generated.resources.login_google
 import support_mobile.composeapp.generated.resources.login_options
 import support_mobile.composeapp.generated.resources.login_subtitle
 import support_mobile.composeapp.generated.resources.login_title
@@ -80,6 +86,14 @@ actual fun LoginScreen(navController: NavHostController) {
             Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
+
+    fun googleSignInOptions(context: Context): GoogleSignInOptions {
+        return GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(context.getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+    }
+
 
     LaunchedEffect(state.session) {
         if (state.session != null) {
@@ -178,7 +192,7 @@ actual fun LoginScreen(navController: NavHostController) {
                         .fillMaxWidth()
                         .padding(vertical = 16.dp)
                 ) {
-                    Divider(
+                    HorizontalDivider(
                         modifier = Modifier.weight(1f),
                         color = MaterialTheme.colorScheme.outline
                     )
@@ -188,10 +202,43 @@ actual fun LoginScreen(navController: NavHostController) {
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )
-                    Divider(
+                    HorizontalDivider(
                         modifier = Modifier.weight(1f),
                         color = MaterialTheme.colorScheme.outline
                     )
+                }
+                Spacer(modifier = Modifier.padding(8.dp))
+                OutlinedButton(
+                    onClick = {
+                        scope.launch {
+                            try {
+                                viewModel.login()
+                            } catch (e: Exception) {
+                                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG)
+                                    .show()
+                            }
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                        contentColor = MaterialTheme.colorScheme.onSurface
+                    ),
+                    elevation = ButtonDefaults.buttonElevation(
+                        defaultElevation = 6.dp,
+                        pressedElevation = 10.dp,
+                        focusedElevation = 8.dp,
+                    )) {
+                    Icon(
+                        painterResource(
+                            id = R.drawable.ic_google,
+                        ), contentDescription = null,
+                        modifier = Modifier.height(20.dp)
+                    )
+                    Text(text = stringResource(Res.string.login_google))
                 }
             }
         }

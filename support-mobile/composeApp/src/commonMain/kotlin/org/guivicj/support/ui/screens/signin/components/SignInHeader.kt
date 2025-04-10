@@ -15,10 +15,10 @@ fun SignInHeader(
     modifier: Modifier = Modifier,
 ) {
     GradientTopBackground {
-        Column(modifier = modifier.padding(34.dp)) {
+        Column(modifier = modifier.padding(50.dp)) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.displaySmall,
+                style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onPrimary
             )
             Text(

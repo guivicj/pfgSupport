@@ -18,6 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import org.guivicj.support.navigation.Screen
 import org.guivicj.support.ui.screens.onboarding.components.GradientBackgroundBox
+import org.guivicj.support.ui.screens.onboarding.components.OnBoardingButton
+import org.guivicj.support.ui.screens.onboarding.components.OnBoardingTitle
 import org.jetbrains.compose.resources.stringResource
 import org.koin.core.annotation.KoinExperimentalAPI
 import support_mobile.composeapp.generated.resources.Res
@@ -38,38 +40,17 @@ fun ThirdOnBoardingScreen(navController: NavHostController) {
                 Modifier.padding(50.dp),
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                Text(
-                    text = stringResource(Res.string.third_onboarding_title),
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.surface
-                )
-                Text(
-                    text = stringResource(Res.string.third_onboarding_subtitle),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.surface
+                OnBoardingTitle(
+                    stringResource(Res.string.third_onboarding_title),
+                    stringResource(Res.string.third_onboarding_subtitle)
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                OutlinedButton(
-                    onClick = { navController.navigate(Screen.FourthOnBoardingScreen.route) },
-                    modifier = Modifier.fillMaxWidth().height(50.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = MaterialTheme.colorScheme.background,
-                        contentColor = MaterialTheme.colorScheme.onSurface
-                    ),
-                    elevation = ButtonDefaults.buttonElevation(
-                        defaultElevation = 6.dp,
-                        pressedElevation = 10.dp,
-                        focusedElevation = 8.dp,
-                    )
-                ) {
-                    Text(
-                        text = stringResource(Res.string.third_onboarding_button),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
+                OnBoardingButton(
+                    navController,
+                    Screen.FourthOnBoardingScreen.route,
+                    stringResource(Res.string.third_onboarding_button)
+                )
             }
-
         }
     }
 }

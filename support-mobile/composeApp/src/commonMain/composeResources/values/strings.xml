@@ -24,4 +24,5 @@
     <string name="register_btn">Register</string>
     <string name="forgot_password">Forgot Password?</string>">
     <string name="login_options">Or login with</string>
+    <string name="login_google">Google</string>
 </resources>
