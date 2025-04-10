@@ -47,7 +47,7 @@ fun FourthOnBoardingScreen(navController: NavHostController) {
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 OutlinedButton(
-                    onClick = { navController.navigate(Screen.FirstOnBoardingScreen.route) },
+                    onClick = { navController.navigate(Screen.LoginScreen.route) },
                     modifier = Modifier.fillMaxWidth().height(50.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.outlinedButtonColors(

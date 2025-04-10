@@ -23,7 +23,7 @@ class AuthService(
         val firebaseUid = decodedToken.uid
 
         val iat = decodedToken.claims["iat"] as? Long
-            ?: throw RuntimeException("No se pudo obtener la fecha de emisión")
+            ?: throw RuntimeException("Cannot obtain emission token")
 
         val issuedAt = Instant.ofEpochSecond(iat)
             .atZone(ZoneId.systemDefault())

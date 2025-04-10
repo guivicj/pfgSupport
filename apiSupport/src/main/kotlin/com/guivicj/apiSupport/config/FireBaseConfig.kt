@@ -20,7 +20,7 @@ class FirebaseConfig {
         val serviceAccount = File(credentialsPath)
 
         if (!serviceAccount.exists()) {
-            throw RuntimeException("Archivo de credenciales Firebase no encontrado en $credentialsPath")
+            throw RuntimeException("Credentials file not found in $credentialsPath")
         }
 
         val options = FirebaseOptions.builder()

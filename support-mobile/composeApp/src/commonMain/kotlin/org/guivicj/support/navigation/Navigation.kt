@@ -10,6 +10,7 @@ import org.guivicj.support.ui.screens.onboarding.FirstOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.FourthOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.SecondOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.ThirdOnBoardingScreen
+import org.guivicj.support.ui.screens.signin.LoginScreen
 import org.koin.core.annotation.KoinExperimentalAPI
 
 @Composable
@@ -40,6 +41,9 @@ fun NavHostMain(navController: NavHostController) {
             }
             composable(Screen.FourthOnBoardingScreen.route) {
                 FourthOnBoardingScreen(navController)
+            }
+            composable(Screen.LoginScreen.route) {
+                LoginScreen(navController)
             }
         }
     }

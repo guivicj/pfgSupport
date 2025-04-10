@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -34,6 +35,14 @@ kotlin {
                 implementation(libs.ktor.client.serialization)
 
                 implementation(libs.kamel.image)
+
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.serialization)
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
+                implementation(libs.ktor.client.cio)
+
             }
         }
 
@@ -45,6 +54,8 @@ kotlin {
 
                 implementation(libs.koin.android)
                 implementation(libs.koin.androidx.compose)
+
+                implementation(libs.ktor.client.cio)
             }
         }
 
@@ -89,4 +100,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
+}
+dependencies {
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.play.services.auth)
+    implementation(libs.firebase.auth)
+
 }
