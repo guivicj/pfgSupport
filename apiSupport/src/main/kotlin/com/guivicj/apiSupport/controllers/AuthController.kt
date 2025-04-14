@@ -27,7 +27,7 @@ class AuthController(
 
     @PostMapping("/firebase-login")
     fun loginWithFirebase(@RequestBody request: FirebaseLoginRequest): ResponseEntity<UserSessionInfoDTO> {
-        val sessionInfo = authService.authenticateWithFirebase(request.token)
+        val sessionInfo = authService.authenticateWithFirebase(request)
         return ResponseEntity.ok(sessionInfo)
     }
 

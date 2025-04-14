@@ -2,6 +2,7 @@ package com.guivicj.apiSupport.services
 
 import com.google.firebase.auth.FirebaseAuth
 import com.guivicj.apiSupport.dtos.UserDTO
+import com.guivicj.apiSupport.dtos.requests.FirebaseLoginRequest
 import com.guivicj.apiSupport.dtos.responses.Response
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.UserType
@@ -40,8 +41,8 @@ class AuthService(
         )
     }
 
-    fun authenticateWithFirebase(token: String): UserSessionInfoDTO {
-        val verifiedToken = FirebaseAuth.getInstance().verifyIdToken(token)
+    fun authenticateWithFirebase(request: FirebaseLoginRequest): UserSessionInfoDTO {
+        val verifiedToken = FirebaseAuth.getInstance().verifyIdToken(request.token)
         val firebaseUid = verifiedToken.uid
         val email = verifiedToken.email ?: throw Exception("Cannot verify email")
         val iat = verifiedToken.claims["iat"] as? Long
@@ -53,9 +54,9 @@ class AuthService(
         val user = userRepository.findByFirebaseUid(firebaseUid).orElseGet {
             val newUser = UserModel(
                 firebaseUid = firebaseUid,
-                name = verifiedToken.name ?: "Default",
+                name = request.name,
                 email = email,
-                telephone = 0,
+                telephone = request.telephone,
                 type = UserType.USER
             )
             userRepository.save(newUser)
