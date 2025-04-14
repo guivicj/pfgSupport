@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -57,6 +59,8 @@ import support_mobile.composeapp.generated.resources.login_options
 import support_mobile.composeapp.generated.resources.login_subtitle
 import support_mobile.composeapp.generated.resources.login_title
 import support_mobile.composeapp.generated.resources.password_field
+import support_mobile.composeapp.generated.resources.register_btn
+import support_mobile.composeapp.generated.resources.register_text
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
@@ -95,7 +99,6 @@ actual fun LoginScreen(navController: NavHostController) {
             .build()
     }
 
-
     LaunchedEffect(state.session) {
         if (state.session != null) {
             navController.navigate(Screen.FirstOnBoardingScreen.route) {
@@ -123,12 +126,14 @@ actual fun LoginScreen(navController: NavHostController) {
                 FormTextField(
                     value = state.email,
                     onValueChange = { viewModel.onEmailChange(it) },
-                    label = stringResource(Res.string.email_field)
+                    label = stringResource(Res.string.email_field),
+                    error = state.emailError
                 )
                 PasswordTextField(
                     value = state.password,
                     onValueChange = { viewModel.onPasswordChange(it) },
-                    label = stringResource(Res.string.password_field)
+                    label = stringResource(Res.string.password_field),
+                    error = state.passwordError
                 )
 
                 Spacer(modifier = Modifier.padding(8.dp))
@@ -143,7 +148,7 @@ actual fun LoginScreen(navController: NavHostController) {
                     style = MaterialTheme.typography.bodyLarge
                 )
 
-                Spacer(modifier = Modifier.padding(8.dp))
+                Spacer(modifier = Modifier.padding(16.dp))
 
                 OutlinedButton(
                     onClick = {
@@ -162,7 +167,7 @@ actual fun LoginScreen(navController: NavHostController) {
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = MaterialTheme.colorScheme.outline,
-                        contentColor = MaterialTheme.colorScheme.onSurface
+                        contentColor = MaterialTheme.colorScheme.background
                     ),
                     elevation = ButtonDefaults.buttonElevation(
                         defaultElevation = 6.dp,
@@ -177,15 +182,6 @@ actual fun LoginScreen(navController: NavHostController) {
                 }
 
                 Spacer(modifier = Modifier.padding(8.dp))
-
-                if (state.message.isNotBlank()) {
-                    Text(
-                        text = state.message,
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-
-                Spacer(modifier = Modifier.padding(16.dp))
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -236,6 +232,29 @@ actual fun LoginScreen(navController: NavHostController) {
                         modifier = Modifier.height(20.dp)
                     )
                     Text(text = stringResource(Res.string.login_google))
+                }
+                Spacer(modifier = Modifier.padding(8.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp)
+                ) {
+                    Text(
+                        text = stringResource(Res.string.register_text),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface
+
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = stringResource(Res.string.register_btn),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.outline,
+                        modifier = Modifier
+                            .clickable { navController.navigate(Screen.RegisterScreen.route) }
+                    )
                 }
             }
         }

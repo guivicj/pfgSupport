@@ -41,6 +41,32 @@ class AuthRepositoryImpl(
         }
     }
 
+    override suspend fun register(
+        name: String,
+        email: String,
+        password: String,
+        telephone: String
+    ): Result<UserSessionInfoDTO> {
+        return try {
+            val authResult = FirebaseAuth.getInstance()
+                .createUserWithEmailAndPassword(email, password)
+                .await()
+
+            val idToken = authResult.user?.getIdToken(true)?.await()?.token
+                ?: return Result.failure(Exception("Failed to retrieve ID token"))
+
+            val response = client.post("http://10.0.2.2:8080/api/auth/firebase-login") {
+                contentType(ContentType.Application.Json)
+                setBody(mapOf("token" to idToken, "name" to name, "telephone" to telephone))
+            }.body<UserSessionInfoDTO>()
+
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+
     override suspend fun loginWithFirebase(idToken: String): Result<UserSessionInfoDTO> {
         return try {
             val response: HttpResponse =

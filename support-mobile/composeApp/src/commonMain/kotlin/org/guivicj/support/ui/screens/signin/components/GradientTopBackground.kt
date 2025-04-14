@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -26,7 +27,8 @@ fun GradientTopBackground(content: @Composable () -> Unit) {
                     start = Offset(x = Float.POSITIVE_INFINITY, y = 0f),
                     end = Offset(x = 0f, y = Float.POSITIVE_INFINITY),
                 )
-            )
+            ),
+        contentAlignment = Alignment.Center
     ) {
         content()
     }

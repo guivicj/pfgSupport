@@ -1,6 +1,5 @@
 package org.guivicj.support.ui.screens.signin.components
 
-
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -8,6 +7,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +29,7 @@ fun PasswordTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
+    error: String? = null
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -40,6 +41,14 @@ fun PasswordTextField(
         visualTransformation =
         if (passwordVisible) VisualTransformation.None
         else PasswordVisualTransformation(),
+        supportingText = {
+            if (error != null) {
+                Text(
+                    text = error,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        },
         trailingIcon = {
             val image = if (passwordVisible)
                 Icons.Filled.Visibility

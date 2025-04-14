@@ -15,6 +15,7 @@ fun FormTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
+    error: String? = null
 ) {
     OutlinedTextField(
         value = value,
@@ -24,7 +25,14 @@ fun FormTextField(
             .fillMaxWidth()
             .padding(top = 24.dp),
         singleLine = true,
-
+        supportingText = {
+            if (error != null) {
+                Text(
+                    text = error,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        },
         colors = OutlinedTextFieldDefaults.colors(
             focusedTextColor = MaterialTheme.colorScheme.onBackground,
             focusedBorderColor = MaterialTheme.colorScheme.outline,

@@ -4,13 +4,19 @@ import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.guivicj.support.domain.usecase.ValidateEmail
+import org.guivicj.support.domain.usecase.ValidateName
+import org.guivicj.support.domain.usecase.ValidatePassword
+import org.guivicj.support.domain.usecase.ValidatePhone
 import org.guivicj.support.ui.screens.signin.LoginViewModel
+import org.guivicj.support.ui.screens.signin.RegisterViewModel
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
 val appModule = module {
-    factory { LoginViewModel(get()) }
+    factory { LoginViewModel(get(), get(), get()) }
+    factory { RegisterViewModel(get(), get(), get(), get(), get()) }
 }
 
 val networkModule = module {
@@ -27,6 +33,10 @@ val networkModule = module {
 }
 
 val validationModule = module {
+    factory { ValidateEmail() }
+    factory { ValidatePassword() }
+    factory { ValidateName() }
+    factory { ValidatePhone() }
 }
 
 fun initializeKoin(vararg modules: Module) {

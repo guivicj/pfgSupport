@@ -37,7 +37,7 @@ fun ThirdOnBoardingScreen(navController: NavHostController) {
         Scaffold {
             GradientBackgroundBox()
             Column(
-                Modifier.padding(50.dp),
+                Modifier.padding(40.dp),
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
                 OnBoardingTitle(

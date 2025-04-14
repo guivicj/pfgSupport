@@ -12,13 +12,14 @@
     <string name="fourth_onboarding_title">Handled by certified professionals</string>
     <string name="fourth_onboarding_subtitle">Your request is assigned to the most suitable technician for optimal resolution</string>
     <string name="fourth_onboarding_button">Start using Support-Mobile</string>
-    <string name="login_title">Sign In to your account</string>
-    <string name="login_subtitle">Sign In to your account</string>
+    <string name="login_title">Sign In to your Account</string>
+    <string name="login_subtitle">Please log in to continue</string>
     <string name="register_title">Register</string>
     <string name="register_subtitle">Create your account</string>
     <string name="username_field">Username</string>
     <string name="email_field">Email</string>
     <string name="password_field">Password</string>
+    <string name="conf_password_field">Confirm Password</string>
     <string name="phone_field">Mobile Phone</string>
     <string name="login_btn">Login</string>
     <string name="register_btn">Register</string>
@@ -28,4 +29,8 @@
     <string name="default_web_client_id">28198273486-d2n4ju8rghg1e7n4d8eobiihvp4k83o8.apps.googleusercontent.com</string>
     <string name="hide_pass">Hide Password</string>
     <string name="show_pass">Show Password</string>
+    <string name="register_text">Don't have an account?</string>
+    <string name="email_not_valid">Please enter a valid email address.</string>"
+    <string name="password_not_valid">Password must contain at least 8 characters, including uppercase, lowercase, number, and symbol(@$!%*).</string>
+    <string name="password_not_match">Passwords do not match</string>
 </resources>
