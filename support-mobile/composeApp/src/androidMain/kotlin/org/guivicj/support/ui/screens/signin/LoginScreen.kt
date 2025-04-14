@@ -43,6 +43,7 @@ import org.guivicj.support.R
 import org.guivicj.support.firebase.firebaseAuthWithGoogle
 import org.guivicj.support.navigation.Screen
 import org.guivicj.support.ui.screens.signin.components.FormTextField
+import org.guivicj.support.ui.screens.signin.components.PasswordTextField
 import org.guivicj.support.ui.screens.signin.components.SignInHeader
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
@@ -124,7 +125,7 @@ actual fun LoginScreen(navController: NavHostController) {
                     onValueChange = { viewModel.onEmailChange(it) },
                     label = stringResource(Res.string.email_field)
                 )
-                FormTextField(
+                PasswordTextField(
                     value = state.password,
                     onValueChange = { viewModel.onPasswordChange(it) },
                     label = stringResource(Res.string.password_field)

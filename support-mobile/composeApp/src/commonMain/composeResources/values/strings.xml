@@ -26,4 +26,6 @@
     <string name="login_options">Or login with</string>
     <string name="login_google">Google</string>
     <string name="default_web_client_id">28198273486-d2n4ju8rghg1e7n4d8eobiihvp4k83o8.apps.googleusercontent.com</string>
+    <string name="hide_pass">Hide Password</string>
+    <string name="show_pass">Show Password</string>
 </resources>

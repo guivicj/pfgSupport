@@ -56,6 +56,8 @@ kotlin {
 
                 implementation(libs.firebase.auth.ktx)
                 implementation(libs.play.services.auth)
+                implementation(libs.material.icons)
+
             }
         }
         val iosMain by creating {
