@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.google.services)
 }
 
 kotlin {
@@ -42,23 +43,21 @@ kotlin {
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.serialization.kotlinx.json)
                 implementation(libs.ktor.client.cio)
-
             }
         }
 
         val androidMain by getting {
             dependencies {
                 implementation(libs.androidx.activity.compose)
-
-                implementation(libs.ktor.client.cio)
-
                 implementation(libs.koin.android)
                 implementation(libs.koin.androidx.compose)
 
                 implementation(libs.ktor.client.cio)
+
+                implementation(libs.firebase.auth.ktx)
+                implementation(libs.play.services.auth)
             }
         }
-
         val iosMain by creating {
             dependsOn(commonMain)
             dependencies {

@@ -210,14 +210,9 @@ actual fun LoginScreen(navController: NavHostController) {
                 Spacer(modifier = Modifier.padding(8.dp))
                 OutlinedButton(
                     onClick = {
-                        scope.launch {
-                            try {
-                                viewModel.login()
-                            } catch (e: Exception) {
-                                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG)
-                                    .show()
-                            }
-                        }
+                        val gso = googleSignInOptions(context)
+                        val googleSignInClient = GoogleSignIn.getClient(activity, gso)
+                        launcher.launch(googleSignInClient.signInIntent)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -231,7 +226,8 @@ actual fun LoginScreen(navController: NavHostController) {
                         defaultElevation = 6.dp,
                         pressedElevation = 10.dp,
                         focusedElevation = 8.dp,
-                    )) {
+                    )
+                ) {
                     Icon(
                         painterResource(
                             id = R.drawable.ic_google,

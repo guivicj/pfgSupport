@@ -24,6 +24,7 @@ fun FormTextField(
             .fillMaxWidth()
             .padding(top = 24.dp),
         singleLine = true,
+
         colors = OutlinedTextFieldDefaults.colors(
             focusedTextColor = MaterialTheme.colorScheme.onBackground,
             unfocusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,

@@ -26,9 +26,9 @@ class AuthController(
 
 
     @PostMapping("/firebase-login")
-    fun loginWithFirebase(@RequestBody request: FirebaseLoginRequest): ResponseEntity<Response> {
-        val response = authService.authenticateWithFirebase(request.token)
-        return ResponseEntity.status(response.status).body(response)
+    fun loginWithFirebase(@RequestBody request: FirebaseLoginRequest): ResponseEntity<UserSessionInfoDTO> {
+        val sessionInfo = authService.authenticateWithFirebase(request.token)
+        return ResponseEntity.ok(sessionInfo)
     }
 
     @PostMapping("/firebase-logout")

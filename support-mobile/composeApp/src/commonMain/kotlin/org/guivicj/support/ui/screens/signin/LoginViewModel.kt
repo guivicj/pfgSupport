@@ -60,7 +60,6 @@ class LoginViewModel(
             }
         }
     }
-
 }
 
 data class LoginUiState(

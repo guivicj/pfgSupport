@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.io.File
 import java.io.FileInputStream
+import javax.annotation.PostConstruct
 
 @Configuration
 class FirebaseConfig {
@@ -15,7 +16,7 @@ class FirebaseConfig {
     @Value("\${firebase.credentials.path}")
     lateinit var credentialsPath: String
 
-    @Bean
+    @PostConstruct
     fun firebaseApp(): FirebaseApp {
         val serviceAccount = File(credentialsPath)
 
