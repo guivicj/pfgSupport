@@ -33,4 +33,8 @@
     <string name="email_not_valid">Please enter a valid email address.</string>"
     <string name="password_not_valid">Password must contain at least 8 characters, including uppercase, lowercase, number, and symbol(@$!%*).</string>
     <string name="password_not_match">Passwords do not match</string>
+    <string name="home_user_subtitle">Here you can see your opened tickets</string>
+    <string name="home_tech_subtitle">Manage the opened tickets here</string>
+    <string name="home_admin_subtitle">Manage all the tickets here</string>
+    <string name="search_placeholder">Search...</string>
 </resources>

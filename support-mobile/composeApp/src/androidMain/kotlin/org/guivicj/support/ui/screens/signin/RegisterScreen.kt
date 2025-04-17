@@ -52,7 +52,7 @@ actual fun RegisterScreen(navController: NavHostController) {
 
     LaunchedEffect(state.session) {
         if (state.session != null) {
-            navController.navigate(Screen.FirstOnBoardingScreen.route) {
+            navController.navigate(Screen.HomeScreen.route) {
                 popUpTo(0)
             }
         }
@@ -81,7 +81,7 @@ actual fun RegisterScreen(navController: NavHostController) {
                     error = state.nameError
                 )
                 FormTextField(
-                    value = state.telephone.toString(),
+                    value = state.telephone,
                     onValueChange = { viewModel.onTelephoneChange(it) },
                     label = stringResource(Res.string.phone_field),
                     error = state.phoneError

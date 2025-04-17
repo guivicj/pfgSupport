@@ -21,7 +21,6 @@ import support_mobile.composeapp.generated.resources.first_onboarding_button
 import support_mobile.composeapp.generated.resources.first_onboarding_subtitle
 import support_mobile.composeapp.generated.resources.welcome_title
 
-@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun FirstOnBoardingScreen(navController: NavHostController) {
     MaterialTheme {

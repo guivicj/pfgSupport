@@ -54,9 +54,7 @@ class AuthService(
         val user = userRepository.findByFirebaseUid(firebaseUid).orElseGet {
             val newUser = UserModel(
                 firebaseUid = firebaseUid,
-                name = request.name,
                 email = email,
-                telephone = request.telephone,
                 type = UserType.USER
             )
             userRepository.save(newUser)

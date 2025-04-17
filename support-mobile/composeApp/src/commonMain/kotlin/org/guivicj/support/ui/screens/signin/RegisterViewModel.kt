@@ -12,9 +12,7 @@ import org.guivicj.support.domain.usecase.ValidateName
 import org.guivicj.support.domain.usecase.ValidatePassword
 import org.guivicj.support.domain.usecase.ValidatePhone
 import org.guivicj.support.validation.ValidationResult
-import org.koin.core.annotation.KoinExperimentalAPI
 
-@OptIn(KoinExperimentalAPI::class)
 class RegisterViewModel(
     private val authRepository: AuthRepository,
     private val validateEmail: ValidateEmail,
@@ -45,31 +43,35 @@ class RegisterViewModel(
         _state.value = _state.value.copy(telephone = value)
     }
 
-    private fun validate() {
+    private fun validate(): Boolean {
         val emailResult = validateEmail(_state.value.email)
         val passwordResult = validatePassword(_state.value.password)
         val nameResult = validateName(_state.value.name)
         val phoneResult = validatePhone(_state.value.telephone)
-        if (emailResult is ValidationResult.Error || passwordResult is ValidationResult.Error && _state.value.password != _state.value.confirmPassword || nameResult is ValidationResult.Error || phoneResult is ValidationResult.Error) {
+        if (emailResult is ValidationResult.Error
+            || passwordResult is ValidationResult.Error && _state.value.password != _state.value.confirmPassword
+            || nameResult is ValidationResult.Error || phoneResult is ValidationResult.Error
+        ) {
             _state.value = _state.value.copy(
                 emailError = (emailResult as? ValidationResult.Error)?.message,
                 passwordError = (passwordResult as? ValidationResult.Error)?.message,
                 nameError = (nameResult as? ValidationResult.Error)?.message,
                 phoneError = (phoneResult as? ValidationResult.Error)?.message,
             )
-            return
+            return false
         }
+        return true
     }
 
     fun register() {
-        validate()
+        if (validate()) return
         viewModelScope.launch {
             _state.value = _state.value.copy(loading = true)
             val result = authRepository.register(
                 _state.value.name,
                 _state.value.email,
                 _state.value.password,
-                _state.value.telephone
+                _state.value.telephone.toInt()
             )
 
             _state.value = if (result.isSuccess) {
@@ -85,7 +87,6 @@ class RegisterViewModel(
         }
     }
 }
-
 
 data class RegisterState(
     val email: String = "",

@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import org.guivicj.support.ui.screens.home.HomeScreen
+import org.guivicj.support.ui.screens.home.UserViewModel
 import org.guivicj.support.ui.screens.onboarding.FirstOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.FourthOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.SecondOnBoardingScreen
@@ -13,6 +15,7 @@ import org.guivicj.support.ui.screens.onboarding.ThirdOnBoardingScreen
 import org.guivicj.support.ui.screens.signin.LoginScreen
 import org.guivicj.support.ui.screens.signin.RegisterScreen
 import org.koin.core.annotation.KoinExperimentalAPI
+import org.koin.mp.KoinPlatform.getKoin
 
 @Composable
 fun HomeNav() {
@@ -24,7 +27,7 @@ fun HomeNav() {
 @OptIn(KoinExperimentalAPI::class)
 @Composable
 fun NavHostMain(navController: NavHostController) {
-    // TODO ViewModels
+    val userViewModel = getKoin().get<UserViewModel>()
 
     Scaffold {
         NavHost(
@@ -48,6 +51,9 @@ fun NavHostMain(navController: NavHostController) {
             }
             composable(Screen.RegisterScreen.route) {
                 RegisterScreen(navController)
+            }
+            composable(Screen.HomeScreen.route) {
+                HomeScreen(navController, userViewModel)
             }
         }
     }

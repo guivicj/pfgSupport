@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -49,7 +50,6 @@ import org.guivicj.support.ui.screens.signin.components.PasswordTextField
 import org.guivicj.support.ui.screens.signin.components.SignInHeader
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
-import org.koin.core.annotation.KoinExperimentalAPI
 import support_mobile.composeapp.generated.resources.Res
 import support_mobile.composeapp.generated.resources.email_field
 import support_mobile.composeapp.generated.resources.forgot_password
@@ -62,14 +62,13 @@ import support_mobile.composeapp.generated.resources.password_field
 import support_mobile.composeapp.generated.resources.register_btn
 import support_mobile.composeapp.generated.resources.register_text
 
-@OptIn(KoinExperimentalAPI::class)
 @Composable
 actual fun LoginScreen(navController: NavHostController) {
     val viewModel = koinViewModel<LoginViewModel>()
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val activity = context as Activity
+    val scope = rememberCoroutineScope()
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -101,7 +100,7 @@ actual fun LoginScreen(navController: NavHostController) {
 
     LaunchedEffect(state.session) {
         if (state.session != null) {
-            navController.navigate(Screen.FirstOnBoardingScreen.route) {
+            navController.navigate(Screen.HomeScreen.route) {
                 popUpTo(0)
             }
         }
@@ -114,7 +113,9 @@ actual fun LoginScreen(navController: NavHostController) {
                 .verticalScroll(rememberScrollState())
         ) {
             SignInHeader(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 40.dp),
                 title = stringResource(Res.string.login_title),
                 subTitle = stringResource(Res.string.login_subtitle)
             )
@@ -163,7 +164,13 @@ actual fun LoginScreen(navController: NavHostController) {
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(50.dp),
+                        .height(50.dp)
+                        .shadow(
+                            elevation = 8.dp,
+                            shape = RoundedCornerShape(8.dp),
+                            clip = false,
+                            spotColor = MaterialTheme.colorScheme.outline
+                        ),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = MaterialTheme.colorScheme.outline,

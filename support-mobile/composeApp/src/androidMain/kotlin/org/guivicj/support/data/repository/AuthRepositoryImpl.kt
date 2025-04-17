@@ -1,5 +1,6 @@
 package org.guivicj.support.data.repository
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -45,7 +46,7 @@ class AuthRepositoryImpl(
         name: String,
         email: String,
         password: String,
-        telephone: String
+        telephone: Int
     ): Result<UserSessionInfoDTO> {
         return try {
             val authResult = FirebaseAuth.getInstance()
@@ -55,9 +56,13 @@ class AuthRepositoryImpl(
             val idToken = authResult.user?.getIdToken(true)?.await()?.token
                 ?: return Result.failure(Exception("Failed to retrieve ID token"))
 
+            val request = FirebaseLoginRequest(
+                token = idToken,
+            )
+
             val response = client.post("http://10.0.2.2:8080/api/auth/firebase-login") {
                 contentType(ContentType.Application.Json)
-                setBody(mapOf("token" to idToken, "name" to name, "telephone" to telephone))
+                setBody(request)
             }.body<UserSessionInfoDTO>()
 
             Result.success(response)
