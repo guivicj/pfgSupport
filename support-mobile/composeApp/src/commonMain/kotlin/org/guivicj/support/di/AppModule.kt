@@ -9,6 +9,7 @@ import org.guivicj.support.domain.usecase.ValidateName
 import org.guivicj.support.domain.usecase.ValidatePassword
 import org.guivicj.support.domain.usecase.ValidatePhone
 import org.guivicj.support.ui.screens.home.UserViewModel
+import org.guivicj.support.ui.screens.home.components.TicketViewModel
 import org.guivicj.support.ui.screens.signin.LoginViewModel
 import org.guivicj.support.ui.screens.signin.RegisterViewModel
 import org.koin.core.context.startKoin
@@ -18,6 +19,7 @@ import org.koin.dsl.module
 val appModule = module {
     factory { LoginViewModel(get(), get(), get(), get()) }
     factory { RegisterViewModel(get(), get(), get(), get(), get()) }
+    single { TicketViewModel() }
     single { UserViewModel() }
 }
 

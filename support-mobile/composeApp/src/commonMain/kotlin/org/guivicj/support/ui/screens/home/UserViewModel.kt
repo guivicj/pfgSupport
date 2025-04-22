@@ -12,6 +12,7 @@ class UserViewModel() : ViewModel() {
 
     fun setUser(user: UserDTO) {
         _state.value = UserUIState(
+            id = user.id!!,
             name = user.name,
             email = user.email,
             telephone = user.telephone.toString(),
@@ -25,6 +26,7 @@ class UserViewModel() : ViewModel() {
 }
 
 data class UserUIState(
+    val id: Long = 0L,
     val name: String = "",
     val email: String = "",
     val telephone: String = "",

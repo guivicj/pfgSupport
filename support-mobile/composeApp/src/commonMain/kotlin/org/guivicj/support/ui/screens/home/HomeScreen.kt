@@ -12,19 +12,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import kotlinx.datetime.LocalDateTime
-import org.guivicj.support.data.model.StateType
 import org.guivicj.support.data.model.UserType
-import org.guivicj.support.domain.model.TicketDTO
 import org.guivicj.support.ui.screens.home.components.MainHeader
-import org.guivicj.support.ui.screens.home.components.SearchBar
-import org.guivicj.support.ui.screens.home.components.TicketCard
+import org.guivicj.support.ui.screens.home.components.TicketList
+import org.guivicj.support.ui.screens.home.components.TicketViewModel
 import org.jetbrains.compose.resources.stringResource
 import support_mobile.composeapp.generated.resources.Res
 import support_mobile.composeapp.generated.resources.home_admin_subtitle
@@ -32,9 +26,13 @@ import support_mobile.composeapp.generated.resources.home_tech_subtitle
 import support_mobile.composeapp.generated.resources.home_user_subtitle
 
 @Composable
-fun HomeScreen(navController: NavHostController, userViewModel: UserViewModel) {
+fun HomeScreen(
+    navController: NavHostController,
+    userViewModel: UserViewModel,
+    ticketViewModel: TicketViewModel
+) {
     val userState by userViewModel.state.collectAsState()
-    var query by remember { mutableStateOf("") }
+    ticketViewModel.setUser(userState.id, userState.type)
     MaterialTheme {
         Scaffold {
             Column(
@@ -51,31 +49,9 @@ fun HomeScreen(navController: NavHostController, userViewModel: UserViewModel) {
                         .fillMaxWidth()
                         .padding(horizontal = 32.dp),
                 ) {
-                    SearchBar(
-                        query = query,
-                        onQueryChange = { query = it },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp)
-                    )
+                    TicketList(ticketViewModel, navController, userState.name)
                 }
                 Spacer(modifier = Modifier.height(24.dp))
-
-                TicketCard(
-                    navController,
-                    TicketDTO(
-                        ticketId = 1,
-                        productId = 1,
-                        technicianId = 1,
-                        userId = 52,
-                        description = "Ticket 1",
-                        state = StateType.OPEN,
-                        openedAt = LocalDateTime(2023, 1, 1, 1, 1),
-                        inProgressAt = LocalDateTime(2023, 1, 1, 1, 1),
-                        closedAt = LocalDateTime(2023, 1, 1, 1, 1),
-                    ),
-                    user = userState.name
-                )
             }
         }
     }

@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.guivicj.support.ui.screens.home.HomeScreen
 import org.guivicj.support.ui.screens.home.UserViewModel
+import org.guivicj.support.ui.screens.home.components.TicketViewModel
 import org.guivicj.support.ui.screens.onboarding.FirstOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.FourthOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.SecondOnBoardingScreen
@@ -28,6 +29,7 @@ fun HomeNav() {
 @Composable
 fun NavHostMain(navController: NavHostController) {
     val userViewModel = getKoin().get<UserViewModel>()
+    val ticketViewModel = getKoin().get<TicketViewModel>()
 
     Scaffold {
         NavHost(
@@ -53,7 +55,7 @@ fun NavHostMain(navController: NavHostController) {
                 RegisterScreen(navController)
             }
             composable(Screen.HomeScreen.route) {
-                HomeScreen(navController, userViewModel)
+                HomeScreen(navController, userViewModel, ticketViewModel)
             }
         }
     }
