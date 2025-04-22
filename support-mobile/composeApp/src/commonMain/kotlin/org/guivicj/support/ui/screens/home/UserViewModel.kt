@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import org.guivicj.support.data.model.UserType
 import org.guivicj.support.domain.model.UserDTO
 
-class UserViewModel() : ViewModel() {
+class UserViewModel : ViewModel() {
     private val _state = MutableStateFlow(UserUIState())
     val state = _state.asStateFlow()
 

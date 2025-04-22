@@ -1,6 +1,5 @@
 package org.guivicj.support.data.repository
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -43,6 +42,7 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun register(
+        id: Long,
         name: String,
         email: String,
         password: String,
@@ -58,6 +58,8 @@ class AuthRepositoryImpl(
 
             val request = FirebaseLoginRequest(
                 token = idToken,
+                name = name,
+                telephone = telephone
             )
 
             val response = client.post("http://10.0.2.2:8080/api/auth/firebase-login") {
@@ -71,13 +73,13 @@ class AuthRepositoryImpl(
         }
     }
 
-
     override suspend fun loginWithFirebase(idToken: String): Result<UserSessionInfoDTO> {
         return try {
+            val request = FirebaseLoginRequest(token = idToken, name = null, telephone = null)
             val response: HttpResponse =
                 client.post("http://10.0.2.2:8080/api/auth/firebase-login") {
                     contentType(ContentType.Application.Json)
-                    setBody(FirebaseLoginRequest(token = idToken))
+                    setBody(request)
                 }
 
             if (response.status.isSuccess()) {

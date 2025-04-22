@@ -52,7 +52,7 @@ actual fun RegisterScreen(navController: NavHostController) {
 
     LaunchedEffect(state.session) {
         if (state.session != null) {
-            navController.navigate(Screen.HomeScreen.route) {
+            navController.navigate(Screen.LoginScreen.route) {
                 popUpTo(0)
             }
         }
@@ -65,7 +65,9 @@ actual fun RegisterScreen(navController: NavHostController) {
                 .verticalScroll(rememberScrollState())
         ) {
             SignInHeader(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 40.dp),
                 title = stringResource(Res.string.register_title),
                 subTitle = stringResource(Res.string.register_subtitle)
             )

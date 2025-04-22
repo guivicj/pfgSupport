@@ -52,12 +52,20 @@ class AuthService(
             .toLocalDateTime()
 
         val user = userRepository.findByFirebaseUid(firebaseUid).orElseGet {
-            val newUser = UserModel(
-                firebaseUid = firebaseUid,
-                email = email,
-                type = UserType.USER
+            userRepository.save(
+                UserModel(
+                    firebaseUid = firebaseUid,
+                    email = email,
+                    name = request.name ?: "",
+                    telephone = request.telephone ?: 0,
+                    type = UserType.USER
+                )
             )
-            userRepository.save(newUser)
+        }
+        if (user.name.isBlank() || user.telephone == 0) {
+            user.name = request.name ?: user.name
+            user.telephone = request.telephone ?: user.telephone
+            userRepository.save(user)
         }
         return UserSessionInfoDTO(
             user = userMapper.toDTO(user),

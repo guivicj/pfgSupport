@@ -64,10 +64,11 @@ class RegisterViewModel(
     }
 
     fun register() {
-        if (validate()) return
+        if (!validate()) return
         viewModelScope.launch {
             _state.value = _state.value.copy(loading = true)
             val result = authRepository.register(
+                _state.value.id,
                 _state.value.name,
                 _state.value.email,
                 _state.value.password,
@@ -89,6 +90,7 @@ class RegisterViewModel(
 }
 
 data class RegisterState(
+    val id: Long = 0,
     val email: String = "",
     val password: String = "",
     val confirmPassword: String = "",

@@ -13,4 +13,3 @@ data class UserDTO(
     val telephone: Int,
     val type: UserType
 )
-
