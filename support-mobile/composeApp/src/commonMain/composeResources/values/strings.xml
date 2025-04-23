@@ -37,4 +37,10 @@
     <string name="home_tech_subtitle">Manage the opened tickets here</string>
     <string name="home_admin_subtitle">Manage all the tickets here</string>
     <string name="search_placeholder">Search...</string>
+    <string name="description_field">Description</string>">
+    <string name="product_field">Product</string>">
+    <string name="create_ticket_btn">Create Ticket</string>
+    <string name="cancel_btn">Cancel</string>">
+    <string name="success_ticket_message">Ticket created successfully</string>
+    <string name="failed_ticket_message">Failed to create ticket</string>
 </resources>

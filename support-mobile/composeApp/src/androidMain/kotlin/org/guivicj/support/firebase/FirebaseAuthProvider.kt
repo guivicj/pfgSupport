@@ -4,12 +4,11 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
 import com.google.firebase.auth.GoogleAuthProvider
 
-suspend fun getIdToken(): String {
-    val user = FirebaseAuth.getInstance().currentUser
-        ?: throw IllegalStateException("No user is logged in")
+class FirebaseAuthProvider : FirebaseTokenProvider {
+    override suspend fun getIdToken(): String {
+        return FirebaseAuth.getInstance().currentUser?.getIdToken(true)?.await()?.token!!
+    }
 
-    return user.getIdToken(true).await().token
-        ?: throw IllegalStateException("Token retrieval failed")
 }
 
 fun firebaseAuthWithGoogle(idToken: String, onResult: (Boolean, String?) -> Unit) {

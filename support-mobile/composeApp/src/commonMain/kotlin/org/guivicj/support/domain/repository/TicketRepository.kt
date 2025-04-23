@@ -1,0 +1,13 @@
+package org.guivicj.support.domain.repository
+
+import org.guivicj.support.domain.model.TicketDTO
+
+interface TicketRepository {
+    suspend fun getAll(): List<TicketDTO>
+    suspend fun getByUser(userId: Long): List<TicketDTO>
+    suspend fun getByTechnician(techId: Long): List<TicketDTO>
+    suspend fun create(ticket: TicketDTO, idToken: String): TicketDTO
+    suspend fun assignToHuman(ticketId: Long, idToken: String): TicketDTO
+    suspend fun changeState(ticketId: Long, newState: String, technicianId: Long, idToken: String): TicketDTO
+
+}
