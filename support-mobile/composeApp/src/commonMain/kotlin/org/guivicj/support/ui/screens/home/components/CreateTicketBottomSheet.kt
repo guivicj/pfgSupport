@@ -13,16 +13,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import support_mobile.composeapp.generated.resources.Res
 import support_mobile.composeapp.generated.resources.cancel_btn
 import support_mobile.composeapp.generated.resources.create_ticket_btn
+import support_mobile.composeapp.generated.resources.create_ticket_subtitle
 import support_mobile.composeapp.generated.resources.description_field
 import support_mobile.composeapp.generated.resources.product_field
 
@@ -37,8 +41,9 @@ fun CreateTicketBottomSheet(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .shadow(8.dp, RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp))
                 .background(
-                    MaterialTheme.colorScheme.onSurfaceVariant,
+                    MaterialTheme.colorScheme.surfaceVariant,
                     RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
                 )
                 .padding(50.dp)
@@ -47,12 +52,40 @@ fun CreateTicketBottomSheet(
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
+                Text(
+                    text = stringResource(Res.string.create_ticket_btn),
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Spacer(modifier = Modifier.padding(12.dp))
+
+                Text(
+                    text = stringResource(Res.string.create_ticket_subtitle),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Spacer(modifier = Modifier.padding(24.dp))
+
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = ticketState.description,
                     onValueChange = { ticketViewModel.onDescriptionChange(it) },
                     singleLine = true,
-                    placeholder = { stringResource(Res.string.description_field) }
+                    label = {
+                        Text(
+                            stringResource(Res.string.description_field),
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    },
+                    placeholder = { Text(stringResource(Res.string.description_field)) },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+                        focusedBorderColor = MaterialTheme.colorScheme.outline,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                    ),
                 )
 
                 Spacer(modifier = Modifier.padding(24.dp))
@@ -71,8 +104,7 @@ fun CreateTicketBottomSheet(
 
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp),
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -92,13 +124,16 @@ fun CreateTicketBottomSheet(
                                     ticketViewModel.showMessage("Failed to create ticket")
                                 }
                             )
-                        })
+                        },
+                        modifier = Modifier.weight(1f)
+                    )
                     TicketCreationButton(
                         label = stringResource(Res.string.cancel_btn),
                         onClick = {
                             ticketViewModel.onDescriptionChange("")
                             ticketViewModel.setBottomSheetVisible(false)
-                        }
+                        },
+                        modifier = Modifier.weight(1f)
                     )
                 }
             }

@@ -13,6 +13,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import org.guivicj.support.data.model.ProductType
+import org.jetbrains.compose.resources.stringResource
+import support_mobile.composeapp.generated.resources.Res
+import support_mobile.composeapp.generated.resources.description_field
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -33,15 +36,15 @@ fun DropdownField(
         ) {
             OutlinedTextField(
                 value = value,
-                onValueChange = { },
+                onValueChange = {  },
                 readOnly = true,
                 singleLine = true,
                 isError = isError,
                 label = { Text(text = label) },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    focusedLabelColor = MaterialTheme.colorScheme.primary,
+                    focusedBorderColor = MaterialTheme.colorScheme.outline,
+                    focusedLabelColor = MaterialTheme.colorScheme.outline,
                 ),
                 modifier = Modifier.fillMaxWidth()
             )

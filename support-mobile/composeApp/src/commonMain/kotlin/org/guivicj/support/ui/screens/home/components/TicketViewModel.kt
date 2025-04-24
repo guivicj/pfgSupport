@@ -1,6 +1,7 @@
 package org.guivicj.support.ui.screens.home.components
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -13,10 +14,12 @@ import org.guivicj.support.data.model.StateType
 import org.guivicj.support.data.model.UserType
 import org.guivicj.support.domain.model.TicketDTO
 import org.guivicj.support.domain.repository.TicketRepository
+import org.guivicj.support.domain.repository.UserRepository
 import org.guivicj.support.firebase.FirebaseTokenProvider
 
 class TicketViewModel(
     private val ticketRepository: TicketRepository,
+    private val userRepository: UserRepository,
     private val tokenProvider: FirebaseTokenProvider
 
 ) : ViewModel() {
@@ -26,13 +29,13 @@ class TicketViewModel(
     var searchQuery by mutableStateOf("")
     private var userType by mutableStateOf(UserType.USER)
     private var currentUserId by mutableStateOf(0L)
+    val ticketOwners = mutableStateMapOf<Long, String>()
 
     val filteredTickets: List<TicketDTO>
         get() = allTickets.filter { ticket ->
             val matchesSearch = ticket.description.contains(searchQuery, ignoreCase = true)
             val matchesRole = when (userType) {
-                UserType.ADMIN -> true
-                UserType.TECHNICIAN -> ticket.technicianId == currentUserId
+                UserType.ADMIN, UserType.TECHNICIAN -> true
                 UserType.USER -> ticket.userId == currentUserId
             }
             matchesSearch && matchesRole
@@ -51,10 +54,25 @@ class TicketViewModel(
         allTickets = tickets
     }
 
+    fun getTicketOwner(ticket: TicketDTO) {
+        if (ticketOwners.containsKey(ticket.userId)) return
+        viewModelScope.launch {
+            try {
+                val owner = userRepository.getUserById(ticket.userId)
+                ticketOwners[ticket.userId] = owner.name
+            } catch (e: Exception) {
+                showMessage("Failed to load ticket owner: ${e.message}")
+            }
+        }
+    }
+
     fun fetchTickets() {
         viewModelScope.launch {
             try {
-                val tickets = ticketRepository.getByUser(currentUserId)
+                val tickets = when (userType) {
+                    UserType.ADMIN, UserType.TECHNICIAN -> ticketRepository.getAll()
+                    UserType.USER -> ticketRepository.getByUser(currentUserId)
+                }
                 allTickets = tickets
             } catch (e: Exception) {
                 showMessage("Failed to load tickets: ${e.message}")
@@ -123,6 +141,7 @@ class TicketViewModel(
 
 data class TicketUIState(
     val ticketId: Long = 0L,
+    val userOwner: String = "",
     val userId: Long = 0L,
     val technicianId: Long = 0L,
     val productId: Long = 0L,

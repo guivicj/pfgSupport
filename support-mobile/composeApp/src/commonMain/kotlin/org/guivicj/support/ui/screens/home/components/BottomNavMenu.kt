@@ -2,6 +2,7 @@ package org.guivicj.support.ui.screens.home.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -24,7 +25,7 @@ fun BottomNavMenu(navController: NavHostController, type: UserType, selectedRout
         modifier = Modifier
             .fillMaxWidth()
             .height(80.dp),
-        backgroundColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
     ) {
         val items = when (type) {
             UserType.ADMIN -> listOf(
@@ -49,7 +50,12 @@ fun BottomNavMenu(navController: NavHostController, type: UserType, selectedRout
 
         items.forEach { (route, icon) ->
             BottomNavigationItem(
-                icon = { Icon(icon, contentDescription = route) },
+                icon = {
+                    Icon(
+                        icon, contentDescription = route,
+                        modifier = Modifier.size(32.dp)
+                    )
+                },
                 selected = route == selectedRoute,
                 onClick = {
                     if (route != selectedRoute) {
@@ -57,7 +63,7 @@ fun BottomNavMenu(navController: NavHostController, type: UserType, selectedRout
                             launchSingleTop = true
                         }
                     }
-                }
+                },
             )
         }
     }

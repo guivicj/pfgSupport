@@ -15,20 +15,20 @@ import androidx.navigation.NavHostController
 fun TicketList(
     viewModel: TicketViewModel,
     navController: NavHostController,
-    username: String
 ) {
     Column {
         SearchBar(
             query = viewModel.searchQuery,
             onQueryChange = { viewModel.updateSearch(it) },
             modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
+                .height(70.dp)
                 .padding(bottom = 20.dp)
         )
         LazyColumn {
             items(viewModel.filteredTickets) { ticket ->
-                TicketCard(navController, ticket, username)
+                viewModel.getTicketOwner(ticket)
+                val ownerName = viewModel.ticketOwners[ticket.userId] ?: ""
+                TicketCard(navController, ticket, ownerName)
             }
         }
     }

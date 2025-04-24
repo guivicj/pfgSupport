@@ -45,7 +45,10 @@ fun HomeScreen(
 ) {
     val userState by userViewModel.state.collectAsState()
     val ticketState by ticketViewModel.state.collectAsState()
-    ticketViewModel.setUser(userState.id, userState.type)
+    LaunchedEffect(userState) {
+        ticketViewModel.setUser(userState.id, userState.type)
+        ticketViewModel.fetchTickets()
+    }
 
     MaterialTheme {
         Scaffold(
@@ -97,13 +100,7 @@ fun HomeScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 32.dp),
                     ) {
-                        LaunchedEffect(userState.id) {
-                            ticketViewModel.setUser(userState.id, userState.type)
-                            if (userState.type == UserType.USER) {
-                                ticketViewModel.fetchTickets()
-                            }
-                        }
-                        TicketList(ticketViewModel, navController, userState.name)
+                        TicketList(ticketViewModel, navController)
                     }
                     Spacer(modifier = Modifier.height(24.dp))
                 }
