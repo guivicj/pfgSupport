@@ -20,13 +20,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import org.guivicj.support.domain.model.TicketDTO
 import org.guivicj.support.navigation.Screen
+import org.guivicj.support.utils.formatDateTime
 
 @Composable
 fun TicketCard(navController: NavHostController, ticketDTO: TicketDTO, user: String) {
     Box(
         modifier = Modifier
-            .height(150.dp)
-            .padding(horizontal = 30.dp)
+            .height(180.dp)
+            .padding(bottom = 20.dp)
             .fillMaxWidth()
             .shadow(
                 elevation = 8.dp,
@@ -35,8 +36,7 @@ fun TicketCard(navController: NavHostController, ticketDTO: TicketDTO, user: Str
                 spotColor = MaterialTheme.colorScheme.outline
             )
             .clip(RoundedCornerShape((8.dp)))
-            .background(MaterialTheme.colorScheme.outline)
-        ,
+            .background(MaterialTheme.colorScheme.outline),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -64,7 +64,7 @@ fun TicketCard(navController: NavHostController, ticketDTO: TicketDTO, user: Str
                 color = MaterialTheme.colorScheme.onPrimary,
             )
             Text(
-                text = "Opened at: ${ticketDTO.openedAt}",
+                text = "Opened at: ${formatDateTime(ticketDTO.openedAt!!)}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimary,
             )

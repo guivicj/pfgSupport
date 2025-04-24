@@ -51,6 +51,17 @@ class TicketViewModel(
         allTickets = tickets
     }
 
+    fun fetchTickets() {
+        viewModelScope.launch {
+            try {
+                val tickets = ticketRepository.getByUser(currentUserId)
+                allTickets = tickets
+            } catch (e: Exception) {
+                showMessage("Failed to load tickets: ${e.message}")
+            }
+        }
+    }
+
     fun createTicket(
         productId: Long,
         description: String,
@@ -59,7 +70,6 @@ class TicketViewModel(
     ) {
         viewModelScope.launch {
             try {
-                println("Sending productId = $productId")
                 val token = tokenProvider.getIdToken()
                 val dto = TicketDTO(
                     ticketId = 0,

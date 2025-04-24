@@ -10,13 +10,13 @@ data class TicketModel(
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     var id: Long,
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "userid", nullable = false)
     var userId: UserModel,
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "techid", nullable = false)
     var technicianId: Technician,
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "productid", nullable = false)
     var productId: Product,
     var description: String,
@@ -24,7 +24,7 @@ data class TicketModel(
     var openedAt: LocalDateTime,
     var inProgressAt: LocalDateTime? = null,
     var closedAt: LocalDateTime? = null,
-    ) {
+) {
     @PrePersist
     fun setOpenedAtAutomatically() {
         openedAt = LocalDateTime.now()

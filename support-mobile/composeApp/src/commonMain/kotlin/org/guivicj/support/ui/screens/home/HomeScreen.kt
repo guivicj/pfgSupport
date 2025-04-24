@@ -97,6 +97,12 @@ fun HomeScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 32.dp),
                     ) {
+                        LaunchedEffect(userState.id) {
+                            ticketViewModel.setUser(userState.id, userState.type)
+                            if (userState.type == UserType.USER) {
+                                ticketViewModel.fetchTickets()
+                            }
+                        }
                         TicketList(ticketViewModel, navController, userState.name)
                     }
                     Spacer(modifier = Modifier.height(24.dp))

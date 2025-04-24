@@ -24,9 +24,7 @@ import support_mobile.composeapp.generated.resources.Res
 import support_mobile.composeapp.generated.resources.cancel_btn
 import support_mobile.composeapp.generated.resources.create_ticket_btn
 import support_mobile.composeapp.generated.resources.description_field
-import support_mobile.composeapp.generated.resources.failed_ticket_message
 import support_mobile.composeapp.generated.resources.product_field
-import support_mobile.composeapp.generated.resources.success_ticket_message
 
 @Composable
 fun CreateTicketBottomSheet(
@@ -35,8 +33,6 @@ fun CreateTicketBottomSheet(
     modifier: Modifier = Modifier,
 ) {
     val ticketState by ticketViewModel.state.collectAsState()
-    val successMessage = stringResource(Res.string.success_ticket_message)
-    val errorMessage = stringResource(Res.string.failed_ticket_message)
     AnimatedVisibility(visible = visible, modifier = modifier) {
         Box(
             modifier = Modifier
@@ -88,11 +84,13 @@ fun CreateTicketBottomSheet(
                                 productId = state.productId,
                                 description = state.description,
                                 onSuccess = {
-                                    ticketViewModel.setBottomSheetVisible(false)
+                                    ticketViewModel.showMessage("Ticket created successfully")
                                     ticketViewModel.onDescriptionChange("")
-                                    ticketViewModel.showMessage(successMessage)
+                                    ticketViewModel.setBottomSheetVisible(false)
                                 },
-                                onError = { ticketViewModel.showMessage("Error: ${it.message}") }
+                                onError = {
+                                    ticketViewModel.showMessage("Failed to create ticket")
+                                }
                             )
                         })
                     TicketCreationButton(

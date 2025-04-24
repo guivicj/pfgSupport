@@ -1,6 +1,5 @@
 package org.guivicj.support.domain.model
 
-import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 import org.guivicj.support.data.model.StateType
 
@@ -12,7 +11,7 @@ data class TicketDTO(
     val productId: Long,
     val description: String,
     val state: StateType,
-    val openedAt: LocalDateTime? = null,
-    val inProgressAt: LocalDateTime? = null,
-    val closedAt: LocalDateTime? = null
+    val openedAt: String? = null,
+    val inProgressAt: String? = null,
+    val closedAt: String? = null
 )

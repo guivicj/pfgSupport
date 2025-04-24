@@ -8,6 +8,7 @@ import org.mapstruct.Mapping
 
 @Mapper(componentModel = "spring")
 interface TicketMapper {
+    @Mapping(source = "id", target = "ticketId")
     @Mapping(source = "userId.id", target = "userId")
     @Mapping(source = "technicianId.id", target = "technicianId")
     @Mapping(source = "productId.id", target = "productId")

@@ -4,6 +4,7 @@ import com.guivicj.apiSupport.enums.StateType
 import java.time.LocalDateTime
 
 data class TicketDTO(
+    val ticketId: Long,
     var userId: Long,
     val technicianId: Long,
     val productId: Long,

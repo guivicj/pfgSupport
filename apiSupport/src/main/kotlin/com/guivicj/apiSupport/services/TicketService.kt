@@ -40,7 +40,7 @@ class TicketService(
             .orElseThrow { RuntimeException("Product not found") }
 
         val ticket = TicketModel(
-            id = 0,
+            id = dto.ticketId,
             userId = user,
             technicianId = technician,
             productId = product,
