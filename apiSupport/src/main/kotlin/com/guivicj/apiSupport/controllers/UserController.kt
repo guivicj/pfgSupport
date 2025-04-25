@@ -59,7 +59,7 @@ class UserController(val userService: UserService) {
         @CurrentUser user: UserSessionInfoDTO,
         @PathVariable email: String
     ): ResponseEntity<Any> {
-            val response = userService.deleteUser(email)
-            return ResponseEntity.status(response.status).body(response)
+        val response = userService.deleteUser(email)
+        return ResponseEntity.status(response.status).body(response)
     }
 }

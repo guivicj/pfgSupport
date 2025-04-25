@@ -15,7 +15,7 @@ fun FormTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    error: String? = null
+    error: String? = null,
 ) {
     OutlinedTextField(
         value = value,
@@ -29,7 +29,8 @@ fun FormTextField(
             if (error != null) {
                 Text(
                     text = error,
-                    color = MaterialTheme.colorScheme.error
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.labelMedium,
                 )
             }
         },

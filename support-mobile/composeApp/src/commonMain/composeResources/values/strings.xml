@@ -16,6 +16,7 @@
     <string name="login_subtitle">Please log in to continue</string>
     <string name="register_title">Register</string>
     <string name="register_subtitle">Create your account</string>
+    <string name="profile_title">Profile</string>"
     <string name="username_field">Username</string>
     <string name="email_field">Email</string>
     <string name="password_field">Password</string>

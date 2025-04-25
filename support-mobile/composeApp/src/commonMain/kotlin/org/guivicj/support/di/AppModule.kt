@@ -17,7 +17,7 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 
 val appModule = module {
-    factory { LoginViewModel(get(), get(), get(), get()) }
+    factory { LoginViewModel(get(), get(), get()) }
     factory { RegisterViewModel(get(), get(), get(), get(), get()) }
     single { TicketViewModel(get(), get(), get()) }
     single { UserViewModel() }

@@ -128,13 +128,13 @@ actual fun LoginScreen(navController: NavHostController) {
                     value = state.email,
                     onValueChange = { viewModel.onEmailChange(it) },
                     label = stringResource(Res.string.email_field),
-                    error = state.emailError
+                    error = null
                 )
                 PasswordTextField(
                     value = state.password,
                     onValueChange = { viewModel.onPasswordChange(it) },
                     label = stringResource(Res.string.password_field),
-                    error = state.passwordError
+                    error = state.error
                 )
 
                 Spacer(modifier = Modifier.padding(8.dp))

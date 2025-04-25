@@ -1,6 +1,7 @@
 package org.guivicj.support.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
@@ -35,9 +36,10 @@ class AuthRepositoryImpl(
             }.body<UserSessionInfoDTO>()
 
             Result.success(response)
-
+        } catch (e: FirebaseAuthInvalidCredentialsException) {
+            Result.failure(IllegalArgumentException("ERROR: Wrong email or password"))
         } catch (e: Exception) {
-            Result.failure(e)
+            Result.failure(Exception("GENERAL_ERROR: ${e.message}"))
         }
     }
 

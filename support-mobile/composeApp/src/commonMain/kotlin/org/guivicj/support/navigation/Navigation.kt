@@ -13,9 +13,9 @@ import org.guivicj.support.ui.screens.onboarding.FirstOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.FourthOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.SecondOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.ThirdOnBoardingScreen
+import org.guivicj.support.ui.screens.profile.ProfileScreen
 import org.guivicj.support.ui.screens.signin.LoginScreen
 import org.guivicj.support.ui.screens.signin.RegisterScreen
-import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.mp.KoinPlatform.getKoin
 
 @Composable
@@ -25,7 +25,6 @@ fun HomeNav() {
     NavHostMain(navController)
 }
 
-@OptIn(KoinExperimentalAPI::class)
 @Composable
 fun NavHostMain(navController: NavHostController) {
     val userViewModel = getKoin().get<UserViewModel>()
@@ -56,6 +55,9 @@ fun NavHostMain(navController: NavHostController) {
             }
             composable(Screen.HomeScreen.route) {
                 HomeScreen(navController, userViewModel, ticketViewModel)
+            }
+            composable<Screen.ProfileScreen> {
+                ProfileScreen(navController, userViewModel, userViewModel.getUser())
             }
         }
     }
