@@ -55,7 +55,7 @@ fun TicketCard(navController: NavHostController, ticketDTO: TicketDTO, user: Str
 
                     )
                 InitialUserProfile(user) {
-                    navController.navigate(Screen.ProfileScreen.route)
+                    navController.navigate(Screen.ProfileScreen.createRoute(ticketDTO.userId.toString()))
                 }
             }
             Text(

@@ -17,11 +17,13 @@
     <string name="register_title">Register</string>
     <string name="register_subtitle">Create your account</string>
     <string name="profile_title">Profile</string>"
+    <string name="profile_subtitle">User account details</string>
     <string name="username_field">Username</string>
     <string name="email_field">Email</string>
     <string name="password_field">Password</string>
     <string name="conf_password_field">Confirm Password</string>
     <string name="phone_field">Mobile Phone</string>
+    <string name="user_type_field">User type</string>
     <string name="login_btn">Login</string>
     <string name="register_btn">Register</string>
     <string name="forgot_password">Forgot Password?</string>">

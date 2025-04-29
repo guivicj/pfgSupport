@@ -2,11 +2,12 @@ package org.guivicj.support.ui.screens.signin.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.guivicj.support.ui.core.components.GradientTopBackground
+import org.guivicj.support.ui.core.components.SubtitleText
+import org.guivicj.support.ui.core.components.TitleText
 
 @Composable
 fun SignInHeader(
@@ -16,16 +17,8 @@ fun SignInHeader(
 ) {
     GradientTopBackground {
         Column(modifier = modifier.padding(top = 50.dp)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-            Text(
-                text = subTitle,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
+            TitleText(title)
+            SubtitleText(subTitle)
         }
     }
 }

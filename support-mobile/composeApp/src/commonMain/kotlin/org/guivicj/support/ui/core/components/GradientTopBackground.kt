@@ -1,4 +1,4 @@
-package org.guivicj.support.ui.screens.signin.components
+package org.guivicj.support.ui.core.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

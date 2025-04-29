@@ -2,10 +2,16 @@ package org.guivicj.support.navigation
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import org.guivicj.support.data.model.UserType
 import org.guivicj.support.ui.screens.home.HomeScreen
 import org.guivicj.support.ui.screens.home.UserViewModel
 import org.guivicj.support.ui.screens.home.components.TicketViewModel
@@ -56,8 +62,32 @@ fun NavHostMain(navController: NavHostController) {
             composable(Screen.HomeScreen.route) {
                 HomeScreen(navController, userViewModel, ticketViewModel)
             }
-            composable<Screen.ProfileScreen> {
-                ProfileScreen(navController, userViewModel, userViewModel.getUser())
+            composable(
+                route = Screen.ProfileScreen.route,
+                arguments = listOf(navArgument("userId") {
+                    type = NavType.LongType
+                })
+            ) { backStackEntry ->
+                val userId = backStackEntry.arguments?.getLong("userId") ?: return@composable
+
+                val userByIdState by userViewModel.userById.collectAsState()
+
+                LaunchedEffect(userId) {
+                    userViewModel.fetchUserById(userId)
+                }
+
+                userByIdState?.let { user ->
+                    val currentUser = userViewModel.getCurrentUser()
+                    val isEditable = currentUser.type === UserType.USER
+                    ProfileScreen(
+                        user = user,
+                        isEditable = isEditable,
+                        onSaveChanges = { updatedUser ->
+                            userViewModel.updateUser(updatedUser)
+                        },
+                        userViewModel
+                    )
+                }
             }
         }
     }

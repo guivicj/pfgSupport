@@ -90,6 +90,7 @@ fun HomeScreen(
                         }
                     }
                     MainHeader(
+                        userState.id,
                         userState.name,
                         showSubtitleForUser(userState.type),
                         navController
