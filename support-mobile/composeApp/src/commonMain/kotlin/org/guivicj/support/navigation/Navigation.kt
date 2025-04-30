@@ -11,7 +11,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import org.guivicj.support.data.model.UserType
 import org.guivicj.support.ui.screens.home.HomeScreen
 import org.guivicj.support.ui.screens.home.UserViewModel
 import org.guivicj.support.ui.screens.home.components.TicketViewModel
@@ -27,7 +26,6 @@ import org.koin.mp.KoinPlatform.getKoin
 @Composable
 fun HomeNav() {
     val navController = rememberNavController()
-
     NavHostMain(navController)
 }
 
@@ -78,14 +76,15 @@ fun NavHostMain(navController: NavHostController) {
 
                 userByIdState?.let { user ->
                     val currentUser = userViewModel.getCurrentUser()
-                    val isEditable = currentUser.type === UserType.USER
+                    val isEditable = currentUser?.id == user.id
                     ProfileScreen(
+                        navController = navController,
                         user = user,
                         isEditable = isEditable,
                         onSaveChanges = { updatedUser ->
                             userViewModel.updateUser(updatedUser)
                         },
-                        userViewModel
+                        userViewModel = userViewModel,
                     )
                 }
             }

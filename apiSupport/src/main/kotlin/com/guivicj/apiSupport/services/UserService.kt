@@ -31,15 +31,16 @@ class UserService(
         return userRepository.findByEmail(email).map(userMapper::toDTO)
     }
 
+    @Transactional
     fun updateUser(email: String, updateRequest: UserUpdateRequest): UserDTO {
-        val user = getUserByEmail(email).orElseThrow { IllegalArgumentException("User not found") }
+        val user = userRepository.findByEmail(email)
+            .orElseThrow { RuntimeException("User not found") }
 
-        updateRequest.name?.let { user.name = it }
-        updateRequest.email?.let { user.email = it }
-        updateRequest.telephone?.let { user.telephone = it }
-        userRepository.save(userMapper.toEntity(user))
+        user.name = updateRequest.name!!
+        user.telephone = updateRequest.telephone!!
+        val userSaved = userRepository.save(user)
 
-        return user;
+        return userSaved.let(userMapper::toDTO)
     }
 
     @Transactional

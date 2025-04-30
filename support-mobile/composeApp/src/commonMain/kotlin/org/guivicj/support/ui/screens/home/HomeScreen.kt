@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import org.guivicj.support.data.model.UserType
+import org.guivicj.support.domain.model.UserDTO
 import org.guivicj.support.ui.screens.home.components.BottomNavMenu
 import org.guivicj.support.ui.screens.home.components.CreateTicketBottomSheet
 import org.guivicj.support.ui.screens.home.components.MainHeader
@@ -46,6 +47,15 @@ fun HomeScreen(
     val userState by userViewModel.state.collectAsState()
     val ticketState by ticketViewModel.state.collectAsState()
     LaunchedEffect(userState) {
+        userViewModel.setCurrentUser(
+            UserDTO(
+                id = userState.id,
+                name = userState.name,
+                email = userState.email,
+                telephone = userState.telephone.toIntOrNull() ?: 0,
+                type = userState.type
+            )
+        )
         ticketViewModel.setUser(userState.id, userState.type)
         ticketViewModel.fetchTickets()
     }

@@ -2,6 +2,7 @@ package org.guivicj.support.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -10,12 +11,13 @@ import org.guivicj.support.domain.model.UserDTO
 import org.guivicj.support.domain.repository.UserRepository
 
 class UserViewModel(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : ViewModel() {
     private val _state = MutableStateFlow(UserUIState())
     val state = _state.asStateFlow()
     private val _userById = MutableStateFlow<UserDTO?>(null)
     val userById = _userById.asStateFlow()
+    private var currentUser: UserDTO? = null
 
     fun fetchUserById(userId: Long) {
         viewModelScope.launch {
@@ -38,9 +40,11 @@ class UserViewModel(
         }
     }
 
-    fun getCurrentUser(): UserDTO {
-        return _userById.value!!
+    fun setCurrentUser(user: UserDTO) {
+        currentUser = user
     }
+
+    fun getCurrentUser(): UserDTO? = currentUser
 
     fun setUser(user: UserDTO) {
         _state.value = UserUIState(
@@ -54,6 +58,7 @@ class UserViewModel(
 
     fun logout() {
         _state.value = UserUIState()
+        currentUser = null
     }
 
     fun onNameChanged(name: String) {
