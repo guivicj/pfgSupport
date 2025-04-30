@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
+import org.guivicj.support.presentation.TicketViewModel
 import org.jetbrains.compose.resources.stringResource
 import support_mobile.composeapp.generated.resources.Res
 import support_mobile.composeapp.generated.resources.cancel_btn

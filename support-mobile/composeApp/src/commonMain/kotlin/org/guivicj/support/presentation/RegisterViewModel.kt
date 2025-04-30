@@ -1,16 +1,16 @@
-package org.guivicj.support.ui.screens.signin
+package org.guivicj.support.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.guivicj.support.domain.model.UserSessionInfoDTO
 import org.guivicj.support.domain.repository.AuthRepository
 import org.guivicj.support.domain.usecase.ValidateEmail
 import org.guivicj.support.domain.usecase.ValidateName
 import org.guivicj.support.domain.usecase.ValidatePassword
 import org.guivicj.support.domain.usecase.ValidatePhone
+import org.guivicj.support.state.RegisterUIState
 import org.guivicj.support.validation.ValidationResult
 
 class RegisterViewModel(
@@ -20,8 +20,8 @@ class RegisterViewModel(
     private val validateName: ValidateName,
     private val validatePhone: ValidatePhone
 ) : ViewModel() {
-    private val _state = MutableStateFlow(RegisterState())
-    val state: StateFlow<RegisterState> = _state
+    private val _state = MutableStateFlow(RegisterUIState())
+    val state: StateFlow<RegisterUIState> = _state
 
     fun onEmailChange(value: String) {
         _state.value = _state.value.copy(email = value)
@@ -88,19 +88,3 @@ class RegisterViewModel(
         }
     }
 }
-
-data class RegisterState(
-    val id: Long = 0,
-    val email: String = "",
-    val password: String = "",
-    val confirmPassword: String = "",
-    val name: String = "",
-    val telephone: String = "",
-    val emailError: String? = null,
-    val passwordError: String? = null,
-    val nameError: String? = null,
-    val phoneError: String? = null,
-    val registered: Boolean = false,
-    val loading: Boolean = false,
-    val session: UserSessionInfoDTO? = null,
-)

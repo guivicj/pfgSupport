@@ -1,4 +1,4 @@
-package org.guivicj.support.ui.screens.home.components
+package org.guivicj.support.presentation
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -16,6 +16,7 @@ import org.guivicj.support.domain.model.TicketDTO
 import org.guivicj.support.domain.repository.TicketRepository
 import org.guivicj.support.domain.repository.UserRepository
 import org.guivicj.support.firebase.FirebaseTokenProvider
+import org.guivicj.support.state.TicketUIState
 
 class TicketViewModel(
     private val ticketRepository: TicketRepository,
@@ -138,19 +139,3 @@ class TicketViewModel(
         _state.value = _state.value.copy(message = null)
     }
 }
-
-data class TicketUIState(
-    val ticketId: Long = 0L,
-    val userOwner: String = "",
-    val userId: Long = 0L,
-    val technicianId: Long = 0L,
-    val productId: Long = 0L,
-    val description: String = "",
-    val product: ProductType = ProductType.ENGINE,
-    val showCreateSheet: Boolean = false,
-    val expandProductDropdown: Boolean = false,
-    val products: List<ProductType> = ProductType.entries,
-    val productError: String? = null,
-    val state: StateType = StateType.OPEN,
-    val message: String? = null,
-)

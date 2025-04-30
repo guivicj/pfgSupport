@@ -1,14 +1,13 @@
-package org.guivicj.support.ui.screens.home
+package org.guivicj.support.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.guivicj.support.data.model.UserType
 import org.guivicj.support.domain.model.UserDTO
 import org.guivicj.support.domain.repository.UserRepository
+import org.guivicj.support.state.UserUIState
 
 class UserViewModel(
     private val userRepository: UserRepository,
@@ -69,11 +68,3 @@ class UserViewModel(
         _state.value = _state.value.copy(telephone = telephone)
     }
 }
-
-data class UserUIState(
-    val id: Long = 0L,
-    val name: String = "",
-    val email: String = "",
-    val telephone: String = "",
-    val type: UserType = UserType.USER,
-)

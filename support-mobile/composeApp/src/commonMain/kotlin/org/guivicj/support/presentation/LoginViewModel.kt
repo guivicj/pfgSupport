@@ -1,14 +1,13 @@
-package org.guivicj.support.ui.screens.signin
+package org.guivicj.support.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.guivicj.support.domain.model.UserSessionInfoDTO
 import org.guivicj.support.domain.repository.AuthRepository
 import org.guivicj.support.domain.usecase.ValidatePassword
-import org.guivicj.support.ui.screens.home.UserViewModel
+import org.guivicj.support.state.LoginUiState
 import org.guivicj.support.validation.ValidationResult
 
 class LoginViewModel(
@@ -83,11 +82,3 @@ class LoginViewModel(
         }
     }
 }
-
-data class LoginUiState(
-    val email: String = "",
-    val password: String = "",
-    val error: String? = null,
-    val loading: Boolean = false,
-    val session: UserSessionInfoDTO? = null,
-)

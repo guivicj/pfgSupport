@@ -8,10 +8,10 @@ import org.guivicj.support.domain.usecase.ValidateEmail
 import org.guivicj.support.domain.usecase.ValidateName
 import org.guivicj.support.domain.usecase.ValidatePassword
 import org.guivicj.support.domain.usecase.ValidatePhone
-import org.guivicj.support.ui.screens.home.UserViewModel
-import org.guivicj.support.ui.screens.home.components.TicketViewModel
-import org.guivicj.support.ui.screens.signin.LoginViewModel
-import org.guivicj.support.ui.screens.signin.RegisterViewModel
+import org.guivicj.support.presentation.UserViewModel
+import org.guivicj.support.presentation.TicketViewModel
+import org.guivicj.support.presentation.LoginViewModel
+import org.guivicj.support.presentation.RegisterViewModel
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.dsl.module

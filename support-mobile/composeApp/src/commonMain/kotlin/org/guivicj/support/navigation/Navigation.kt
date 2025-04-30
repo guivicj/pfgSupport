@@ -12,8 +12,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import org.guivicj.support.ui.screens.home.HomeScreen
-import org.guivicj.support.ui.screens.home.UserViewModel
-import org.guivicj.support.ui.screens.home.components.TicketViewModel
+import org.guivicj.support.presentation.UserViewModel
+import org.guivicj.support.presentation.TicketViewModel
 import org.guivicj.support.ui.screens.onboarding.FirstOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.FourthOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.SecondOnBoardingScreen

@@ -31,7 +31,8 @@ import org.guivicj.support.ui.screens.home.components.BottomNavMenu
 import org.guivicj.support.ui.screens.home.components.CreateTicketBottomSheet
 import org.guivicj.support.ui.screens.home.components.MainHeader
 import org.guivicj.support.ui.screens.home.components.TicketList
-import org.guivicj.support.ui.screens.home.components.TicketViewModel
+import org.guivicj.support.presentation.TicketViewModel
+import org.guivicj.support.presentation.UserViewModel
 import org.jetbrains.compose.resources.stringResource
 import support_mobile.composeapp.generated.resources.Res
 import support_mobile.composeapp.generated.resources.home_admin_subtitle

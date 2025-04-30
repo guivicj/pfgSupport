@@ -35,7 +35,7 @@ import org.guivicj.support.domain.model.UserDTO
 import org.guivicj.support.ui.core.components.GradientTopBackground
 import org.guivicj.support.ui.core.components.SubtitleText
 import org.guivicj.support.ui.core.components.TitleText
-import org.guivicj.support.ui.screens.home.UserViewModel
+import org.guivicj.support.presentation.UserViewModel
 import org.guivicj.support.ui.screens.home.components.InitialUserProfile
 import org.guivicj.support.ui.screens.profile.components.ProfileInfoRow
 import org.jetbrains.compose.resources.stringResource
