@@ -1,9 +1,7 @@
 package org.guivicj.support.ui.screens.profile
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import org.guivicj.support.domain.model.UserDTO
@@ -40,6 +37,7 @@ import org.guivicj.support.ui.core.components.SubtitleText
 import org.guivicj.support.ui.core.components.TitleText
 import org.guivicj.support.ui.screens.home.UserViewModel
 import org.guivicj.support.ui.screens.home.components.InitialUserProfile
+import org.guivicj.support.ui.screens.profile.components.ProfileInfoRow
 import org.jetbrains.compose.resources.stringResource
 import support_mobile.composeapp.generated.resources.Res
 import support_mobile.composeapp.generated.resources.logout_btn
@@ -184,7 +182,9 @@ fun ProfileScreen(
                 },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(24.dp)
+                    .padding(24.dp),
+                backgroundColor = MaterialTheme.colorScheme.outline,
+                contentColor = MaterialTheme.colorScheme.background
             ) {
                 Icon(
                     imageVector = if (isEditing) Icons.Filled.Check else Icons.Filled.Edit,
@@ -192,24 +192,5 @@ fun ProfileScreen(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun ProfileInfoRow(label: String, value: String) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color.Gray
-        )
     }
 }
