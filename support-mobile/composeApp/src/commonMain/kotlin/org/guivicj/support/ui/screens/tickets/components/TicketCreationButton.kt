@@ -1,4 +1,4 @@
-package org.guivicj.support.ui.screens.home.components
+package org.guivicj.support.ui.screens.tickets.components
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding

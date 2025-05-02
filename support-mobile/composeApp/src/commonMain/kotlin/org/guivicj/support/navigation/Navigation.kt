@@ -11,9 +11,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import org.guivicj.support.ui.screens.home.HomeScreen
-import org.guivicj.support.presentation.UserViewModel
 import org.guivicj.support.presentation.TicketViewModel
+import org.guivicj.support.presentation.UserViewModel
+import org.guivicj.support.ui.screens.home.HomeScreen
+import org.guivicj.support.ui.screens.tickets.TicketDetailScreen
 import org.guivicj.support.ui.screens.onboarding.FirstOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.FourthOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.SecondOnBoardingScreen
@@ -86,6 +87,18 @@ fun NavHostMain(navController: NavHostController) {
                         },
                         userViewModel = userViewModel,
                     )
+                }
+            }
+            composable(Screen.TicketDetailScreen.route) { backStackEntry ->
+                val ticketId = backStackEntry.arguments?.getLong("ticketId") ?: return@composable
+                val ticket by ticketViewModel.selectedTicket.collectAsState()
+
+                LaunchedEffect(ticketId) {
+                    ticketViewModel.fetchTicketById(ticketId)
+                }
+
+                ticket?.let {
+                    TicketDetailScreen(ticketDTO = it, navController = navController)
                 }
             }
         }

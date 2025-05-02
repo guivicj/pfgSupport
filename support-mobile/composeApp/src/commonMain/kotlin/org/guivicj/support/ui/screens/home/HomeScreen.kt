@@ -28,9 +28,9 @@ import kotlinx.coroutines.delay
 import org.guivicj.support.data.model.UserType
 import org.guivicj.support.domain.model.UserDTO
 import org.guivicj.support.ui.screens.home.components.BottomNavMenu
-import org.guivicj.support.ui.screens.home.components.CreateTicketBottomSheet
+import org.guivicj.support.ui.screens.tickets.components.CreateTicketBottomSheet
 import org.guivicj.support.ui.screens.home.components.MainHeader
-import org.guivicj.support.ui.screens.home.components.TicketList
+import org.guivicj.support.ui.screens.tickets.components.TicketList
 import org.guivicj.support.presentation.TicketViewModel
 import org.guivicj.support.presentation.UserViewModel
 import org.jetbrains.compose.resources.stringResource

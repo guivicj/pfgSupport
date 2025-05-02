@@ -1,4 +1,4 @@
-package org.guivicj.support.ui.core.components
+package org.guivicj.support.ui.core.components.texts
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme

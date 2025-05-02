@@ -4,6 +4,7 @@ import org.guivicj.support.domain.model.TicketDTO
 
 interface TicketRepository {
     suspend fun getAll(): List<TicketDTO>
+    suspend fun getById(id: Long): TicketDTO?
     suspend fun getByUser(userId: Long): List<TicketDTO>
     suspend fun getByTechnician(techId: Long): List<TicketDTO>
     suspend fun create(ticket: TicketDTO, idToken: String): TicketDTO

@@ -20,6 +20,10 @@ class TicketRepositoryImpl(
         return client.get(baseUrl).body()
     }
 
+    override suspend fun getById(id: Long): TicketDTO? {
+        return client.get("$baseUrl/id/$id").body()
+    }
+
     override suspend fun getByUser(userId: Long): List<TicketDTO> {
         return client.get("$baseUrl/by-user/$userId").body()
     }

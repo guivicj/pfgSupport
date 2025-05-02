@@ -1,4 +1,4 @@
-package org.guivicj.support.ui.screens.home.components
+package org.guivicj.support.ui.core.components.texts
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text

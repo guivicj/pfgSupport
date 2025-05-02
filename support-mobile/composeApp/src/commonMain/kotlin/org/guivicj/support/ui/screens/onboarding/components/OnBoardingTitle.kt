@@ -1,8 +1,8 @@
 package org.guivicj.support.ui.screens.onboarding.components
 
 import androidx.compose.runtime.Composable
-import org.guivicj.support.ui.core.components.SubtitleText
-import org.guivicj.support.ui.core.components.TitleText
+import org.guivicj.support.ui.core.components.texts.SubtitleText
+import org.guivicj.support.ui.core.components.texts.TitleText
 
 
 @Composable

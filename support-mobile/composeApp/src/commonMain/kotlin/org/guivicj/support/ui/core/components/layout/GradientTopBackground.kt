@@ -1,4 +1,4 @@
-package org.guivicj.support.ui.core.components
+package org.guivicj.support.ui.core.components.layout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

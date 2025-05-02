@@ -210,7 +210,7 @@ class TicketService(
         ticketMessageRepository.save(
             TicketMessage(
                 ticket = ticket,
-                role = ChatRole.ASSISTANT,
+                role = ChatRole.TECHNICIAN,
                 content = response
             )
         )

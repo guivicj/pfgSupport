@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import org.guivicj.support.data.model.ProductType
 import org.guivicj.support.data.model.StateType
 import org.guivicj.support.data.model.UserType
+import org.guivicj.support.domain.model.MessageDTO
 import org.guivicj.support.domain.model.TicketDTO
 import org.guivicj.support.domain.repository.TicketRepository
 import org.guivicj.support.domain.repository.UserRepository
@@ -27,6 +28,10 @@ class TicketViewModel(
     private val _state = MutableStateFlow(TicketUIState())
     val state = _state.asStateFlow()
     private var allTickets by mutableStateOf(listOf<TicketDTO>())
+    private val _selectedTicker = MutableStateFlow<TicketDTO?>(null)
+    val selectedTicket = _selectedTicker.asStateFlow()
+    private val _messages = MutableStateFlow<List<MessageDTO>>(emptyList())
+    val messages = _messages.asStateFlow()
     var searchQuery by mutableStateOf("")
     private var userType by mutableStateOf(UserType.USER)
     private var currentUserId by mutableStateOf(0L)
@@ -80,6 +85,24 @@ class TicketViewModel(
             }
         }
     }
+
+    fun fetchTicketById(ticketId: Long) {
+        viewModelScope.launch {
+            try {
+                val ticket = ticketRepository.getById(ticketId)
+                _selectedTicker.value = ticket
+            } catch (e: Exception) {
+                showMessage("Failed to load ticket: ${e.message}")
+            }
+        }
+    }
+
+    fun fetchMessages(ticketId: Long) {
+    }
+
+    fun sendMessage(message: String) {
+    }
+
 
     fun createTicket(
         productId: Long,

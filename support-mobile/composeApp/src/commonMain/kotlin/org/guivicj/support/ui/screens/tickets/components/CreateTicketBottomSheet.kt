@@ -1,4 +1,4 @@
-package org.guivicj.support.ui.screens.home.components
+package org.guivicj.support.ui.screens.tickets.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import org.guivicj.support.presentation.TicketViewModel
+import org.guivicj.support.ui.screens.home.components.DropdownField
 import org.jetbrains.compose.resources.stringResource
 import support_mobile.composeapp.generated.resources.Res
 import support_mobile.composeapp.generated.resources.cancel_btn

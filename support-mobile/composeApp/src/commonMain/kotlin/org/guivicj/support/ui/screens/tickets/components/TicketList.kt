@@ -1,4 +1,4 @@
-package org.guivicj.support.ui.screens.home.components
+package org.guivicj.support.ui.screens.tickets.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import org.guivicj.support.presentation.TicketViewModel
+import org.guivicj.support.ui.screens.home.components.SearchBar
 
 @Composable
 fun TicketList(

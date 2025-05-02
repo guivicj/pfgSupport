@@ -1,4 +1,4 @@
-package org.guivicj.support.ui.screens.home.components
+package org.guivicj.support.ui.screens.tickets.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -26,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import org.guivicj.support.domain.model.TicketDTO
 import org.guivicj.support.navigation.Screen
+import org.guivicj.support.ui.core.components.display.InitialUserProfile
+import org.guivicj.support.ui.core.components.texts.TicketText
 import org.guivicj.support.utils.formatDateTime
 import org.jetbrains.compose.resources.stringResource
 import support_mobile.composeapp.generated.resources.Res

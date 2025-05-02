@@ -1,4 +1,4 @@
-package org.guivicj.support.ui.screens.home.components
+package org.guivicj.support.ui.core.components.display
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
