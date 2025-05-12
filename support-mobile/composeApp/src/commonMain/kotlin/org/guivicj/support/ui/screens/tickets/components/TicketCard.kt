@@ -88,7 +88,7 @@ fun TicketCard(navController: NavHostController, ticketDTO: TicketDTO, user: Str
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.clickable {
-                            navController.navigate("ticket_detail/${ticketDTO.ticketId}")
+                            navController.navigate(Screen.TicketDetailScreen.createRoute(ticketDTO.ticketId))
                         },
                         textDecoration = TextDecoration.Underline
                     )

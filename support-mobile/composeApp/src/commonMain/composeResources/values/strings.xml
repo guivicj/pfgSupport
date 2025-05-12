@@ -50,4 +50,8 @@
     <string name="failed_ticket_message">Failed to create ticket</string>
     <string name="open_support_message">Open support thread</string>
     <string name="message_placeholder">Write a message...</string>
+    <string name="status_field">Status</string>
+    <string name="opened_at_field">Opened at</string>
+    <string name="in_progress_at_field">In progress at</string>
+    <string name="closed_at_field">Closed at</string>
 </resources>

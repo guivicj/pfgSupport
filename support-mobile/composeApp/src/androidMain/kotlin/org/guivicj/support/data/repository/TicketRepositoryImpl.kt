@@ -7,6 +7,7 @@ import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import org.guivicj.support.domain.model.TicketDTO
@@ -21,7 +22,10 @@ class TicketRepositoryImpl(
     }
 
     override suspend fun getById(id: Long): TicketDTO? {
-        return client.get("$baseUrl/id/$id").body()
+        val response = client.get("$baseUrl/id/$id")
+        println(response.status)
+        println(response.bodyAsText())
+        return response.body()
     }
 
     override suspend fun getByUser(userId: Long): List<TicketDTO> {

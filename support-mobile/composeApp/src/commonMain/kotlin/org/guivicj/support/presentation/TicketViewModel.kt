@@ -86,10 +86,10 @@ class TicketViewModel(
         }
     }
 
-    fun fetchTicketById(ticketId: Long) {
+    fun fetchTicketById(ticketId: String) {
         viewModelScope.launch {
             try {
-                val ticket = ticketRepository.getById(ticketId)
+                val ticket = ticketRepository.getById(ticketId.toLong())
                 _selectedTicker.value = ticket
             } catch (e: Exception) {
                 showMessage("Failed to load ticket: ${e.message}")

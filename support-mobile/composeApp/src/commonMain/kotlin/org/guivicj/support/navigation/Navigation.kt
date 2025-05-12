@@ -90,7 +90,7 @@ fun NavHostMain(navController: NavHostController) {
                 }
             }
             composable(Screen.TicketDetailScreen.route) { backStackEntry ->
-                val ticketId = backStackEntry.arguments?.getLong("ticketId") ?: return@composable
+                val ticketId = backStackEntry.arguments?.getString("ticketId") ?: return@composable
                 val ticket by ticketViewModel.selectedTicket.collectAsState()
 
                 LaunchedEffect(ticketId) {
