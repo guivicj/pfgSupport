@@ -8,11 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TitleText(text: String) {
+fun TitleText(text: String, modifier: Modifier? = Modifier) {
     Text(
         text = text,
         style = MaterialTheme.typography.headlineLarge,
         color = MaterialTheme.colorScheme.onPrimary,
-        modifier = Modifier.padding(bottom = 12.dp)
+        modifier = modifier ?: Modifier.padding(bottom = 12.dp)
     )
 }
