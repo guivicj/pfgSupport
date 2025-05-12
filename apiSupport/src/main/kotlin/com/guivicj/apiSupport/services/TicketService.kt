@@ -1,5 +1,8 @@
 package com.guivicj.apiSupport.services
 
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.FirebaseMessagingException
+import com.google.firebase.messaging.Message
 import com.guivicj.apiSupport.dtos.TicketDTO
 import com.guivicj.apiSupport.dtos.TicketHistoryDTO
 import com.guivicj.apiSupport.dtos.requests.ChangeStateRequest
@@ -28,6 +31,7 @@ class TicketService(
     private val ticketHistoryMapper: TicketHistoryMapper,
     private val ticketMessageRepository: TicketMessageRepository,
     private val openAiService: OpenAiService,
+    private val firebaseMessaging: FirebaseMessaging,
 ) {
     fun toEntity(dto: TicketDTO): TicketModel {
         val user = userRepository.findById(dto.userId)
@@ -180,6 +184,47 @@ class TicketService(
         return ticketHistoryMapper.toDtoList(history)
     }
 
+    fun sendMessage(ticketMessage: TicketMessage, currentUser: UserSessionInfoDTO): TicketMessage {
+        val ticket = ticketRepository.findById(ticketMessage.ticket.id)
+            .orElseThrow { RuntimeException("Ticket not found") }
+
+        if (currentUser.user.type == UserType.USER && ticket.userId.email != currentUser.user.email) {
+            throw RuntimeException("You cannot send messages to this ticket")
+        }
+
+        val technician =
+            userRepository.findById(ticket.technicianId.id).orElseThrow { RuntimeException("Technician not found") }
+
+        if (currentUser.user.type == UserType.TECHNICIAN && technician.email != currentUser.user.email) {
+            throw RuntimeException("You are not assigned to this ticket")
+        }
+
+        val savedMessage = ticketMessageRepository.save(ticketMessage)
+        val recipientEmail = when (currentUser.user.type) {
+            UserType.USER -> technician.email
+            UserType.TECHNICIAN -> ticket.userId.email
+            else -> return savedMessage
+        }
+
+        val recipient = userRepository.findByEmail(recipientEmail)
+            .orElseThrow { RuntimeException("Recipient not found") }
+
+        val token = recipient.firebaseUid
+
+        val notification = Message.builder()
+            .setToken(token)
+            .putData("title", "New message on Ticket #${ticket.id}")
+            .putData("body", savedMessage.content)
+            .build()
+
+        try {
+            firebaseMessaging.send(notification)
+        } catch (e: FirebaseMessagingException) {
+            e.printStackTrace()
+        }
+        return savedMessage
+    }
+
     fun chatWithIA(ticketId: Long, userSession: UserSessionInfoDTO, message: String): String {
         val user = userRepository.findByEmail(userSession.user.email)
             .orElseThrow { RuntimeException("User not found") }
@@ -223,5 +268,18 @@ class TicketService(
 
         return response
     }
+    fun getMessages(ticketId: Long, user: UserSessionInfoDTO): List<TicketMessage> {
+        val ticket = ticketRepository.findById(ticketId)
+            .orElseThrow { RuntimeException("Ticket not found") }
 
+        val isUserTicketOwner = user.user.type == UserType.USER && ticket.userId.email == user.user.email
+        val isTechnicianAssigned = user.user.type == UserType.TECHNICIAN
+        val isAdmin = user.user.type == UserType.ADMIN
+
+        if (!isUserTicketOwner && !isTechnicianAssigned && !isAdmin) {
+            throw RuntimeException("You don't have access to this ticket's messages")
+        }
+
+        return ticketMessageRepository.findAllByTicketIdOrderByTimestampAsc(ticketId)
+    }
 }

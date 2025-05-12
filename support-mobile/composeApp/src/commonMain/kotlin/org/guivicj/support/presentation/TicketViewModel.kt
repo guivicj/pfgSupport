@@ -98,9 +98,33 @@ class TicketViewModel(
     }
 
     fun fetchMessages(ticketId: Long) {
+        viewModelScope.launch {
+            try {
+                val token = tokenProvider.getIdToken()
+                val msgs = ticketRepository.getMessages(ticketId, token)
+                _messages.value = msgs
+            } catch (e: Exception) {
+                showMessage("Failed to load messages: ${e.message}")
+            }
+        }
     }
 
-    fun sendMessage(message: String) {
+    fun sendMessage(messageDTO: MessageDTO) {
+        viewModelScope.launch {
+            println(messageDTO)
+            try {
+                val token = tokenProvider.getIdToken()
+                val sentMessage = ticketRepository.sendMessage(
+                    ticketId = messageDTO.ticketId,
+                    role = messageDTO.role,
+                    content = messageDTO.content,
+                    idToken = token
+                )
+                _messages.value += sentMessage
+            } catch (e: Exception) {
+                showMessage("Failed to send message: ${e.message}")
+            }
+        }
     }
 
 

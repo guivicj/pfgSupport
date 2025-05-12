@@ -9,6 +9,7 @@ import com.guivicj.apiSupport.dtos.requests.EscalateTicketRequest
 import com.guivicj.apiSupport.dtos.responses.ChatResponse
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.StateType
+import com.guivicj.apiSupport.models.TicketMessage
 import com.guivicj.apiSupport.services.TicketService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -82,6 +83,25 @@ class TicketController(val ticketService: TicketService) {
     ): ResponseEntity<TicketDTO> {
         val updatedTicket = ticketService.changeState(ticketId, request, user)
         return ResponseEntity.ok(updatedTicket)
+    }
+
+    @PostMapping("/tickets/{ticketId}/send")
+    fun sendMessage(
+        @PathVariable ticketId: String,
+        @RequestBody ticketMessage: TicketMessage,
+        @CurrentUser userSession: UserSessionInfoDTO
+    ): ResponseEntity<TicketMessage> {
+        val messageSent = ticketService.sendMessage(ticketMessage = ticketMessage, currentUser = userSession)
+        return ResponseEntity.ok(messageSent)
+    }
+
+    @GetMapping("/tickets/{ticketId}/messages")
+    fun getMessages(
+        @PathVariable ticketId: Long,
+        @CurrentUser user: UserSessionInfoDTO
+    ): ResponseEntity<List<TicketMessage>> {
+        val messages = ticketService.getMessages(ticketId, user)
+        return ResponseEntity.ok(messages)
     }
 
     @PostMapping("/{ticketId}/chat")

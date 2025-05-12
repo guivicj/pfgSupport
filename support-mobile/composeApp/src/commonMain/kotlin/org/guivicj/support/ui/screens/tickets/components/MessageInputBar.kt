@@ -28,7 +28,7 @@ fun MessageInputBar(onSend: (String) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(12.dp),
+            .padding(20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         OutlinedTextField(

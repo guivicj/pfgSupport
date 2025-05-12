@@ -10,6 +10,8 @@ import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import org.guivicj.support.data.model.ChatRole
+import org.guivicj.support.domain.model.MessageDTO
 import org.guivicj.support.domain.model.TicketDTO
 import org.guivicj.support.domain.repository.TicketRepository
 
@@ -67,4 +69,29 @@ class TicketRepositoryImpl(
             )
         }.body()
     }
+
+    override suspend fun sendMessage(
+        ticketId: Long,
+        role: ChatRole,
+        content: String,
+        idToken: String
+    ): List<MessageDTO> {
+        return client.post("$baseUrl/tickets/$ticketId/messages") {
+            contentType(ContentType.Application.Json)
+            setBody(
+                mapOf(
+                    "ticketId" to ticketId,
+                    "role" to role,
+                    "content" to content
+                )
+            )
+        }.body()
+    }
+
+    override suspend fun getMessages(ticketId: Long, idToken: String): List<MessageDTO> {
+        return client.get("$baseUrl/tickets/$ticketId/messages") {
+            header("Authorization", "Bearer $idToken")
+        }.body()
+    }
+
 }

@@ -14,7 +14,6 @@ import androidx.navigation.navArgument
 import org.guivicj.support.presentation.TicketViewModel
 import org.guivicj.support.presentation.UserViewModel
 import org.guivicj.support.ui.screens.home.HomeScreen
-import org.guivicj.support.ui.screens.tickets.TicketDetailScreen
 import org.guivicj.support.ui.screens.onboarding.FirstOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.FourthOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.SecondOnBoardingScreen
@@ -22,6 +21,7 @@ import org.guivicj.support.ui.screens.onboarding.ThirdOnBoardingScreen
 import org.guivicj.support.ui.screens.profile.ProfileScreen
 import org.guivicj.support.ui.screens.signin.LoginScreen
 import org.guivicj.support.ui.screens.signin.RegisterScreen
+import org.guivicj.support.ui.screens.tickets.TicketDetailScreen
 import org.koin.mp.KoinPlatform.getKoin
 
 @Composable
@@ -98,7 +98,11 @@ fun NavHostMain(navController: NavHostController) {
                 }
 
                 ticket?.let {
-                    TicketDetailScreen(ticketDTO = it, navController = navController)
+                    TicketDetailScreen(
+                        ticketDTO = it,
+                        navController = navController,
+                        viewModel = ticketViewModel
+                    )
                 }
             }
         }

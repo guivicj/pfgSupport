@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import org.guivicj.support.domain.model.TicketDTO
+import org.guivicj.support.utils.formatDateTime
 import org.jetbrains.compose.resources.stringResource
 import support_mobile.composeapp.generated.resources.Res
 import support_mobile.composeapp.generated.resources.closed_at_field
@@ -29,12 +30,12 @@ fun TicketMetadataSection(ticket: TicketDTO) {
             .padding(16.dp)
     ) {
         TicketInfoRow(stringResource(Res.string.status_field), ticket.state.toString())
-        TicketInfoRow(stringResource(Res.string.opened_at_field), ticket.openedAt.toString())
+        TicketInfoRow(stringResource(Res.string.opened_at_field), formatDateTime(ticket.openedAt.toString()))
         ticket.inProgressAt?.let {
-            TicketInfoRow(stringResource(Res.string.in_progress_at_field), it)
+            TicketInfoRow(stringResource(Res.string.in_progress_at_field), formatDateTime(it))
         }
         ticket.closedAt?.let {
-            TicketInfoRow(stringResource(Res.string.closed_at_field), it)
+            TicketInfoRow(stringResource(Res.string.closed_at_field), formatDateTime(it))
         }
     }
 }
