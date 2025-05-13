@@ -43,6 +43,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import kotlinx.coroutines.launch
 import org.guivicj.support.R
+import org.guivicj.support.fcm.FcmManager
 import org.guivicj.support.firebase.firebaseAuthWithGoogle
 import org.guivicj.support.navigation.Screen
 import org.guivicj.support.presentation.LoginViewModel
@@ -82,6 +83,12 @@ actual fun LoginScreen(navController: NavHostController) {
                 firebaseAuthWithGoogle(idToken) { success, token ->
                     if (success && token != null) {
                         viewModel.loginWithToken(token)
+
+                        FcmManager().getToken { fcmToken ->
+                            if (fcmToken != null) {
+                                viewModel.saveFcmToken(fcmToken)
+                            }
+                        }
                     } else {
                         Toast.makeText(context, "Google login failed", Toast.LENGTH_LONG).show()
                     }

@@ -7,7 +7,6 @@ import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import org.guivicj.support.data.model.ChatRole
@@ -23,11 +22,8 @@ class TicketRepositoryImpl(
         return client.get(baseUrl).body()
     }
 
-    override suspend fun getById(id: Long): TicketDTO? {
-        val response = client.get("$baseUrl/id/$id")
-        println(response.status)
-        println(response.bodyAsText())
-        return response.body()
+    override suspend fun getById(id: Long): TicketDTO {
+        return client.get("$baseUrl/id/$id").body()
     }
 
     override suspend fun getByUser(userId: Long): List<TicketDTO> {
@@ -47,7 +43,7 @@ class TicketRepositoryImpl(
     }
 
     override suspend fun assignToHuman(ticketId: Long, idToken: String): TicketDTO {
-        return client.put("$baseUrl/tickets/$ticketId/assign-human") {
+        return client.put("$baseUrl/$ticketId/assign-human") {
             header("Authorization", "Bearer $idToken")
         }.body()
     }
@@ -58,7 +54,7 @@ class TicketRepositoryImpl(
         technicianId: Long,
         idToken: String
     ): TicketDTO {
-        return client.put("$baseUrl/tickets/$ticketId/change-state") {
+        return client.put("$baseUrl/$ticketId/change-state") {
             header("Authorization", "Bearer $idToken")
             contentType(ContentType.Application.Json)
             setBody(
@@ -75,21 +71,22 @@ class TicketRepositoryImpl(
         role: ChatRole,
         content: String,
         idToken: String
-    ): List<MessageDTO> {
-        return client.post("$baseUrl/tickets/$ticketId/messages") {
+    ): MessageDTO {
+        return client.post("$baseUrl/$ticketId/send") {
+            header("Authorization", "Bearer $idToken")
             contentType(ContentType.Application.Json)
             setBody(
-                mapOf(
-                    "ticketId" to ticketId,
-                    "role" to role,
-                    "content" to content
+                MessageDTO(
+                    ticketId = ticketId,
+                    role = role,
+                    content = content
                 )
             )
         }.body()
     }
 
     override suspend fun getMessages(ticketId: Long, idToken: String): List<MessageDTO> {
-        return client.get("$baseUrl/tickets/$ticketId/messages") {
+        return client.get("$baseUrl/$ticketId/messages") {
             header("Authorization", "Bearer $idToken")
         }.body()
     }

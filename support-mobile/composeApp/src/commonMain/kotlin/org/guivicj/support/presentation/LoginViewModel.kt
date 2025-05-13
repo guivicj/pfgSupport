@@ -66,6 +66,17 @@ class LoginViewModel(
         }
     }
 
+    fun saveFcmToken(fcmToken: String) {
+        viewModelScope.launch {
+            try {
+                val userId = state.value.session?.user?.id ?: return@launch
+                authRepository.saveFcmToken(userId, fcmToken)
+            } catch (e: Exception) {
+                _state.value = _state.value.copy(error = "Failed to save FCM token")
+            }
+        }
+    }
+
     fun loginWithToken(idToken: String) {
         viewModelScope.launch {
             _state.value = _state.value.copy(loading = true)

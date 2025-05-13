@@ -65,7 +65,7 @@ ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 material-icons = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-icons" }
-
+firebase-messaging = "com.google.firebase:firebase-messaging:24.1.1"
 
 
 

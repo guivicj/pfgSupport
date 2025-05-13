@@ -3,6 +3,7 @@ package com.guivicj.apiSupport.services
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingException
 import com.google.firebase.messaging.Message
+import com.guivicj.apiSupport.dtos.MessageDTO
 import com.guivicj.apiSupport.dtos.TicketDTO
 import com.guivicj.apiSupport.dtos.TicketHistoryDTO
 import com.guivicj.apiSupport.dtos.requests.ChangeStateRequest
@@ -32,6 +33,7 @@ class TicketService(
     private val ticketMessageRepository: TicketMessageRepository,
     private val openAiService: OpenAiService,
     private val firebaseMessaging: FirebaseMessaging,
+    private val deviceTokenService: DeviceTokenService
 ) {
     fun toEntity(dto: TicketDTO): TicketModel {
         val user = userRepository.findById(dto.userId)
@@ -193,7 +195,8 @@ class TicketService(
         }
 
         val technician =
-            userRepository.findById(ticket.technicianId.id).orElseThrow { RuntimeException("Technician not found") }
+            userRepository.findById(ticket.technicianId.userModel.id)
+                .orElseThrow { RuntimeException("Technician not found") }
 
         if (currentUser.user.type == UserType.TECHNICIAN && technician.email != currentUser.user.email) {
             throw RuntimeException("You are not assigned to this ticket")
@@ -209,20 +212,41 @@ class TicketService(
         val recipient = userRepository.findByEmail(recipientEmail)
             .orElseThrow { RuntimeException("Recipient not found") }
 
-        val token = recipient.firebaseUid
+        val tokens = deviceTokenService.getTokensForUser(recipient.id)
 
-        val notification = Message.builder()
-            .setToken(token)
-            .putData("title", "New message on Ticket #${ticket.id}")
-            .putData("body", savedMessage.content)
-            .build()
+        for (token in tokens) {
+            val notification = Message.builder()
+                .setToken(token)
+                .putData("title", "New message on Ticket #${ticket.id}")
+                .putData("body", savedMessage.content)
+                .build()
 
-        try {
-            firebaseMessaging.send(notification)
-        } catch (e: FirebaseMessagingException) {
-            e.printStackTrace()
+            try {
+                firebaseMessaging.send(notification)
+            } catch (e: FirebaseMessagingException) {
+                e.printStackTrace()
+            }
         }
         return savedMessage
+    }
+
+    fun sendMessageFromDTO(request: MessageDTO, currentUser: UserSessionInfoDTO): MessageDTO {
+        val ticket = ticketRepository.findById(request.ticketId)
+            .orElseThrow { RuntimeException("Ticket not found") }
+
+        val message = TicketMessage(
+            ticket = ticket,
+            role = request.role,
+            content = request.content
+        )
+
+        val saved = sendMessage(message, currentUser)
+
+        return MessageDTO(
+            ticketId = saved.ticket.id,
+            role = saved.role,
+            content = saved.content
+        )
     }
 
     fun chatWithIA(ticketId: Long, userSession: UserSessionInfoDTO, message: String): String {
@@ -268,6 +292,7 @@ class TicketService(
 
         return response
     }
+
     fun getMessages(ticketId: Long, user: UserSessionInfoDTO): List<TicketMessage> {
         val ticket = ticketRepository.findById(ticketId)
             .orElseThrow { RuntimeException("Ticket not found") }

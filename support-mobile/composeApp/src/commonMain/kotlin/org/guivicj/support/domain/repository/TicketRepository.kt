@@ -12,6 +12,6 @@ interface TicketRepository {
     suspend fun create(ticket: TicketDTO, idToken: String): TicketDTO
     suspend fun assignToHuman(ticketId: Long, idToken: String): TicketDTO
     suspend fun changeState(ticketId: Long, newState: String, technicianId: Long, idToken: String): TicketDTO
-    suspend fun sendMessage(ticketId: Long, role: ChatRole, content: String, idToken: String): List<MessageDTO>
+    suspend fun sendMessage(ticketId: Long, role: ChatRole, content: String, idToken: String): MessageDTO
     suspend fun getMessages(ticketId: Long, idToken: String): List<MessageDTO>
 }

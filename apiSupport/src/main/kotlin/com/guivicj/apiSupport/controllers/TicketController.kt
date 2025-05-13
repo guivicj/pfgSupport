@@ -1,6 +1,7 @@
 package com.guivicj.apiSupport.controllers
 
 import com.guivicj.apiSupport.annotations.CurrentUser
+import com.guivicj.apiSupport.dtos.MessageDTO
 import com.guivicj.apiSupport.dtos.TicketDTO
 import com.guivicj.apiSupport.dtos.TicketHistoryDTO
 import com.guivicj.apiSupport.dtos.requests.ChangeStateRequest
@@ -56,7 +57,7 @@ class TicketController(val ticketService: TicketService) {
         return ResponseEntity.ok(createdTicket)
     }
 
-    @PutMapping("/tickets/{ticketId}/assign-human")
+    @PutMapping("/{ticketId}/assign-human")
     fun assignHumanTech(
         @CurrentUser user: UserSessionInfoDTO,
         @PathVariable ticketId: Long
@@ -65,7 +66,7 @@ class TicketController(val ticketService: TicketService) {
         return ResponseEntity.ok(reassignedTicket)
     }
 
-    @PutMapping("/tickets/{ticketId}/escalate")
+    @PutMapping("/{ticketId}/escalate")
     fun escalateTicket(
         @CurrentUser user: UserSessionInfoDTO,
         @PathVariable ticketId: Long,
@@ -75,7 +76,7 @@ class TicketController(val ticketService: TicketService) {
         return ResponseEntity.ok(updatedTicket)
     }
 
-    @PutMapping("/tickets/{ticketId}/change-state")
+    @PutMapping("/{ticketId}/change-state")
     fun changeState(
         @CurrentUser user: UserSessionInfoDTO,
         @PathVariable ticketId: Long,
@@ -85,17 +86,16 @@ class TicketController(val ticketService: TicketService) {
         return ResponseEntity.ok(updatedTicket)
     }
 
-    @PostMapping("/tickets/{ticketId}/send")
+    @PostMapping("/{ticketId}/send")
     fun sendMessage(
-        @PathVariable ticketId: String,
-        @RequestBody ticketMessage: TicketMessage,
+        @RequestBody request: MessageDTO,
         @CurrentUser userSession: UserSessionInfoDTO
-    ): ResponseEntity<TicketMessage> {
-        val messageSent = ticketService.sendMessage(ticketMessage = ticketMessage, currentUser = userSession)
+    ): ResponseEntity<MessageDTO> {
+        val messageSent = ticketService.sendMessageFromDTO(request, userSession)
         return ResponseEntity.ok(messageSent)
     }
 
-    @GetMapping("/tickets/{ticketId}/messages")
+    @GetMapping("/{ticketId}/messages")
     fun getMessages(
         @PathVariable ticketId: Long,
         @CurrentUser user: UserSessionInfoDTO

@@ -101,8 +101,8 @@ class TicketViewModel(
         viewModelScope.launch {
             try {
                 val token = tokenProvider.getIdToken()
-                val msgs = ticketRepository.getMessages(ticketId, token)
-                _messages.value = msgs
+                val messages = ticketRepository.getMessages(ticketId, token)
+                _messages.value = messages
             } catch (e: Exception) {
                 showMessage("Failed to load messages: ${e.message}")
             }
@@ -111,7 +111,6 @@ class TicketViewModel(
 
     fun sendMessage(messageDTO: MessageDTO) {
         viewModelScope.launch {
-            println(messageDTO)
             try {
                 val token = tokenProvider.getIdToken()
                 val sentMessage = ticketRepository.sendMessage(

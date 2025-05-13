@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
@@ -21,6 +22,8 @@ class AuthRepositoryImpl(
     private val client: HttpClient
 ) : AuthRepository {
 
+    private val baseUrl = "http://10.0.2.2:8080/api/auth"
+
     override suspend fun login(email: String, password: String): Result<UserSessionInfoDTO> {
         return try {
             val authResult = FirebaseAuth.getInstance()
@@ -30,7 +33,7 @@ class AuthRepositoryImpl(
             val idToken = authResult.user?.getIdToken(true)?.await()?.token
                 ?: return Result.failure(Exception("Failed to retrieve ID token"))
 
-            val response = client.post("http://10.0.2.2:8080/api/auth/firebase-login") {
+            val response = client.post("$baseUrl/firebase-login") {
                 contentType(ContentType.Application.Json)
                 setBody(mapOf("token" to idToken))
             }.body<UserSessionInfoDTO>()
@@ -64,7 +67,7 @@ class AuthRepositoryImpl(
                 telephone = telephone
             )
 
-            val response = client.post("http://10.0.2.2:8080/api/auth/firebase-login") {
+            val response = client.post("$baseUrl/firebase-login") {
                 contentType(ContentType.Application.Json)
                 setBody(request)
             }.body<UserSessionInfoDTO>()
@@ -79,7 +82,7 @@ class AuthRepositoryImpl(
         return try {
             val request = FirebaseLoginRequest(token = idToken, name = null, telephone = null)
             val response: HttpResponse =
-                client.post("http://10.0.2.2:8080/api/auth/firebase-login") {
+                client.post("$baseUrl/firebase-login") {
                     contentType(ContentType.Application.Json)
                     setBody(request)
                 }
@@ -92,6 +95,13 @@ class AuthRepositoryImpl(
             }
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    override suspend fun saveFcmToken(userId: Long, token: String) {
+        client.put("$baseUrl/$userId") {
+            contentType(ContentType.Application.Json)
+            setBody(token)
         }
     }
 }
