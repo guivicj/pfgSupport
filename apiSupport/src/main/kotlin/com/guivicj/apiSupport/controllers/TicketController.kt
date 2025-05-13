@@ -99,7 +99,7 @@ class TicketController(val ticketService: TicketService) {
     fun getMessages(
         @PathVariable ticketId: Long,
         @CurrentUser user: UserSessionInfoDTO
-    ): ResponseEntity<List<TicketMessage>> {
+    ): ResponseEntity<List<MessageDTO>> {
         val messages = ticketService.getMessages(ticketId, user)
         return ResponseEntity.ok(messages)
     }

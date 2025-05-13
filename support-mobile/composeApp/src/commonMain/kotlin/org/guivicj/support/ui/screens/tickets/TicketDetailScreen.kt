@@ -44,7 +44,7 @@ fun TicketDetailScreen(
                     viewModel.sendMessage(
                         MessageDTO(
                             ticketId = ticketDTO.ticketId,
-                            role = ChatRole.USER,
+                            role = viewModel.getCurrentChatRole(),
                             content = message
                         )
                     )

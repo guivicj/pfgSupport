@@ -245,7 +245,8 @@ class TicketService(
         return MessageDTO(
             ticketId = saved.ticket.id,
             role = saved.role,
-            content = saved.content
+            content = saved.content,
+            timestamp = saved.timestamp
         )
     }
 
@@ -293,7 +294,7 @@ class TicketService(
         return response
     }
 
-    fun getMessages(ticketId: Long, user: UserSessionInfoDTO): List<TicketMessage> {
+    fun getMessages(ticketId: Long, user: UserSessionInfoDTO): List<MessageDTO> {
         val ticket = ticketRepository.findById(ticketId)
             .orElseThrow { RuntimeException("Ticket not found") }
 
@@ -306,5 +307,13 @@ class TicketService(
         }
 
         return ticketMessageRepository.findAllByTicketIdOrderByTimestampAsc(ticketId)
+            .map {
+                MessageDTO(
+                    ticketId = it.ticket.id,
+                    role = it.role,
+                    content = it.content,
+                    timestamp = it.timestamp
+                )
+            }
     }
 }

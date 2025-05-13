@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.guivicj.support.data.model.ChatRole
 import org.guivicj.support.data.model.ProductType
 import org.guivicj.support.data.model.StateType
 import org.guivicj.support.data.model.UserType
@@ -46,6 +47,13 @@ class TicketViewModel(
             }
             matchesSearch && matchesRole
         }
+
+    fun getCurrentChatRole(): ChatRole {
+        return when (userType) {
+            UserType.USER -> ChatRole.USER
+            else -> ChatRole.TECHNICIAN
+        }
+    }
 
     fun updateSearch(query: String) {
         searchQuery = query
