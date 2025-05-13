@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -60,10 +61,13 @@ fun TicketDetailScreen(
                 item {
                     TicketMetadataSection(ticketDTO)
                 }
-                items(messages) {
+                itemsIndexed(messages) { index, message ->
+                    val previousMessage = messages.getOrNull(index - 1)
+                    val sameSender = previousMessage?.role == message.role
                     MessageBubble(
-                        message = it,
-                        isCurrentUser = it.role == ChatRole.USER
+                        message = message,
+                        isCurrentUser = message.role == viewModel.getCurrentChatRole(),
+                        grouped = sameSender
                     )
                 }
             }

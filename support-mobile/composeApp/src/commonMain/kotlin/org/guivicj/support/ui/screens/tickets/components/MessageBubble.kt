@@ -18,26 +18,35 @@ import androidx.compose.ui.unit.dp
 import org.guivicj.support.domain.model.MessageDTO
 
 @Composable
-fun MessageBubble(message: MessageDTO, isCurrentUser: Boolean) {
+fun MessageBubble(message: MessageDTO, isCurrentUser: Boolean, grouped: Boolean) {
+    val topPadding = if (grouped) 4.dp else 0.dp
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 4.dp),
+            .padding(top = topPadding, bottom = 4.dp, start = 12.dp, end = 12.dp),
         horizontalArrangement = if (isCurrentUser) Arrangement.End else Arrangement.Start
     ) {
         Box(
             modifier = Modifier
                 .background(
-                    color = if (isCurrentUser) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondaryContainer,
-                    shape = RoundedCornerShape(12.dp)
+                    color =
+                        if (isCurrentUser) MaterialTheme.colorScheme.outline
+                        else MaterialTheme.colorScheme.onSurface,
+                    shape = RoundedCornerShape(
+                        topStart = if (isCurrentUser) 16.dp else 0.dp,
+                        topEnd = if (isCurrentUser) 0.dp else 16.dp,
+                        bottomStart = 16.dp,
+                        bottomEnd = 16.dp
+                    )
                 )
-                .padding(12.dp)
+                .padding(horizontal = 20.dp, vertical = 8.dp)
                 .widthIn(max = 280.dp)
         ) {
             Text(
                 text = message.content,
-                color = if (isCurrentUser) Color.White else Color.Black,
-                style = MaterialTheme.typography.bodyMedium,
+                color = Color.White,
+                style = MaterialTheme.typography.bodyLarge,
                 textAlign = if (isCurrentUser) TextAlign.End else TextAlign.Start
             )
         }
