@@ -151,7 +151,7 @@ actual fun LoginScreen(navController: NavHostController) {
                     stringResource(Res.string.forgot_password),
                     color = MaterialTheme.colorScheme.outline,
                     modifier = Modifier
-                        .clickable { navController.navigate(Screen.FirstOnBoardingScreen.route) }
+                        .clickable { navController.navigate(Screen.ForgotPasswordScreen.route) }
                         .fillMaxWidth(),
                     textAlign = TextAlign.Right,
                     style = MaterialTheme.typography.bodyLarge

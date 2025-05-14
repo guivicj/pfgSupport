@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import org.guivicj.support.presentation.ForgotPasswordViewModel
 import org.guivicj.support.presentation.TicketViewModel
 import org.guivicj.support.presentation.UserViewModel
 import org.guivicj.support.ui.screens.home.HomeScreen
@@ -19,6 +20,7 @@ import org.guivicj.support.ui.screens.onboarding.FourthOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.SecondOnBoardingScreen
 import org.guivicj.support.ui.screens.onboarding.ThirdOnBoardingScreen
 import org.guivicj.support.ui.screens.profile.ProfileScreen
+import org.guivicj.support.ui.screens.signin.ForgotPasswordScreen
 import org.guivicj.support.ui.screens.signin.LoginScreen
 import org.guivicj.support.ui.screens.signin.RegisterScreen
 import org.guivicj.support.ui.screens.tickets.TicketDetailScreen
@@ -34,6 +36,7 @@ fun HomeNav() {
 fun NavHostMain(navController: NavHostController) {
     val userViewModel = getKoin().get<UserViewModel>()
     val ticketViewModel = getKoin().get<TicketViewModel>()
+    val passwordViewModel = getKoin().get<ForgotPasswordViewModel>()
 
     Scaffold {
         NavHost(
@@ -104,6 +107,12 @@ fun NavHostMain(navController: NavHostController) {
                         viewModel = ticketViewModel
                     )
                 }
+            }
+            composable(Screen.ForgotPasswordScreen.route) {
+                ForgotPasswordScreen(
+                    onBack = { navController.popBackStack() },
+                    viewModel = passwordViewModel
+                )
             }
         }
     }

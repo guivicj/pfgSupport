@@ -8,10 +8,11 @@ import org.guivicj.support.domain.usecase.ValidateEmail
 import org.guivicj.support.domain.usecase.ValidateName
 import org.guivicj.support.domain.usecase.ValidatePassword
 import org.guivicj.support.domain.usecase.ValidatePhone
-import org.guivicj.support.presentation.UserViewModel
-import org.guivicj.support.presentation.TicketViewModel
+import org.guivicj.support.presentation.ForgotPasswordViewModel
 import org.guivicj.support.presentation.LoginViewModel
 import org.guivicj.support.presentation.RegisterViewModel
+import org.guivicj.support.presentation.TicketViewModel
+import org.guivicj.support.presentation.UserViewModel
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -21,6 +22,7 @@ val appModule = module {
     factory { RegisterViewModel(get(), get(), get(), get(), get()) }
     single { TicketViewModel(get(), get(), get()) }
     single { UserViewModel(get()) }
+    single { ForgotPasswordViewModel(get()) }
 }
 
 val networkModule = module {

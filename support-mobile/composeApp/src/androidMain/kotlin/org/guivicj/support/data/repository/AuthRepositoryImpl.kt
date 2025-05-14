@@ -12,11 +12,13 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.tasks.await
 import kotlinx.serialization.json.Json
 import org.guivicj.support.data.model.request.FirebaseLoginRequest
 import org.guivicj.support.domain.model.UserSessionInfoDTO
 import org.guivicj.support.domain.repository.AuthRepository
+import kotlin.coroutines.resume
 
 class AuthRepositoryImpl(
     private val client: HttpClient
@@ -98,10 +100,23 @@ class AuthRepositoryImpl(
         }
     }
 
-    override suspend fun saveFcmToken(userId: Long, token: String) {
+    override suspend fun saveFcmToken(userId: Long, fcmToken: String) {
         client.put("$baseUrl/$userId") {
             contentType(ContentType.Application.Json)
-            setBody(token)
+            setBody(fcmToken)
+        }
+    }
+
+    override suspend fun sendResetEmail(email: String): Result<Unit> {
+        return suspendCancellableCoroutine { continuation ->
+            FirebaseAuth.getInstance()
+                .sendPasswordResetEmail(email)
+                .addOnSuccessListener {
+                    continuation.resume(Result.success(Unit))
+                }
+                .addOnFailureListener { e ->
+                    continuation.resumeWith(Result.failure(e))
+                }
         }
     }
 }

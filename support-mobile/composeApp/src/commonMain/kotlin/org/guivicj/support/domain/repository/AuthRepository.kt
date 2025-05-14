@@ -15,4 +15,5 @@ interface AuthRepository {
 
     suspend fun loginWithFirebase(idToken: String): Result<UserSessionInfoDTO>
     suspend fun saveFcmToken(userId: Long, fcmToken: String)
+    suspend fun sendResetEmail(email: String): Result<Unit>
 }

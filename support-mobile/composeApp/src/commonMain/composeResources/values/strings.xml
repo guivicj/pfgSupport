@@ -54,4 +54,8 @@
     <string name="opened_at_field">Opened at</string>
     <string name="in_progress_at_field">In progress at</string>
     <string name="closed_at_field">Closed at</string>
+    <string name="forgot_password_title">Forgot Password</string>
+    <string name="forgot_password_subtitle">Enter your email account to reset password</string>
+    <string name="send_email_btn">Send Email</string>
+
 </resources>
