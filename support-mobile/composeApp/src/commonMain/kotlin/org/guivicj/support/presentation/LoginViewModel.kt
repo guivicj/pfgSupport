@@ -70,6 +70,7 @@ class LoginViewModel(
         viewModelScope.launch {
             try {
                 val userId = state.value.session?.user?.id ?: return@launch
+                println("Saving FCM token for user $userId: $fcmToken")
                 authRepository.saveFcmToken(userId, fcmToken)
             } catch (e: Exception) {
                 _state.value = _state.value.copy(error = "Failed to save FCM token")

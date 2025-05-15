@@ -157,7 +157,7 @@ class TicketService(
         return ticketMapper.toDTO(ticketRepository.save(ticket))
     }
 
-    fun changeState(ticketId: Long, request: ChangeStateRequest, currentUser: UserSessionInfoDTO): TicketDTO {
+    fun changeState(ticketId: Long, request: ChangeStateRequest): TicketDTO {
         val ticket = ticketRepository.findById(ticketId)
             .orElseThrow { RuntimeException("Ticket not found") }
 

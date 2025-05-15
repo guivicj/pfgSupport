@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class NotificationService(
-    private val deviceTokenService: DeviceTokenService,
     private val deviceTokenRepository: DeviceTokenRepository
 ) {
     fun sendNotificationToUser(userId: Long, title: String, message: String) {
@@ -20,7 +19,7 @@ class NotificationService(
                 .setNotification(
                     Notification.builder()
                         .setTitle(title)
-                        .setTitle(message)
+                        .setBody(message)
                         .build()
                 ).build()
 

@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import io.ktor.client.HttpClient
@@ -17,6 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import org.guivicj.support.R
 import org.guivicj.support.data.repository.AuthRepositoryImpl
+import org.guivicj.support.session.UserSessionManager
 
 class RealTimeMessagingService(
 ) : FirebaseMessagingService() {
@@ -32,7 +32,7 @@ class RealTimeMessagingService(
     }
 
     private fun sendRegistrationToServer(token: String) {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        val userId = UserSessionManager.getUserId(this)
 
         if (userId != null) {
             CoroutineScope(Dispatchers.IO).launch {

@@ -47,6 +47,7 @@ import org.guivicj.support.fcm.FcmManager
 import org.guivicj.support.firebase.firebaseAuthWithGoogle
 import org.guivicj.support.navigation.Screen
 import org.guivicj.support.presentation.LoginViewModel
+import org.guivicj.support.session.UserSessionManager
 import org.guivicj.support.ui.screens.signin.components.FormTextField
 import org.guivicj.support.ui.screens.signin.components.PasswordTextField
 import org.guivicj.support.ui.screens.signin.components.SignInHeader
@@ -82,13 +83,13 @@ actual fun LoginScreen(navController: NavHostController) {
             if (idToken != null) {
                 firebaseAuthWithGoogle(idToken) { success, token ->
                     if (success && token != null) {
-                        viewModel.loginWithToken(token)
-
                         FcmManager().getToken { fcmToken ->
                             if (fcmToken != null) {
+
                                 viewModel.saveFcmToken(fcmToken)
                             }
                         }
+                        viewModel.loginWithToken(token)
                     } else {
                         Toast.makeText(context, "Google login failed", Toast.LENGTH_LONG).show()
                     }
@@ -108,9 +109,8 @@ actual fun LoginScreen(navController: NavHostController) {
 
     LaunchedEffect(state.session) {
         if (state.session != null) {
-            navController.navigate(Screen.HomeScreen.route) {
-                popUpTo(0)
-            }
+            UserSessionManager.saveUserId(context, state.session!!.user.id!!)
+            navController.navigate(Screen.HomeScreen.route) { popUpTo(0) }
         }
     }
 
@@ -164,6 +164,12 @@ actual fun LoginScreen(navController: NavHostController) {
                         scope.launch {
                             try {
                                 viewModel.login()
+                                FcmManager().getToken { fcmToken ->
+                                    println("FCM token: $fcmToken")
+                                    if (fcmToken != null) {
+                                        viewModel.saveFcmToken(fcmToken)
+                                    }
+                                }
                             } catch (e: Exception) {
                                 Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG)
                                     .show()

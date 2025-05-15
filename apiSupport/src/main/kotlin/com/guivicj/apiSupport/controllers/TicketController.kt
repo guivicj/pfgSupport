@@ -11,13 +11,14 @@ import com.guivicj.apiSupport.dtos.responses.ChatResponse
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.StateType
 import com.guivicj.apiSupport.models.TicketMessage
+import com.guivicj.apiSupport.services.TicketMessageService
 import com.guivicj.apiSupport.services.TicketService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/tickets")
-class TicketController(val ticketService: TicketService) {
+class TicketController(val ticketService: TicketService, val ticketMessageService: TicketMessageService) {
     @GetMapping
     fun getTickets(): List<TicketDTO> {
         return ticketService.getAllTickets()
@@ -82,7 +83,7 @@ class TicketController(val ticketService: TicketService) {
         @PathVariable ticketId: Long,
         @RequestBody request: ChangeStateRequest
     ): ResponseEntity<TicketDTO> {
-        val updatedTicket = ticketService.changeState(ticketId, request, user)
+        val updatedTicket = ticketService.changeState(ticketId, request)
         return ResponseEntity.ok(updatedTicket)
     }
 
@@ -91,7 +92,7 @@ class TicketController(val ticketService: TicketService) {
         @RequestBody request: MessageDTO,
         @CurrentUser userSession: UserSessionInfoDTO
     ): ResponseEntity<MessageDTO> {
-        val messageSent = ticketService.sendMessageFromDTO(request, userSession)
+        val messageSent = ticketMessageService.sendMessageFromDTO(request, userSession)
         return ResponseEntity.ok(messageSent)
     }
 
@@ -100,7 +101,7 @@ class TicketController(val ticketService: TicketService) {
         @PathVariable ticketId: Long,
         @CurrentUser user: UserSessionInfoDTO
     ): ResponseEntity<List<MessageDTO>> {
-        val messages = ticketService.getMessages(ticketId, user)
+        val messages = ticketMessageService.getMessages(ticketId, user)
         return ResponseEntity.ok(messages)
     }
 
@@ -110,7 +111,7 @@ class TicketController(val ticketService: TicketService) {
         @RequestBody request: ChatRequest,
         @CurrentUser userSession: UserSessionInfoDTO
     ): ResponseEntity<ChatResponse> {
-        val response = ticketService.chatWithIA(ticketId, userSession, request.message)
+        val response = ticketMessageService.chatWithIA(ticketId, userSession, request.message)
         return ResponseEntity.ok(ChatResponse(response))
     }
 }
