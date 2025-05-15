@@ -1,10 +1,10 @@
 package org.guivicj.support.ui.screens.tickets
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.MaterialTheme
@@ -14,7 +14,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import org.guivicj.support.data.model.ChatRole
 import org.guivicj.support.domain.model.MessageDTO
 import org.guivicj.support.domain.model.TicketDTO
 import org.guivicj.support.presentation.TicketViewModel
@@ -23,6 +22,7 @@ import org.guivicj.support.ui.screens.tickets.components.MessageBubble
 import org.guivicj.support.ui.screens.tickets.components.MessageInputBar
 import org.guivicj.support.ui.screens.tickets.components.TicketMetadataSection
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TicketDetailScreen(
     ticketDTO: TicketDTO,
@@ -34,7 +34,6 @@ fun TicketDetailScreen(
     LaunchedEffect(ticketDTO.ticketId) {
         viewModel.fetchMessages(ticketDTO.ticketId)
     }
-
     MaterialTheme {
         Scaffold(
             topBar = {
@@ -56,9 +55,10 @@ fun TicketDetailScreen(
                 modifier = Modifier
                     .padding(padding)
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
+                    .background(MaterialTheme.colorScheme.background),
+                reverseLayout = false,
             ) {
-                item {
+                stickyHeader {
                     TicketMetadataSection(ticketDTO)
                 }
                 itemsIndexed(messages) { index, message ->
