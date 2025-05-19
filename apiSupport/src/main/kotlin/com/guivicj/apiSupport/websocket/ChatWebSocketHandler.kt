@@ -43,7 +43,6 @@ class ChatWebSocketHandler(
                 ticket = ticket,
                 role = dto.role!!,
                 content = dto.content!!,
-                timestamp = dto.timestamp
             )
             ticketMessageRepository.save(ticketMessage)
 

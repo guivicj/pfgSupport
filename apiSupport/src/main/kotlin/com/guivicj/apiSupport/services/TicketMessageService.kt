@@ -81,7 +81,6 @@ class TicketMessageService(
             ticketId = saved.ticket.id,
             role = saved.role,
             content = saved.content,
-            timestamp = saved.timestamp
         )
     }
 
@@ -147,7 +146,6 @@ class TicketMessageService(
                     ticketId = it.ticket.id,
                     role = it.role,
                     content = it.content,
-                    timestamp = it.timestamp
                 )
             }
     }
