@@ -13,10 +13,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler
 import java.util.concurrent.ConcurrentHashMap
 
 @Component
-class ChatWebSocketHandler(
-    private val ticketRepository: TicketRepository,
-    private val ticketMessageRepository: TicketMessageRepository
-) : TextWebSocketHandler() {
+class ChatWebSocketHandler() : TextWebSocketHandler() {
 
     private val sessionsByTicket = ConcurrentHashMap<Long, MutableSet<WebSocketSession>>()
     private val connectedUsers = ConcurrentHashMap<Long, WebSocketSession>()
@@ -37,18 +34,12 @@ class ChatWebSocketHandler(
 
         try {
             val dto = objectMapper.readValue(message.payload, MessageDTO::class.java)
-            val ticket = ticketRepository.findById(ticketId).orElseThrow()
-
-            val ticketMessage = TicketMessage(
-                ticket = ticket,
-                role = dto.role!!,
-                content = dto.content!!,
-            )
-            ticketMessageRepository.save(ticketMessage)
-
             val jsonBroadcast = objectMapper.writeValueAsString(dto)
+
             sessionsByTicket[ticketId]?.forEach {
-                if (it.isOpen) it.sendMessage(TextMessage(jsonBroadcast))
+                if (it != session && it.isOpen) {
+                    it.sendMessage(TextMessage(jsonBroadcast))
+                }
             }
         } catch (e: Exception) {
             println("Failed to handle message: ${e.message}")

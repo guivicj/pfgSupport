@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -52,10 +53,18 @@ fun TicketDetailScreen(
 
     LaunchedEffect(ticketDTO.ticketId) {
         ticketViewModel.fetchMessages(ticketDTO.ticketId)
+    }
+
+    DisposableEffect(ticketDTO.ticketId) {
         handler.connect(ticketDTO.ticketId, currentUser) { message ->
             ticketViewModel.appendMessage(message)
         }
+
+        onDispose {
+            handler.disconnect()
+        }
     }
+
     MaterialTheme {
         Scaffold(
             topBar = {
@@ -70,6 +79,7 @@ fun TicketDetailScreen(
                     )
                     ticketViewModel.sendMessage(message)
                     handler.send(message)
+                    ticketViewModel.appendMessage(message)
                 }
             }
         ) { padding ->
