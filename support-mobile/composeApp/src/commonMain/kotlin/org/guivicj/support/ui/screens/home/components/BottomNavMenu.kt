@@ -53,7 +53,8 @@ fun BottomNavMenu(navController: NavHostController, type: UserType, selectedRout
                 icon = {
                     Icon(
                         icon, contentDescription = route,
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(32.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
                 selected = route == selectedRoute,
