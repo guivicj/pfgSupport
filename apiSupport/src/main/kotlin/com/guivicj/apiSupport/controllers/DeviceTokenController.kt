@@ -22,4 +22,3 @@ class DeviceTokenController(
         return ResponseEntity.ok().build()
     }
 }
-

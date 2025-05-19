@@ -83,12 +83,6 @@ actual fun LoginScreen(navController: NavHostController) {
             if (idToken != null) {
                 firebaseAuthWithGoogle(idToken) { success, token ->
                     if (success && token != null) {
-                        FcmManager().getToken { fcmToken ->
-                            if (fcmToken != null) {
-
-                                viewModel.saveFcmToken(fcmToken)
-                            }
-                        }
                         viewModel.loginWithToken(token)
                     } else {
                         Toast.makeText(context, "Google login failed", Toast.LENGTH_LONG).show()
@@ -108,12 +102,20 @@ actual fun LoginScreen(navController: NavHostController) {
     }
 
     LaunchedEffect(state.session) {
-        if (state.session != null) {
-            UserSessionManager.saveUserId(context, state.session!!.user.id!!)
+        val session = state.session
+        if (session != null) {
+            val userId = session.user.id!!
+            UserSessionManager.saveUserId(context, userId)
+
+            FcmManager().getToken { token ->
+                if (token != null) {
+                    viewModel.saveFcmToken(token)
+                }
+            }
+
             navController.navigate(Screen.HomeScreen.route) { popUpTo(0) }
         }
     }
-
     Scaffold { padding ->
         Column(
             modifier = Modifier

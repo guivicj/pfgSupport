@@ -104,7 +104,8 @@ fun NavHostMain(navController: NavHostController) {
                     TicketDetailScreen(
                         ticketDTO = it,
                         navController = navController,
-                        viewModel = ticketViewModel
+                        ticketViewModel = ticketViewModel,
+                        userViewModel = userViewModel
                     )
                 }
             }

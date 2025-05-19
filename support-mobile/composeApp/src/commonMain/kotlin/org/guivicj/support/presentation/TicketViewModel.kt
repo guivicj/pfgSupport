@@ -134,6 +134,9 @@ class TicketViewModel(
         }
     }
 
+    fun appendMessage(message: MessageDTO) {
+        _messages.value += message
+    }
 
     fun createTicket(
         productId: Long,

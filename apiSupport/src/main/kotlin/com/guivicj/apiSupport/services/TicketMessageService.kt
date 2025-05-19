@@ -8,6 +8,7 @@ import com.guivicj.apiSupport.models.TicketMessage
 import com.guivicj.apiSupport.repositories.TicketMessageRepository
 import com.guivicj.apiSupport.repositories.TicketRepository
 import com.guivicj.apiSupport.repositories.UserRepository
+import com.guivicj.apiSupport.websocket.ChatWebSocketHandler
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,7 +18,8 @@ class TicketMessageService(
     private val ticketMessageRepository: TicketMessageRepository,
     private val notificationService: NotificationService,
     private val openAiService: OpenAiService,
-    private val ticketService: TicketService
+    private val ticketService: TicketService,
+    private val chatWebSocketHandler: ChatWebSocketHandler
 ) {
 
     fun sendMessage(ticketMessage: TicketMessage, currentUser: UserSessionInfoDTO): TicketMessage {
@@ -47,11 +49,15 @@ class TicketMessageService(
             .orElseThrow { RuntimeException("Recipient not found") }
 
         try {
-            notificationService.sendNotificationToUser(
-                userId = recipient.id,
-                title = "New message on Ticket #${ticket.id}",
-                message = savedMessage.content
-            )
+            if (!chatWebSocketHandler.isUserConnected(recipient.id)) {
+                notificationService.sendNotificationToUser(
+                    userId = recipient.id,
+                    title = "New message on Ticket #${ticket.id}",
+                    message = savedMessage.content
+                )
+            } else {
+                println("📡 User ${recipient.id} is connected via WebSocket. No FCM sent.")
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -60,13 +66,13 @@ class TicketMessageService(
     }
 
     fun sendMessageFromDTO(request: MessageDTO, currentUser: UserSessionInfoDTO): MessageDTO {
-        val ticket = ticketRepository.findById(request.ticketId)
+        val ticket = ticketRepository.findById(request.ticketId!!)
             .orElseThrow { RuntimeException("Ticket not found") }
 
         val message = TicketMessage(
             ticket = ticket,
-            role = request.role,
-            content = request.content
+            role = request.role!!,
+            content = request.content!!
         )
 
         val saved = sendMessage(message, currentUser)

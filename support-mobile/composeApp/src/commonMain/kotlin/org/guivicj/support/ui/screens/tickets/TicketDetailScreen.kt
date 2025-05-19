@@ -12,27 +12,49 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.websocket.WebSockets
 import org.guivicj.support.domain.model.MessageDTO
 import org.guivicj.support.domain.model.TicketDTO
 import org.guivicj.support.presentation.TicketViewModel
+import org.guivicj.support.presentation.UserViewModel
 import org.guivicj.support.ui.screens.home.components.TopNavMenu
 import org.guivicj.support.ui.screens.tickets.components.MessageBubble
 import org.guivicj.support.ui.screens.tickets.components.MessageInputBar
 import org.guivicj.support.ui.screens.tickets.components.TicketMetadataSection
+import org.guivicj.support.websocket.ChatSyncHandler
+import org.guivicj.support.websocket.WebSocketManager
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TicketDetailScreen(
     ticketDTO: TicketDTO,
     navController: NavHostController,
-    viewModel: TicketViewModel
+    ticketViewModel: TicketViewModel,
+    userViewModel: UserViewModel
 ) {
-    val messages by viewModel.messages.collectAsState()
+    val messages by ticketViewModel.messages.collectAsState()
+    val currentUser = userViewModel.state.value.id
+
+    val httpClient = remember {
+        HttpClient(CIO) {
+            install(WebSockets)
+        }
+    }
+
+    val handler = remember {
+        ChatSyncHandler(WebSocketManager(httpClient))
+    }
 
     LaunchedEffect(ticketDTO.ticketId) {
-        viewModel.fetchMessages(ticketDTO.ticketId)
+        ticketViewModel.fetchMessages(ticketDTO.ticketId)
+        handler.connect(ticketDTO.ticketId, currentUser) { message ->
+            ticketViewModel.appendMessage(message)
+        }
     }
     MaterialTheme {
         Scaffold(
@@ -40,14 +62,14 @@ fun TicketDetailScreen(
                 TopNavMenu(ticketId = ticketDTO.ticketId, navController = navController)
             },
             bottomBar = {
-                MessageInputBar { message ->
-                    viewModel.sendMessage(
-                        MessageDTO(
-                            ticketId = ticketDTO.ticketId,
-                            role = viewModel.getCurrentChatRole(),
-                            content = message
-                        )
+                MessageInputBar { text ->
+                    val message = MessageDTO(
+                        ticketId = ticketDTO.ticketId,
+                        role = ticketViewModel.getCurrentChatRole(),
+                        content = text
                     )
+                    ticketViewModel.sendMessage(message)
+                    handler.send(message)
                 }
             }
         ) { padding ->
@@ -66,7 +88,7 @@ fun TicketDetailScreen(
                     val sameSender = previousMessage?.role == message.role
                     MessageBubble(
                         message = message,
-                        isCurrentUser = message.role == viewModel.getCurrentChatRole(),
+                        isCurrentUser = message.role == ticketViewModel.getCurrentChatRole(),
                         grouped = sameSender
                     )
                 }
