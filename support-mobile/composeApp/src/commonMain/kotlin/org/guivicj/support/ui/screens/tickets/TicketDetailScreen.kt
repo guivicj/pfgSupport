@@ -79,7 +79,6 @@ fun TicketDetailScreen(
                     )
                     ticketViewModel.sendMessage(message)
                     handler.send(message)
-                    ticketViewModel.appendMessage(message)
                 }
             }
         ) { padding ->

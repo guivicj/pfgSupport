@@ -43,7 +43,7 @@ kotlin {
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.serialization.kotlinx.json)
                 implementation(libs.ktor.client.cio)
-                implementation(libs.firebase.messaging)
+                implementation(libs.icons.lucide)
             }
         }
 
@@ -58,6 +58,7 @@ kotlin {
                 implementation(libs.firebase.auth.ktx)
                 implementation(libs.play.services.auth)
                 implementation(libs.material.icons)
+                implementation(libs.firebase.messaging)
 
             }
         }

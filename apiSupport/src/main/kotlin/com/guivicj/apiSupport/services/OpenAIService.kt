@@ -1,9 +1,12 @@
 package com.guivicj.apiSupport.services
 
 import com.guivicj.apiSupport.dtos.responses.OpenAiResponse
+import org.apache.http.HttpHeaders
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
+import java.time.Duration
+import java.time.Instant
 
 @Service
 class OpenAiService(
@@ -11,12 +14,21 @@ class OpenAiService(
     @Value("\${openai.api.url}") private val apiUrl: String,
     @Value("\${openai.model}") private val model: String
 ) {
+    private var lastAiCallTime = Instant.MIN
 
     private val webClient = WebClient.builder()
         .baseUrl(apiUrl)
-        .defaultHeader("Authorization", "Bearer $apiKey")
-        .defaultHeader("Content-Type", "application/json")
+        .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer $apiKey")
+        .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/json")
         .build()
+
+
+    fun shouldCallAI(): Boolean {
+        val now = Instant.now()
+        if (Duration.between(lastAiCallTime, now).seconds < 2) return false
+        lastAiCallTime = now
+        return true
+    }
 
     fun sendMessage(messages: List<Map<String, String>>): String {
         val requestBody = mapOf(

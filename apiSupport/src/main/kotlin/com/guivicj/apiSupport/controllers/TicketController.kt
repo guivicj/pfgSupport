@@ -103,14 +103,4 @@ class TicketController(val ticketService: TicketService, val ticketMessageServic
         val messages = ticketMessageService.getMessages(ticketId, user)
         return ResponseEntity.ok(messages)
     }
-
-    @PostMapping("/{ticketId}/chat")
-    fun chatWithIA(
-        @PathVariable ticketId: Long,
-        @RequestBody request: ChatRequest,
-        @CurrentUser userSession: UserSessionInfoDTO
-    ): ResponseEntity<ChatResponse> {
-        val response = ticketMessageService.chatWithIA(ticketId, userSession, request.message)
-        return ResponseEntity.ok(ChatResponse(response))
-    }
 }

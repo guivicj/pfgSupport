@@ -27,8 +27,8 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import org.guivicj.support.navigation.Screen
 import org.guivicj.support.presentation.RegisterViewModel
-import org.guivicj.support.ui.screens.signin.components.FormTextField
-import org.guivicj.support.ui.screens.signin.components.PasswordTextField
+import org.guivicj.support.ui.core.components.display.FormTextField
+import org.guivicj.support.ui.core.components.display.PasswordTextField
 import org.guivicj.support.ui.screens.signin.components.SignInHeader
 import org.jetbrains.compose.resources.stringResource
 import org.koin.androidx.compose.koinViewModel
