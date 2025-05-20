@@ -1,21 +1,15 @@
 package com.guivicj.apiSupport.services
 
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.FirebaseMessagingException
-import com.google.firebase.messaging.Message
-import com.guivicj.apiSupport.dtos.MessageDTO
 import com.guivicj.apiSupport.dtos.TicketDTO
 import com.guivicj.apiSupport.dtos.TicketHistoryDTO
 import com.guivicj.apiSupport.dtos.requests.ChangeStateRequest
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
-import com.guivicj.apiSupport.enums.ChatRole
 import com.guivicj.apiSupport.enums.StateType
 import com.guivicj.apiSupport.enums.TechnicianType
 import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.mappers.TicketHistoryMapper
 import com.guivicj.apiSupport.mappers.TicketMapper
 import com.guivicj.apiSupport.models.TicketHistory
-import com.guivicj.apiSupport.models.TicketMessage
 import com.guivicj.apiSupport.models.TicketModel
 import com.guivicj.apiSupport.repositories.*
 import org.springframework.stereotype.Service

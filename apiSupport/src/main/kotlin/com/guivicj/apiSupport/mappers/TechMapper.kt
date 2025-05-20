@@ -3,7 +3,9 @@ package com.guivicj.apiSupport.mappers
 import com.guivicj.apiSupport.dtos.TechDTO
 import com.guivicj.apiSupport.models.Technician
 import com.guivicj.apiSupport.models.UserModel
-import org.mapstruct.*
+import org.mapstruct.Mapper
+import org.mapstruct.Mapping
+import org.mapstruct.Named
 
 @Mapper(componentModel = "spring")
 interface TechMapper {

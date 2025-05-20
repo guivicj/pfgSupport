@@ -7,7 +7,6 @@ import com.guivicj.apiSupport.dtos.requests.UserUpdateRequest
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.services.UserService
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*

@@ -10,7 +10,6 @@ import com.guivicj.apiSupport.dtos.requests.EscalateTicketRequest
 import com.guivicj.apiSupport.dtos.responses.ChatResponse
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.StateType
-import com.guivicj.apiSupport.models.TicketMessage
 import com.guivicj.apiSupport.services.TicketMessageService
 import com.guivicj.apiSupport.services.TicketService
 import org.springframework.http.ResponseEntity

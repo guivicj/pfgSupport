@@ -2,9 +2,6 @@ package com.guivicj.apiSupport.websocket
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.guivicj.apiSupport.dtos.MessageDTO
-import com.guivicj.apiSupport.models.TicketMessage
-import com.guivicj.apiSupport.repositories.TicketMessageRepository
-import com.guivicj.apiSupport.repositories.TicketRepository
 import org.springframework.stereotype.Component
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage

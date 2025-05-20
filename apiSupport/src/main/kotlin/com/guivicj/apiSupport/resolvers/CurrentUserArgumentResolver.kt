@@ -1,9 +1,9 @@
 package com.guivicj.apiSupport.resolvers
 
-import com.guivicj.apiSupport.services.AuthService
-import org.springframework.core.MethodParameter
 import com.guivicj.apiSupport.annotations.CurrentUser
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
+import com.guivicj.apiSupport.services.AuthService
+import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
 import org.springframework.web.bind.support.WebDataBinderFactory
 import org.springframework.web.context.request.NativeWebRequest

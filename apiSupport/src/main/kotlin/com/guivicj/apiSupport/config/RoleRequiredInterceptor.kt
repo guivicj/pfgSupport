@@ -1,6 +1,5 @@
 package com.guivicj.apiSupport.config
 
-import com.google.firebase.auth.FirebaseAuth
 import com.guivicj.apiSupport.annotations.RoleRequired
 import com.guivicj.apiSupport.services.AuthService
 import jakarta.servlet.http.HttpServletRequest

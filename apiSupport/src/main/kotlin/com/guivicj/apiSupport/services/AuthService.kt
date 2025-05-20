@@ -1,15 +1,12 @@
 package com.guivicj.apiSupport.services
 
 import com.google.firebase.auth.FirebaseAuth
-import com.guivicj.apiSupport.dtos.UserDTO
 import com.guivicj.apiSupport.dtos.requests.FirebaseLoginRequest
-import com.guivicj.apiSupport.dtos.responses.Response
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.mappers.UserMapper
 import com.guivicj.apiSupport.models.UserModel
 import com.guivicj.apiSupport.repositories.UserRepository
-import org.apache.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.time.Instant

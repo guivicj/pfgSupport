@@ -6,7 +6,6 @@ import com.guivicj.apiSupport.dtos.AdminDTO
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.services.AdminService
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 

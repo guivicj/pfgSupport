@@ -1,10 +1,8 @@
 package com.guivicj.apiSupport.services
 
-import com.guivicj.apiSupport.dtos.responses.Response
 import com.guivicj.apiSupport.dtos.UserDTO
 import com.guivicj.apiSupport.dtos.requests.UserUpdateRequest
-import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
-import com.guivicj.apiSupport.enums.UserType
+import com.guivicj.apiSupport.dtos.responses.Response
 import com.guivicj.apiSupport.mappers.UserMapper
 import com.guivicj.apiSupport.repositories.UserRepository
 import jakarta.transaction.Transactional
