@@ -19,6 +19,10 @@ class ChatMessageService(
     private val ticketRepository: TicketRepository
 ) {
     fun processIncomingMessage(ticketId: Long, message: MessageDTO, userSession: UserSessionInfoDTO) {
+        val systemPrompt =
+            "You are a technical support assistant. In your first message, introduce yourself as an AI " +
+                    "assistant assigned to help with the user's issue. Respond respectfully and, if possible, in one line. " +
+                    "Let the user know that if they write \"real person\", their ticket will be escalated to a human technician."
         val json = ObjectMapper().writeValueAsString(message)
 
         broadcastService.broadcast(ticketId, json)
@@ -31,19 +35,33 @@ class ChatMessageService(
             if (tech.technicianType.name == "CHAT") {
                 ticketService.assignToAvailableHuman(ticketId, userSession)
                 println("Escalated ticket $ticketId to a human technician.")
+
+                val ticket = ticketRepository.findById(ticketId)
+                    .orElseThrow { RuntimeException("Ticket not found") }
+
+                val systemMessage = TicketMessage(
+                    ticket = ticket,
+                    id = ticketId,
+                    role = ChatRole.TECHNICIAN,
+                    content = "This ticket has been escalated and assigned to a human technician"
+                )
             }
         }
+
+        val history = ticketMessageRepository.findAllByTicketIdOrderByTimestampAsc(ticketId)
+            .map {
+                val role = when (it.role) {
+                    ChatRole.USER -> "user"
+                    ChatRole.TECHNICIAN -> "assistant"
+                }
+                mapOf("role" to role, "content" to it.content)
+            }
 
         if (message.role == ChatRole.USER && ticket.technicianId == 0L && openAiService.shouldCallAI()) {
             val aiReplyText = openAiService.sendMessage(
                 listOf(
-                    mapOf(
-                        "role" to "system",
-                        "content" to "You are a technical support assistant. In your first message, " +
-                                "introduce yourself as an AI assistant assigned to help with the user's issue. " +
-                                "Respond respectfully and concisely. Let the user know that if they write " +
-                                "\"real person\", their ticket will be escalated to a human technician."
-                    ),
+                    mapOf("role" to "system", "content" to systemPrompt)
+                ) + history + listOf(
                     mapOf("role" to "user", "content" to userContent)
                 )
             )

@@ -106,10 +106,6 @@ class TicketService(
         val ticket = ticketRepository.findById(ticketId)
             .orElseThrow { RuntimeException("Ticket not found") }
 
-        if (ticket.userId.email != currentUser.user.email) {
-            throw RuntimeException("You can only escalate your own tickets")
-        }
-
         if (ticket.technicianId.technicianType != TechnicianType.CHAT) {
             throw RuntimeException("Ticket already assigned to a human technician")
         }
