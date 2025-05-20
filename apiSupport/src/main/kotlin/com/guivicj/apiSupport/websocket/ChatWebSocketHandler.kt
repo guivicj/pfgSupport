@@ -23,7 +23,6 @@ class ChatWebSocketHandler(
     private val chatBroadcastService: ChatBroadcastService
 ) : TextWebSocketHandler() {
 
-    private val sessionsByTicket = ConcurrentHashMap<Long, MutableSet<WebSocketSession>>()
     private val connectedUsers = ConcurrentHashMap<Long, WebSocketSession>()
     private val objectMapper = ObjectMapper()
 
@@ -42,7 +41,7 @@ class ChatWebSocketHandler(
                 authenticatedSince = LocalDateTime.now()
             )
 
-            chatMessageService.processIncomingMessage(ticketId, userId, dto, userSession)
+            chatMessageService.processIncomingMessage(ticketId, dto, userSession)
 
         } catch (e: Exception) {
             println("Failed to handle message: ${e.message}")

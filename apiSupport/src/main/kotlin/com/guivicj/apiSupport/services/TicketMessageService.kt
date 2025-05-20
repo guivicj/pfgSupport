@@ -56,7 +56,7 @@ class TicketMessageService(
                     message = savedMessage.content
                 )
             } else {
-                println("📡 User ${recipient.id} is connected via WebSocket. No FCM sent.")
+                println("User ${recipient.id} is connected via WebSocket. No FCM sent.")
             }
         } catch (e: Exception) {
             e.printStackTrace()

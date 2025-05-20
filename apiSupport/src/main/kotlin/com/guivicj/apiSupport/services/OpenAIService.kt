@@ -37,12 +37,13 @@ class OpenAiService(
         )
 
         val response = webClient.post()
+            .uri("/v1/chat/completions")
             .bodyValue(requestBody)
             .retrieve()
             .bodyToMono(OpenAiResponse::class.java)
             .block()
 
-        return response?.choices?.firstOrNull()?.message?.get("content")?.trim()
-            ?: "Sorry, I couldn't generate any answers"
+        return response?.choices?.firstOrNull()?.message?.content?.trim()
+            ?: "Failed to generate response from OpenAI. Try again later."
     }
 }

@@ -134,7 +134,6 @@ class TicketViewModel(
     }
 
     fun appendMessage(message: MessageDTO) {
-        println("📥 New message: ${message.content}")
         _messages.value += message
     }
 
