@@ -40,6 +40,7 @@
     <string name="home_user_subtitle">Here you can see your opened tickets</string>
     <string name="home_tech_subtitle">Manage the opened tickets here</string>
     <string name="home_admin_subtitle">Manage all the tickets here</string>
+    <string name="your_tickets">Manage your assigned tickets here</string>
     <string name="search_placeholder">Search...</string>
     <string name="description_field">Description</string>">
     <string name="product_field">Product</string>">

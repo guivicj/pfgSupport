@@ -23,6 +23,7 @@ import org.guivicj.support.ui.screens.profile.ProfileScreen
 import org.guivicj.support.ui.screens.signin.ForgotPasswordScreen
 import org.guivicj.support.ui.screens.signin.LoginScreen
 import org.guivicj.support.ui.screens.signin.RegisterScreen
+import org.guivicj.support.ui.screens.tickets.AssignedTicketsScreen
 import org.guivicj.support.ui.screens.tickets.TicketDetailScreen
 import org.koin.mp.KoinPlatform.getKoin
 
@@ -113,6 +114,13 @@ fun NavHostMain(navController: NavHostController) {
                 ForgotPasswordScreen(
                     onBack = { navController.popBackStack() },
                     viewModel = passwordViewModel
+                )
+            }
+            composable(Screen.AssignedTicketsScreen.route) {
+                AssignedTicketsScreen(
+                    navController = navController,
+                    ticketViewModel = ticketViewModel,
+                    userViewModel = userViewModel
                 )
             }
         }

@@ -94,6 +94,21 @@ class TicketViewModel(
         }
     }
 
+    fun fetchTicketsByTechnician(techId: Long) {
+        viewModelScope.launch {
+            try {
+                val tickets = when (userType) {
+                    UserType.TECHNICIAN -> ticketRepository.getByTechnician(techId)
+                    else -> emptyList()
+                }
+                allTickets = tickets
+            } catch (e: Exception) {
+                showMessage("Failed to load tickets: ${e.message}")
+            }
+
+        }
+    }
+
     fun fetchTicketById(ticketId: String) {
         viewModelScope.launch {
             try {
