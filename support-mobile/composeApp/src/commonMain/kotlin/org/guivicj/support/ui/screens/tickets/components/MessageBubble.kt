@@ -32,7 +32,7 @@ fun MessageBubble(message: MessageDTO, isCurrentUser: Boolean, grouped: Boolean)
                 .background(
                     color =
                         if (isCurrentUser) MaterialTheme.colorScheme.outline
-                        else MaterialTheme.colorScheme.onSurface,
+                        else MaterialTheme.colorScheme.inverseOnSurface,
                     shape = RoundedCornerShape(
                         topStart = if (isCurrentUser) 16.dp else 0.dp,
                         topEnd = if (isCurrentUser) 0.dp else 16.dp,

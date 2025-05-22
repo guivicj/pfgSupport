@@ -167,7 +167,6 @@ actual fun LoginScreen(navController: NavHostController) {
                             try {
                                 viewModel.login()
                                 FcmManager().getToken { fcmToken ->
-                                    println("FCM token: $fcmToken")
                                     if (fcmToken != null) {
                                         viewModel.saveFcmToken(fcmToken)
                                     }

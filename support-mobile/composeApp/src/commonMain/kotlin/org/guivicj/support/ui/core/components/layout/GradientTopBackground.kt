@@ -16,7 +16,7 @@ fun GradientTopBackground(content: @Composable () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(180.dp)
+            .height(150.dp)
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(

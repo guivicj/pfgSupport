@@ -25,7 +25,7 @@ class OpenAiService(
 
     fun shouldCallAI(): Boolean {
         val now = Instant.now()
-        if (Duration.between(lastAiCallTime, now).seconds < 2) return false
+        if (Duration.between(lastAiCallTime, now).seconds < 1) return false
         lastAiCallTime = now
         return true
     }
