@@ -3,10 +3,12 @@ package com.guivicj.apiSupport.controllers
 import com.guivicj.apiSupport.annotations.CurrentUser
 import com.guivicj.apiSupport.annotations.RoleRequired
 import com.guivicj.apiSupport.dtos.TechDTO
+import com.guivicj.apiSupport.dtos.TechnicianStatsDTO
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.TechnicianType
 import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.services.TechService
+import com.guivicj.apiSupport.services.TicketService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -28,6 +30,12 @@ class TechController(val techService: TechService) {
     @GetMapping("/type/{type}")
     fun getTechsByType(@PathVariable type: TechnicianType): ResponseEntity<List<TechDTO>> {
         return ResponseEntity.ok(techService.getTechsByType(type))
+    }
+
+    @GetMapping("/stats/{id}")
+    fun getTechStats(@PathVariable id: Long): ResponseEntity<TechnicianStatsDTO> {
+        val stats = techService.getTechnicianStats(id)
+        return ResponseEntity.ok(stats)
     }
 
     @RoleRequired(UserType.ADMIN)

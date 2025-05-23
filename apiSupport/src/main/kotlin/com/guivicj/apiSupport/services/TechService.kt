@@ -1,23 +1,27 @@
 package com.guivicj.apiSupport.services
 
 import com.guivicj.apiSupport.dtos.TechDTO
+import com.guivicj.apiSupport.dtos.TechnicianStatsDTO
 import com.guivicj.apiSupport.dtos.responses.Response
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
+import com.guivicj.apiSupport.enums.StateType
 import com.guivicj.apiSupport.enums.TechnicianType
 import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.mappers.TechMapper
 import com.guivicj.apiSupport.repositories.TechRepository
+import com.guivicj.apiSupport.repositories.TicketRepository
 import com.guivicj.apiSupport.repositories.UserRepository
 import jakarta.transaction.Transactional
 import org.apache.http.HttpStatus
 import org.springframework.stereotype.Service
+import java.time.Duration
 
 @Service
 class TechService(
     private val techRepository: TechRepository,
     private val techMapper: TechMapper,
     private val userRepository: UserRepository,
-    private val userService: UserService,
+    private val ticketRepository: TicketRepository
 ) {
 
     fun getAllTechs(): List<TechDTO> =
@@ -93,5 +97,37 @@ class TechService(
         userRepository.save(user)
 
         return Response(HttpStatus.SC_OK, "Successfully removed technician role. User remains as a normal user.")
+    }
+
+    fun getTechnicianStats(techId: Long): TechnicianStatsDTO {
+        val tech = techRepository.findById(techId).orElseThrow { RuntimeException("Technician not found") }
+        val tickets = ticketRepository.getTicketsByTechnicianId(tech)
+
+        val closed = tickets.filter { it.state == StateType.CLOSED }
+        val inProgress = tickets.filter { it.state == StateType.IN_PROGRESS }
+
+        val avgResolutionMinutes = closed.mapNotNull {
+            if (it.closedAt != null)
+                Duration.between(it.openedAt, it.closedAt).toMinutes()
+            else null
+        }.average().toLong()
+
+        val avgTimeFormated = formatResolutionTime(avgResolutionMinutes)
+
+        return TechnicianStatsDTO(
+            technicianId = techId,
+            totalTickets = tickets.size,
+            totalResolved = closed.size,
+            totalInProgress = inProgress.size,
+            avgResolutionTime = avgTimeFormated
+        )
+    }
+
+    private fun formatResolutionTime(avgResolutionMinutes: Long): String {
+        val duration = Duration.ofMinutes(avgResolutionMinutes)
+        val hours = duration.toHours()
+        val minutes = duration.minusHours(hours).toMinutes()
+        val formattedDuration = String.format("%02d:%02d", hours, minutes)
+        return formattedDuration
     }
 }
