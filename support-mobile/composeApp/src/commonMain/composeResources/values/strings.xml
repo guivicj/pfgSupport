@@ -63,5 +63,11 @@
     <string name="stats_closed">Closed Tickets</string>
     <string name="stats_in_progress">In Progress</string>
     <string name="stats_average">Average Resolution Time</string>
-
+    <string name="settings_title">Settings</string>
+    <string name="receive_notifications">Receive notifications</string>
+    <string name="ai_support">AI Support</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="language">Language</string>
+    <string name="version">Version</string>
+    <string name="terms_of_use">Terms of Use</string>
 </resources>
