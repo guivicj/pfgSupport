@@ -37,6 +37,9 @@ kotlin {
 
                 implementation(libs.kamel.image)
 
+                implementation(libs.multiplatform.settings)
+                implementation(libs.multiplatform.settings.no.arg)
+
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.serialization)
                 implementation(libs.kotlinx.serialization.json)

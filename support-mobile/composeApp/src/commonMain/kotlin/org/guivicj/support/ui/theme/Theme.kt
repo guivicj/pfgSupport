@@ -40,7 +40,7 @@ private val DarkColors = darkColorScheme(
 
 @Composable
 fun AppTheme(
-    useDarkTheme: Boolean = isSystemInDarkTheme(),
+    useDarkTheme: Boolean,
     content: @Composable () -> Unit
 ) {
     val colors = if (useDarkTheme) DarkColors else LightColors

@@ -1,9 +1,11 @@
 package org.guivicj.support.di
 
+import com.russhwolf.settings.Settings
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.guivicj.support.domain.repository.SettingsRepository
 import org.guivicj.support.domain.usecase.ValidateEmail
 import org.guivicj.support.domain.usecase.ValidateName
 import org.guivicj.support.domain.usecase.ValidatePassword
@@ -11,6 +13,7 @@ import org.guivicj.support.domain.usecase.ValidatePhone
 import org.guivicj.support.presentation.ForgotPasswordViewModel
 import org.guivicj.support.presentation.LoginViewModel
 import org.guivicj.support.presentation.RegisterViewModel
+import org.guivicj.support.presentation.SettingsViewModel
 import org.guivicj.support.presentation.TechAnalyticsViewModel
 import org.guivicj.support.presentation.TicketViewModel
 import org.guivicj.support.presentation.UserViewModel
@@ -25,6 +28,7 @@ val appModule = module {
     single { UserViewModel(get()) }
     single { ForgotPasswordViewModel(get()) }
     single { TechAnalyticsViewModel(get()) }
+    single { SettingsViewModel(get()) }
 }
 
 val networkModule = module {
@@ -40,6 +44,11 @@ val networkModule = module {
     }
 }
 
+val settingsModule = module {
+    single<Settings> { Settings() }
+    single { SettingsRepository(get()) }
+}
+
 val validationModule = module {
     factory { ValidateEmail() }
     factory { ValidatePassword() }
@@ -49,6 +58,6 @@ val validationModule = module {
 
 fun initializeKoin(vararg modules: Module) {
     startKoin {
-        modules(listOf(appModule, networkModule, validationModule) + modules)
+        modules(listOf(appModule, networkModule, validationModule, settingsModule) + modules)
     }
 }

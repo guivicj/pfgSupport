@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import org.guivicj.support.presentation.ForgotPasswordViewModel
+import org.guivicj.support.presentation.SettingsViewModel
 import org.guivicj.support.presentation.TechAnalyticsViewModel
 import org.guivicj.support.presentation.TicketViewModel
 import org.guivicj.support.presentation.UserViewModel
@@ -27,6 +28,7 @@ import org.guivicj.support.ui.screens.signin.RegisterScreen
 import org.guivicj.support.ui.screens.stats.TechStatsScreen
 import org.guivicj.support.ui.screens.tickets.AssignedTicketsScreen
 import org.guivicj.support.ui.screens.tickets.TicketDetailScreen
+import org.guivicj.support.ui.settings.SettingsScreen
 import org.koin.mp.KoinPlatform.getKoin
 
 @Composable
@@ -41,6 +43,7 @@ fun NavHostMain(navController: NavHostController) {
     val ticketViewModel = getKoin().get<TicketViewModel>()
     val passwordViewModel = getKoin().get<ForgotPasswordViewModel>()
     val techAnalyticsViewModel = getKoin().get<TechAnalyticsViewModel>()
+    val settingsViewModel = getKoin().get<SettingsViewModel>()
 
     Scaffold {
         NavHost(
@@ -133,6 +136,18 @@ fun NavHostMain(navController: NavHostController) {
                     technicianId = techId,
                     viewModel = techAnalyticsViewModel,
                     navController = navController
+                )
+            }
+            composable(Screen.SettingsScreen.route) {
+                val darkTheme by settingsViewModel.darkTheme.collectAsState()
+                val language by settingsViewModel.language.collectAsState()
+                SettingsScreen(
+                    navController = navController,
+                    isDarkTheme = darkTheme,
+                    onThemeChange = { settingsViewModel.toggleTheme() },
+                    userDTO = userViewModel.getCurrentUser() ?: return@composable,
+                    currentLanguage = language,
+                    onLanguageChange = { settingsViewModel.changeLanguage(it) }
                 )
             }
         }

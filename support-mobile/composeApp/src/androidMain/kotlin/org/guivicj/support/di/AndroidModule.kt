@@ -5,6 +5,7 @@ import org.guivicj.support.data.repository.TechRepositoryImpl
 import org.guivicj.support.data.repository.TicketRepositoryImpl
 import org.guivicj.support.data.repository.UserRepositoryImpl
 import org.guivicj.support.domain.repository.AuthRepository
+import org.guivicj.support.domain.repository.SettingsRepository
 import org.guivicj.support.domain.repository.TechRepository
 import org.guivicj.support.domain.repository.TicketRepository
 import org.guivicj.support.domain.repository.UserRepository
@@ -18,4 +19,5 @@ val androidModule = module {
     single<UserRepository> { UserRepositoryImpl(get()) }
     single<FirebaseTokenProvider> { FirebaseAuthProvider() }
     single<TechRepository> { TechRepositoryImpl(get()) }
+    single { SettingsRepository(get()) }
 }
