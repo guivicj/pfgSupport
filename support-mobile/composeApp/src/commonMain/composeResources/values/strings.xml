@@ -58,5 +58,10 @@
     <string name="forgot_password_title">Forgot Password</string>
     <string name="forgot_password_subtitle">Enter your email account to reset password</string>
     <string name="send_email_btn">Send Email</string>
+    <string name="stats_performance">Your Performance Stats</string>
+    <string name="stats_assigned">Total Assigned</string>
+    <string name="stats_closed">Closed Tickets</string>
+    <string name="stats_in_progress">In Progress</string>
+    <string name="stats_average">Average Resolution Time</string>
 
 </resources>

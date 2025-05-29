@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import org.guivicj.support.presentation.ForgotPasswordViewModel
+import org.guivicj.support.presentation.TechAnalyticsViewModel
 import org.guivicj.support.presentation.TicketViewModel
 import org.guivicj.support.presentation.UserViewModel
 import org.guivicj.support.ui.screens.home.HomeScreen
@@ -23,6 +24,7 @@ import org.guivicj.support.ui.screens.profile.ProfileScreen
 import org.guivicj.support.ui.screens.signin.ForgotPasswordScreen
 import org.guivicj.support.ui.screens.signin.LoginScreen
 import org.guivicj.support.ui.screens.signin.RegisterScreen
+import org.guivicj.support.ui.screens.stats.TechStatsScreen
 import org.guivicj.support.ui.screens.tickets.AssignedTicketsScreen
 import org.guivicj.support.ui.screens.tickets.TicketDetailScreen
 import org.koin.mp.KoinPlatform.getKoin
@@ -38,6 +40,7 @@ fun NavHostMain(navController: NavHostController) {
     val userViewModel = getKoin().get<UserViewModel>()
     val ticketViewModel = getKoin().get<TicketViewModel>()
     val passwordViewModel = getKoin().get<ForgotPasswordViewModel>()
+    val techAnalyticsViewModel = getKoin().get<TechAnalyticsViewModel>()
 
     Scaffold {
         NavHost(
@@ -121,6 +124,15 @@ fun NavHostMain(navController: NavHostController) {
                     navController = navController,
                     ticketViewModel = ticketViewModel,
                     userViewModel = userViewModel
+                )
+            }
+            composable(Screen.TechStatsScreen.route) { backStackEntry ->
+                val techId = backStackEntry.arguments?.getString("techId")?.toLongOrNull()
+                    ?: return@composable
+                TechStatsScreen(
+                    technicianId = techId,
+                    viewModel = techAnalyticsViewModel,
+                    navController = navController
                 )
             }
         }

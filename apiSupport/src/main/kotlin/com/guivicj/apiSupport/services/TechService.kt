@@ -33,6 +33,10 @@ class TechService(
     fun getTechsByType(type: TechnicianType): List<TechDTO> =
         techRepository.getTechsByTechnicianType(type).map(techMapper::toDTO)
 
+    fun getTechnicianIdByUserId(userId: Long): Long? {
+        return techRepository.findByUserModel_Id(userId)?.id
+    }
+
     @Transactional
     fun addTech(currentUser: UserSessionInfoDTO, dto: TechDTO): TechDTO {
         if (currentUser.user.type != UserType.ADMIN) {

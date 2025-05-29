@@ -54,7 +54,14 @@ fun AssignedTicketsScreen(
         ticketViewModel.fetchTicketsByTechnician(ticketState.technicianId)
     }
     MaterialTheme {
-        Scaffold(bottomBar = { BottomNavMenu(navController, userState.type, "your-tickets") }) {
+        Scaffold(bottomBar = {
+            BottomNavMenu(
+                navController,
+                userState.id,
+                userState.type,
+                "your-tickets"
+            )
+        }) {
             Box(
                 modifier = Modifier
                     .padding(bottom = 70.dp)

@@ -27,12 +27,12 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.delay
 import org.guivicj.support.data.model.UserType
 import org.guivicj.support.domain.model.UserDTO
-import org.guivicj.support.ui.screens.home.components.BottomNavMenu
-import org.guivicj.support.ui.screens.tickets.components.CreateTicketBottomSheet
-import org.guivicj.support.ui.screens.home.components.MainHeader
-import org.guivicj.support.ui.screens.tickets.components.TicketList
 import org.guivicj.support.presentation.TicketViewModel
 import org.guivicj.support.presentation.UserViewModel
+import org.guivicj.support.ui.screens.home.components.BottomNavMenu
+import org.guivicj.support.ui.screens.home.components.MainHeader
+import org.guivicj.support.ui.screens.tickets.components.CreateTicketBottomSheet
+import org.guivicj.support.ui.screens.tickets.components.TicketList
 import org.jetbrains.compose.resources.stringResource
 import support_mobile.composeapp.generated.resources.Res
 import support_mobile.composeapp.generated.resources.home_admin_subtitle
@@ -63,7 +63,7 @@ fun HomeScreen(
 
     MaterialTheme {
         Scaffold(
-            bottomBar = { BottomNavMenu(navController, userState.type, "home") }
+            bottomBar = { BottomNavMenu(navController, userState.id, userState.type, "home") }
         ) {
             Box(
                 modifier = Modifier

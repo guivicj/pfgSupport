@@ -18,9 +18,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import org.guivicj.support.data.model.UserType
+import org.guivicj.support.navigation.Screen
 
 @Composable
-fun BottomNavMenu(navController: NavHostController, type: UserType, selectedRoute: String) {
+fun BottomNavMenu(
+    navController: NavHostController,
+    userId: Long?,
+    type: UserType,
+    selectedRoute: String
+) {
     BottomNavigation(
         modifier = Modifier
             .fillMaxWidth()
@@ -59,12 +65,17 @@ fun BottomNavMenu(navController: NavHostController, type: UserType, selectedRout
                 },
                 selected = route == selectedRoute,
                 onClick = {
-                    if (route != selectedRoute) {
+                    if (route == "analytics" && type == UserType.TECHNICIAN) {
+                        val techId = userId ?: return@BottomNavigationItem
+                        navController.navigate(Screen.TechStatsScreen.createRoute(techId)) {
+                            launchSingleTop = true
+                        }
+                    } else {
                         navController.navigate(route) {
                             launchSingleTop = true
                         }
                     }
-                },
+                }
             )
         }
     }

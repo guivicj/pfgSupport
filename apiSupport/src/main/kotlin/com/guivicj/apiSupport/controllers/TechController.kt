@@ -9,6 +9,7 @@ import com.guivicj.apiSupport.enums.TechnicianType
 import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.services.TechService
 import com.guivicj.apiSupport.services.TicketService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -32,9 +33,12 @@ class TechController(val techService: TechService) {
         return ResponseEntity.ok(techService.getTechsByType(type))
     }
 
-    @GetMapping("/stats/{id}")
-    fun getTechStats(@PathVariable id: Long): ResponseEntity<TechnicianStatsDTO> {
-        val stats = techService.getTechnicianStats(id)
+    @GetMapping("/stats/user/{userId}")
+    fun getTechStats(@PathVariable userId: Long): ResponseEntity<TechnicianStatsDTO> {
+        val techId = techService.getTechnicianIdByUserId(userId)
+            ?: return ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+
+        val stats = techService.getTechnicianStats(techId)
         return ResponseEntity.ok(stats)
     }
 
