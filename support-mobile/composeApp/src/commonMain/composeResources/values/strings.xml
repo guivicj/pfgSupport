@@ -72,4 +72,9 @@
     <string name="terms_of_use">Terms of Use</string>
     <string name="escalate_ticket">Escalate Ticket</string>
     <string name="change_state">Change State</string>
+    <string name="opened_tickets">Opened Tickets</string>
+    <string name="in_progress_tickets">In Progress Tickets</string>
+    <string name="closed_tickets">Closed Tickets</string>
+    <string name="avg_tickets">Average Time Tickets</string>
+    <string name="total_techs">Total Technicians</string>
 </resources>

@@ -6,6 +6,7 @@ import org.guivicj.support.data.model.TechnicianType
 @Serializable
 data class TechnicianDTO(
     val id: Long,
-    val type: TechnicianType
+    val userId: Long,
+    val technicianType: TechnicianType
 )
 

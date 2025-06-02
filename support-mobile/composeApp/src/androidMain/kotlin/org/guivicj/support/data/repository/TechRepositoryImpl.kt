@@ -3,6 +3,8 @@ package org.guivicj.support.data.repository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.header
+import org.guivicj.support.domain.model.AppStatsDTO
 import org.guivicj.support.domain.model.TechStatsDTO
 import org.guivicj.support.domain.model.TechnicianDTO
 import org.guivicj.support.domain.repository.TechRepository
@@ -28,5 +30,11 @@ class TechRepositoryImpl(
             println("Failed to fetch Technicians: ${e.message}")
             emptyList()
         }
+    }
+
+    override suspend fun getAppStats(idToken: String): AppStatsDTO {
+        return client.get("http://10.0.2.2:8080/api/admin/stats") {
+            header("Authorization", "Bearer $idToken")
+        }.body()
     }
 }

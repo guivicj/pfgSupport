@@ -20,4 +20,6 @@ sealed class Screen(val route: String) {
         fun createRoute(techId: Long) = "analytics/$techId"
     }
     data object SettingsScreen : Screen("settings")
+    data object AppStatsScreen : Screen("stats")
+    data object TechListScreen : Screen("tech-list")
 }

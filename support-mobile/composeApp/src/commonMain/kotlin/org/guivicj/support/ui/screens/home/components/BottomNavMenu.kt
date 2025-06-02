@@ -37,7 +37,7 @@ fun BottomNavMenu(
             UserType.ADMIN -> listOf(
                 "home" to Icons.Default.Home,
                 "tech-list" to Icons.Default.Person,
-                "analytics" to Icons.Default.Info,
+                "stats" to Icons.Default.Info,
                 "settings" to Icons.Default.Settings
             )
 

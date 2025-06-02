@@ -30,7 +30,7 @@ val appModule = module {
     single { ForgotPasswordViewModel(get()) }
     single { TechAnalyticsViewModel(get()) }
     single { SettingsViewModel(get()) }
-    single { TechViewModel(get()) }
+    single { TechViewModel(get(), get()) }
 }
 
 val networkModule = module {

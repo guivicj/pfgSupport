@@ -44,7 +44,7 @@ fun StatCard(
         ) {
             Column {
                 Text(label, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-                Text(value, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                Text(value, fontSize = 24.sp)
             }
             Icon(
                 imageVector = icon,

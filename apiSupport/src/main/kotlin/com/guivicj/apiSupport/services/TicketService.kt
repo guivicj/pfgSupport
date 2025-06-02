@@ -1,5 +1,6 @@
 package com.guivicj.apiSupport.services
 
+import com.guivicj.apiSupport.dtos.AppStatsDTO
 import com.guivicj.apiSupport.dtos.TicketDTO
 import com.guivicj.apiSupport.dtos.TicketHistoryDTO
 import com.guivicj.apiSupport.dtos.requests.ChangeStateRequest
@@ -13,6 +14,7 @@ import com.guivicj.apiSupport.models.TicketHistory
 import com.guivicj.apiSupport.models.TicketModel
 import com.guivicj.apiSupport.repositories.*
 import org.springframework.stereotype.Service
+import java.time.Duration
 import java.time.LocalDateTime
 
 @Service
@@ -169,4 +171,34 @@ class TicketService(
         val history = ticketHistoryRepository.findByTicketId(ticketId)
         return ticketHistoryMapper.toDtoList(history)
     }
+
+    fun getAdminStats(): AppStatsDTO {
+        val allTickets = ticketRepository.findAll()
+
+        val opened = allTickets.count { it.state == StateType.OPEN }
+        val inProgress = allTickets.count { it.state == StateType.IN_PROGRESS }
+        val closed = allTickets.count { it.state == StateType.CLOSED }
+
+        val closedTickets =
+            allTickets.filter { it.state == StateType.CLOSED && it.closedAt != null && it.openedAt != null }
+
+        val avgResolutionTime = if (closedTickets.isNotEmpty()) {
+            closedTickets.map {
+                Duration.between(it.openedAt, it.closedAt).toMinutes()
+            }.average().toLong()
+        } else {
+            0L
+        }
+
+        val totalTechnicians = techRepository.count().toInt()
+
+        return AppStatsDTO(
+            opened = opened,
+            inProgress = inProgress,
+            closed = closed,
+            avgResolutionTimeMinutes = avgResolutionTime,
+            totalTechnicians = totalTechnicians
+        )
+    }
+
 }

@@ -26,6 +26,8 @@ import org.guivicj.support.ui.screens.profile.ProfileScreen
 import org.guivicj.support.ui.screens.signin.ForgotPasswordScreen
 import org.guivicj.support.ui.screens.signin.LoginScreen
 import org.guivicj.support.ui.screens.signin.RegisterScreen
+import org.guivicj.support.ui.screens.stats.TechListScreen
+import org.guivicj.support.ui.screens.stats.AppStatsScreen
 import org.guivicj.support.ui.screens.stats.TechStatsScreen
 import org.guivicj.support.ui.screens.tickets.AssignedTicketsScreen
 import org.guivicj.support.ui.screens.tickets.TicketDetailScreen
@@ -151,6 +153,18 @@ fun NavHostMain(navController: NavHostController) {
                     userDTO = userViewModel.getCurrentUser() ?: return@composable,
                     currentLanguage = language,
                     onLanguageChange = { settingsViewModel.changeLanguage(it) }
+                )
+            }
+            composable(Screen.AppStatsScreen.route) {
+                AppStatsScreen(
+                    navController = navController,
+                    viewModel = techViewModel
+                )
+            }
+            composable(Screen.TechListScreen.route) {
+                TechListScreen(
+                    navController = navController,
+                    viewModel = techViewModel
                 )
             }
         }

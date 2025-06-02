@@ -3,15 +3,19 @@ package com.guivicj.apiSupport.controllers
 import com.guivicj.apiSupport.annotations.CurrentUser
 import com.guivicj.apiSupport.annotations.RoleRequired
 import com.guivicj.apiSupport.dtos.AdminDTO
+import com.guivicj.apiSupport.dtos.AppStatsDTO
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
 import com.guivicj.apiSupport.enums.UserType
 import com.guivicj.apiSupport.services.AdminService
+import com.guivicj.apiSupport.services.TicketService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/admin")
-class AdminController(val adminService: AdminService) {
+class AdminController(
+    val adminService: AdminService, private val ticketService: TicketService
+) {
     @GetMapping
     fun getAllAdmins(): List<AdminDTO> {
         return adminService.getAllAdmins()
@@ -47,5 +51,10 @@ class AdminController(val adminService: AdminService) {
     ): ResponseEntity<Any> {
         val response = adminService.deleteAdmin(user, dto)
         return ResponseEntity.status(response.status).body(response)
+    }
+
+    @GetMapping("/stats")
+    fun getStats(): ResponseEntity<AppStatsDTO> {
+        return ResponseEntity.ok(ticketService.getAdminStats())
     }
 }
