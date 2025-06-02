@@ -38,6 +38,7 @@ class TicketViewModel(
     private var userType by mutableStateOf(UserType.USER)
     private var currentUserId by mutableStateOf(0L)
     val ticketOwners = mutableStateMapOf<Long, String>()
+    var selectedStateFilter by mutableStateOf<StateType?>(null)
 
     val filteredTickets: List<TicketDTO>
         get() = allTickets.filter { ticket ->
@@ -46,7 +47,9 @@ class TicketViewModel(
                 UserType.ADMIN, UserType.TECHNICIAN -> true
                 UserType.USER -> ticket.userId == currentUserId
             }
-            matchesSearch && matchesRole
+            val matchesState = selectedStateFilter?.let { ticket.state == it } ?: true
+
+            matchesSearch && matchesRole && matchesState
         }
 
     fun getCurrentChatRole(): ChatRole {
@@ -219,6 +222,10 @@ class TicketViewModel(
                 showMessage("Failed to update state: ${e.message}")
             }
         }
+    }
+
+    fun updateStateFilter(state: StateType?) {
+        selectedStateFilter = state
     }
 
     fun setBottomSheetVisible(visible: Boolean) {
