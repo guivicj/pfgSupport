@@ -14,6 +14,7 @@ import androidx.navigation.navArgument
 import org.guivicj.support.presentation.ForgotPasswordViewModel
 import org.guivicj.support.presentation.SettingsViewModel
 import org.guivicj.support.presentation.TechAnalyticsViewModel
+import org.guivicj.support.presentation.TechViewModel
 import org.guivicj.support.presentation.TicketViewModel
 import org.guivicj.support.presentation.UserViewModel
 import org.guivicj.support.ui.screens.home.HomeScreen
@@ -44,6 +45,7 @@ fun NavHostMain(navController: NavHostController) {
     val passwordViewModel = getKoin().get<ForgotPasswordViewModel>()
     val techAnalyticsViewModel = getKoin().get<TechAnalyticsViewModel>()
     val settingsViewModel = getKoin().get<SettingsViewModel>()
+    val techViewModel = getKoin().get<TechViewModel>()
 
     Scaffold {
         NavHost(
@@ -112,7 +114,8 @@ fun NavHostMain(navController: NavHostController) {
                         ticketDTO = it,
                         navController = navController,
                         ticketViewModel = ticketViewModel,
-                        userViewModel = userViewModel
+                        userViewModel = userViewModel,
+                        techViewModel = techViewModel
                     )
                 }
             }

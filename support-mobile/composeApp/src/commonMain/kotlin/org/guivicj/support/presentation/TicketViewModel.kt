@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import org.guivicj.support.data.model.ChatRole
 import org.guivicj.support.data.model.ProductType
 import org.guivicj.support.data.model.StateType
+import org.guivicj.support.data.model.TechnicianType
 import org.guivicj.support.data.model.UserType
 import org.guivicj.support.domain.model.MessageDTO
 import org.guivicj.support.domain.model.TicketDTO
@@ -192,6 +193,33 @@ class TicketViewModel(
         )
     }
 
+    fun escalateTicketByType(ticketId: Long, technicianType: TechnicianType) {
+        viewModelScope.launch {
+            try {
+                val token = tokenProvider.getIdToken()
+                ticketRepository.escalateByType(ticketId, technicianType, token)
+            } catch (e: Exception) {
+                showMessage("Failed to escalate: ${e.message}")
+            }
+        }
+    }
+
+    fun changeTicketState(ticketId: Long, newState: String, technicianId: Long) {
+        viewModelScope.launch {
+            try {
+                val token = tokenProvider.getIdToken()
+                val updated =
+                    ticketRepository.changeTicketState(ticketId, newState, technicianId, token)
+                _selectedTicker.value = updated
+                allTickets = allTickets.map {
+                    if (it.ticketId == ticketId) updated else it
+                }
+                showMessage("Ticket updated to $newState")
+            } catch (e: Exception) {
+                showMessage("Failed to update state: ${e.message}")
+            }
+        }
+    }
 
     fun setBottomSheetVisible(visible: Boolean) {
         _state.value = _state.value.copy(showCreateSheet = visible)

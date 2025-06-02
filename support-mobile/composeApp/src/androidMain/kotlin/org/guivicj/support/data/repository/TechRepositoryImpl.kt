@@ -4,6 +4,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import org.guivicj.support.domain.model.TechStatsDTO
+import org.guivicj.support.domain.model.TechnicianDTO
 import org.guivicj.support.domain.repository.TechRepository
 
 class TechRepositoryImpl(
@@ -15,8 +16,17 @@ class TechRepositoryImpl(
             val response: TechStatsDTO = client.get("$baseUrl/stats/user/$id").body()
             Result.success(response)
         } catch (e: Exception) {
-            println("❌ Failed to fetch TechStats: ${e.message}")
+            println("Failed to fetch TechStats: ${e.message}")
             Result.failure(e)
+        }
+    }
+
+    override suspend fun getTechnicians(): List<TechnicianDTO> {
+        return try {
+            client.get(baseUrl).body()
+        } catch (e: Exception) {
+            println("Failed to fetch Technicians: ${e.message}")
+            emptyList()
         }
     }
 }

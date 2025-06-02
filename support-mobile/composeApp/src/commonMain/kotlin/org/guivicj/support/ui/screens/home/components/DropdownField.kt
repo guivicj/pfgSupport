@@ -12,10 +12,6 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import org.guivicj.support.data.model.ProductType
-import org.jetbrains.compose.resources.stringResource
-import support_mobile.composeapp.generated.resources.Res
-import support_mobile.composeapp.generated.resources.description_field
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -24,9 +20,9 @@ fun DropdownField(
     value: String,
     isError: Boolean,
     expanded: Boolean,
-    options: List<ProductType>,
+    options: List<Any>,
     onExpandedChange: (Boolean) -> Unit,
-    onOptionSelected: (ProductType) -> Unit,
+    onOptionSelected: (Any) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier.fillMaxWidth()) {

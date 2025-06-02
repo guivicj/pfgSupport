@@ -19,8 +19,10 @@ import androidx.navigation.NavHostController
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.websocket.WebSockets
+import org.guivicj.support.data.model.UserType
 import org.guivicj.support.domain.model.MessageDTO
 import org.guivicj.support.domain.model.TicketDTO
+import org.guivicj.support.presentation.TechViewModel
 import org.guivicj.support.presentation.TicketViewModel
 import org.guivicj.support.presentation.UserViewModel
 import org.guivicj.support.ui.screens.home.components.TopNavMenu
@@ -36,10 +38,12 @@ fun TicketDetailScreen(
     ticketDTO: TicketDTO,
     navController: NavHostController,
     ticketViewModel: TicketViewModel,
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel,
+    techViewModel: TechViewModel
 ) {
     val messages by ticketViewModel.messages.collectAsState()
     val currentUser = userViewModel.state.value.id
+    val techState by techViewModel.allTechnicians.collectAsState()
 
     val httpClient = remember {
         HttpClient(CIO) {
@@ -53,6 +57,7 @@ fun TicketDetailScreen(
 
     LaunchedEffect(ticketDTO.ticketId) {
         ticketViewModel.fetchMessages(ticketDTO.ticketId)
+        techViewModel.fetchTechnicians()
     }
 
     DisposableEffect(ticketDTO.ticketId) {
@@ -90,7 +95,20 @@ fun TicketDetailScreen(
                 reverseLayout = false,
             ) {
                 stickyHeader {
-                    TicketMetadataSection(ticketDTO)
+                    TicketMetadataSection(
+                        ticket = ticketDTO,
+                        userIsTechnician = userViewModel.state.value.type == UserType.TECHNICIAN,
+                        onEscalate = { technicianType ->
+                            ticketViewModel.escalateTicketByType(ticketDTO.ticketId, technicianType)
+                        },
+                        onChangeState = { newState ->
+                            ticketViewModel.changeTicketState(
+                                ticketDTO.ticketId,
+                                newState.name,
+                                ticketDTO.technicianId
+                            )
+                        }
+                    )
                 }
                 itemsIndexed(messages) { index, message ->
                     val previousMessage = messages.getOrNull(index - 1)

@@ -15,6 +15,7 @@ import org.guivicj.support.presentation.LoginViewModel
 import org.guivicj.support.presentation.RegisterViewModel
 import org.guivicj.support.presentation.SettingsViewModel
 import org.guivicj.support.presentation.TechAnalyticsViewModel
+import org.guivicj.support.presentation.TechViewModel
 import org.guivicj.support.presentation.TicketViewModel
 import org.guivicj.support.presentation.UserViewModel
 import org.koin.core.context.startKoin
@@ -29,6 +30,7 @@ val appModule = module {
     single { ForgotPasswordViewModel(get()) }
     single { TechAnalyticsViewModel(get()) }
     single { SettingsViewModel(get()) }
+    single { TechViewModel(get()) }
 }
 
 val networkModule = module {

@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
+import org.guivicj.support.data.model.ProductType
 import org.guivicj.support.presentation.TicketViewModel
 import org.guivicj.support.ui.screens.home.components.DropdownField
 import org.jetbrains.compose.resources.stringResource
@@ -95,7 +96,7 @@ fun CreateTicketBottomSheet(
                 DropdownField(
                     label = stringResource(Res.string.product_field),
                     value = ticketState.product.toString(),
-                    onOptionSelected = { ticketViewModel.onProductChange(it) },
+                    onOptionSelected = { ticketViewModel.onProductChange(it as ProductType) },
                     options = ticketState.products.map { it },
                     expanded = ticketState.expandProductDropdown,
                     isError = ticketState.productError != null,

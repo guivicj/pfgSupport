@@ -6,6 +6,7 @@ import com.guivicj.apiSupport.dtos.TicketDTO
 import com.guivicj.apiSupport.dtos.TicketHistoryDTO
 import com.guivicj.apiSupport.dtos.requests.ChangeStateRequest
 import com.guivicj.apiSupport.dtos.requests.ChatRequest
+import com.guivicj.apiSupport.dtos.requests.EscalateByTypeRequest
 import com.guivicj.apiSupport.dtos.requests.EscalateTicketRequest
 import com.guivicj.apiSupport.dtos.responses.ChatResponse
 import com.guivicj.apiSupport.dtos.responses.UserSessionInfoDTO
@@ -66,19 +67,18 @@ class TicketController(val ticketService: TicketService, val ticketMessageServic
         return ResponseEntity.ok(reassignedTicket)
     }
 
-    @PutMapping("/{ticketId}/escalate")
-    fun escalateTicket(
-        @CurrentUser user: UserSessionInfoDTO,
+    @PutMapping("/{ticketId}/escalate-by-type")
+    fun escalateByType(
         @PathVariable ticketId: Long,
-        @RequestBody request: EscalateTicketRequest
+        @RequestBody request: EscalateByTypeRequest,
+        @CurrentUser user: UserSessionInfoDTO
     ): ResponseEntity<TicketDTO> {
-        val updatedTicket = ticketService.escalateTicket(ticketId, request.newTechnicianId, user)
-        return ResponseEntity.ok(updatedTicket)
+        val updated = ticketService.escalateByType(ticketId, request.technicianType, user)
+        return ResponseEntity.ok(updated)
     }
 
     @PutMapping("/{ticketId}/change-state")
     fun changeState(
-        @CurrentUser user: UserSessionInfoDTO,
         @PathVariable ticketId: Long,
         @RequestBody request: ChangeStateRequest
     ): ResponseEntity<TicketDTO> {

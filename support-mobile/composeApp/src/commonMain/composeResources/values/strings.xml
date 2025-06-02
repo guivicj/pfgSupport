@@ -70,4 +70,6 @@
     <string name="language">Language</string>
     <string name="version">Version</string>
     <string name="terms_of_use">Terms of Use</string>
+    <string name="escalate_ticket">Escalate Ticket</string>
+    <string name="change_state">Change State</string>
 </resources>

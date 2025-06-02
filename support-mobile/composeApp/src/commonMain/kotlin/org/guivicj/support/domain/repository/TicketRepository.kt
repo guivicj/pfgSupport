@@ -1,6 +1,7 @@
 package org.guivicj.support.domain.repository
 
 import org.guivicj.support.data.model.ChatRole
+import org.guivicj.support.data.model.TechnicianType
 import org.guivicj.support.domain.model.MessageDTO
 import org.guivicj.support.domain.model.TicketDTO
 
@@ -14,4 +15,6 @@ interface TicketRepository {
     suspend fun changeState(ticketId: Long, newState: String, technicianId: Long, idToken: String): TicketDTO
     suspend fun sendMessage(ticketId: Long, role: ChatRole, content: String, idToken: String): MessageDTO
     suspend fun getMessages(ticketId: Long, idToken: String): List<MessageDTO>
+    suspend fun changeTicketState(ticketId: Long, newState: String, technicianId: Long, idToken: String): TicketDTO
+    suspend fun escalateByType(ticketId: Long, technicianType: TechnicianType, token: String)
 }

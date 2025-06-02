@@ -47,7 +47,7 @@ fun ForgotPasswordScreen(
             SignInHeader(
                 title = stringResource(Res.string.forgot_password_title),
                 subTitle = stringResource(Res.string.forgot_password_subtitle),
-                modifier = Modifier.padding(24.dp)
+                modifier = Modifier.padding(18.dp)
             )
             Column(
                 modifier = Modifier

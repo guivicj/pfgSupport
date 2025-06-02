@@ -122,28 +122,26 @@ class TicketService(
         return ticketMapper.toDTO(ticketRepository.save(ticket))
     }
 
-    fun escalateTicket(ticketId: Long, newTechnicianId: Long, currentUser: UserSessionInfoDTO): TicketDTO {
+    fun escalateByType(ticketId: Long, type: TechnicianType, currentUser: UserSessionInfoDTO): TicketDTO {
         val ticket = ticketRepository.findById(ticketId)
             .orElseThrow { RuntimeException("Ticket not found") }
 
         if (ticket.userId.email != currentUser.user.email &&
-            currentUser.user.type != UserType.ADMIN && currentUser.user.type != UserType.TECHNICIAN
+            currentUser.user.type != UserType.ADMIN &&
+            currentUser.user.type != UserType.TECHNICIAN
         ) {
             throw RuntimeException("You can't escalate this ticket")
         }
 
-        val newTechnician = techRepository.findById(newTechnicianId)
-            .orElseThrow { RuntimeException("Technician not found") }
+        val candidates = techRepository.findByTechnicianType(type)
+        val assignedTech = candidates.minByOrNull {
+            ticketRepository.countByTechnicianId(it)
+        } ?: throw RuntimeException("No available technician of type $type")
 
-        val history = TicketHistory(
-            ticket = ticket,
-            fromTechnician = ticket.technicianId,
-            toTechnician = newTechnician
+        ticket.technicianId = assignedTech
+        ticketHistoryRepository.save(
+            TicketHistory(ticket = ticket, fromTechnician = ticket.technicianId, toTechnician = assignedTech)
         )
-
-        ticket.technicianId = newTechnician
-        ticketHistoryRepository.save(history)
-
         return ticketMapper.toDTO(ticketRepository.save(ticket))
     }
 
